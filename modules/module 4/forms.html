@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+</head>
+
+<body>
+    <!-- ex1 -->
+    <h2>User Registration Form</h2>
+    <form>
+        <label for="name">name :</label>
+        <input type="text" id="name"><br>
+        <label for="email">email :</label>
+        <input type="email" id="email" required><br>
+        <label for="password">password :</label>
+        <input type="password" id="password"><br>
+        <label for="date">date :</label>
+        <input type="date" id="date"><br>
+        <label for="file">file :</label>
+        <input type="file" id="file"><br><br>
+        <input type="submit" value="submit">
+    </form>
+    <!-- ex2 -->
+    <h2>User Preferences Form</h2>
+    <form>
+        <label for="aboutMe">About Me</label><br>
+        <textarea name="aboutMe" id="aboutMe" cols="40" rows="4"></textarea><br>
+
+        <label for="country">Country</label>
+        <select name="country" id="country">
+            <option value="jordan">Jordan</option>
+            <option value="USA">USA</option>
+            <option value="Spain">Spain</option>
+        </select>
+        <br><br>
+        <fieldset>
+            <legend>Contact Preference</legend>
+            <input type="radio" id="Email" name="contact">
+            <label for="Email">Email</label>
+            <input type="radio" id="Phone" name="contact">
+            <label for="Phone">Phone</label>
+        </fieldset>
+    </form>
+    <br><br>
+    <!-- ex3 -->
+    <h2>GET & POST Form</h2>
+    <form action="https://example.com/submit" method="GET" target="_blank" autocomplete="off">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- ex4 -->
+    <h2>Survey Form</h2>
+    <form action="https://example.com/submit" method="GET">
+        <label for="name">User Name</label>
+        <input type="text" name="name" id="name" maxlength="10" required autocomplete="off"><br><br>
+        <label for="age">Age</label>
+        <input type="number" name="age" id="age" min="18" max="60"><br>
+        <br>
+        <label for="lang">Favorite Programming Language</label>
+        <input list="lang">
+        <datalist id="lang">
+            <option value="HTML">
+            <option value="CSS">
+            <option value="JavaScript">
+            <option value="Python">
+        </datalist><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

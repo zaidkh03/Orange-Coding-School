@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>task 7</title>
+    <style>
+        #ex1 th,
+        #ex1 td {
+            border: 1px dotted;
+            padding: 10px;
+        }
+
+        #ex2 th,
+        #ex2 td {
+            border: 2px solid;
+            padding: 10px;
+        }
+
+        #ex3 th,
+        #ex3 td {
+            border: 2px solid;
+            padding: 10px;
+        }
+
+        #ex4 th,
+        #ex4 td {
+            border: 1px solid;
+        }
+
+        #ex5 th,
+        #ex5 td {
+            border: 1px solid;
+            padding: 10px;
+        }
+
+        #ex6 th,
+        #ex6 td {
+            border: 1px solid;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Images in Tables</h1>
+    <hr>
+    <h3>What is your favorite pet?</h3>
+    <!-- ex1 -->
+    <table id="ex1" style="border-collapse: collapse">
+        <thead>
+            <tr>
+                <th scope="col">Pet image</th>
+                <th scope="col">More facts about</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><img src="media/horse.png" alt="Horses" width="300px" height="200"></td>
+                <td><a href="https://en.wikipedia.org/wiki/Horse" target="_blank">Horses</a></td>
+            </tr>
+            <tr>
+                <td><img src="media/dog.jpeg" alt="dogs" width="300px" height="200"></td>
+                <td><a href="https://en.wikipedia.org/wiki/Dog" target="_blank">Dogs</a></td>
+            </tr>
+            <tr>
+                <td><img src="media/cat.jpeg" alt="cats" width="300px" height="200"></td>
+                <td><a href="https://en.wikipedia.org/wiki/Cat" target="_blank">Cats</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+    <!-- ex2 -->
+    <table id="ex2" style="border: 1px solid; border-collapse: collapse">
+        <thead>
+            <tr>
+                <th colspan="6">Time Table</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th rowspan="6">Hours</th>
+                <th>Mon</td>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+            </tr>
+            <tr>
+                <td>Math</td>
+                <td>Science</td>
+                <td>Math</td>
+                <td>Science</td>
+                <td>Arts</td>
+            </tr>
+            <tr>
+                <td>Math</td>
+                <td>Science</td>
+                <td>Math</td>
+                <td>Science</td>
+                <td>Arts</td>
+            </tr>
+            <tr>
+                <th colspan="5">Lunch</th>
+            </tr>
+            <tr>
+                <td>Math</td>
+                <td>Science</td>
+                <td>Math</td>
+                <th colspan="2" rowspan="2">Project</th>
+            </tr>
+            <tr>
+                <td>Math</td>
+                <td>Science</td>
+                <td>Math</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <!-- ex3 -->
+    <table id="ex3" style="border: 2px solid;">
+        <thead>
+            <tr>
+                <th colspan="2">Language and Framworks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Python</td>
+                <td>Django</td>
+            </tr>
+            <tr>
+                <td rowspan="2">Javascript</td>
+                <td>React.jd</td>
+            </tr>
+            <tr>
+                <td>Vue.js</td>
+            </tr>
+            <tr>
+                <td>Ruby</td>
+                <td>Ruby on Rails</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+
+    <!-- ex4 -->
+    <table id="ex4" style="border: 1px solid;">
+        <tbody>
+            <tr>
+                <td rowspan="2">Row 1, Col 1</td>
+                <td>Row 1, Col 2</td>
+                <td>Row 1, Col 3</td>
+                <td>Row 1, Col 4</td>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="2">Row 2-3, Col 2-3</td>
+                <td>Row 2, Col 4</td>
+            </tr>
+            <tr>
+                <td>Row 3, Col 1</td>
+                <td>Row 3, Col 4</td>
+            </tr>
+            <tr>
+                <td>Row 4, Col 1</td>
+                <td>Row 4, Col 2</td>
+                <td colspan="2">Row 4, Col 3-4</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+
+    <!-- ex5 14 col 10 row-->
+    <table id="ex5" style="border: 1px solid;">
+        <tbody>
+            <tr>
+                <th rowspan="9">A</th>
+                <th rowspan="8">B</th>
+                <th rowspan="7">C</th>
+                <th rowspan="6">D</th>
+                <th rowspan="5">E</th>
+                <th rowspan="4">F</th>
+                <th colspan="2">AH</th>
+                <th rowspan="4">H</th>
+                <th rowspan="5">I</th>
+                <th rowspan="6">J</th>
+                <th rowspan="7">K</th>
+                <th rowspan="8">L</th>
+                <th rowspan="10">M</th>
+            </tr>
+            <tr>
+                <th>G</th>
+            </tr>
+            <tr>
+                <th>GH</th>
+            </tr>
+            <tr>
+                <th>N</th>
+            </tr>
+            <tr>
+                <th colspan="4">O</th>
+            </tr>
+            <tr>
+                <th colspan="6">P</th>
+            </tr>
+            <tr>
+                <th colspan="8">Q</th>
+            </tr>
+            <tr>
+                <th colspan="2">R</th>
+                <th>S</th>
+                <th>T</th>
+                <th colspan="2">U</th>
+                <th>V</th>
+                <th>W</th>
+                <th colspan="2">X</th>
+            </tr>
+            <tr>
+                <th colspan="12">Y</th>
+            </tr>
+            <tr>
+                <th colspan="2">Z</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th colspan="2">5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <!-- ex6 -->
+    <table id="ex6" style="border: 3px solid; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th><br>Day/Period</th>
+                <th>1<br> 9:30-10:20</th>
+                <th>2<br> 10:20-11:10</th>
+                <th>3<br> 11:10-12:00</th>
+                <th>12:00-12:40</th>
+                <th>4<br>12:40-1:30</th>
+                <th>5<br>1:30-2:20</th>
+                <th>6<br>2:20-3:10</th>
+                <th>7<br>3:10-4:00</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Monday</th>
+                <td>Eng</td>
+                <td>Mat</td>
+                <td>Che</td>
+                <th rowspan="6">L <br> U <br> N <br> C <br> H</th>
+                <td colspan="3">LAB</td>
+                <td>phy</td>
+            </tr>
+            <tr>
+                <th>Tuesday</th>
+                <td colspan="3">LAB</td>
+                <td>Eng</td>
+                <td>Che</td>
+                <td>Mat</td>
+                <td>Sports</td>
+            </tr>
+            <tr>
+                <th>Wednesday</th>
+                <td>Mat</td>
+                <td>phy</td>
+                <td>Eng</td>
+                <td>Che</td>
+                <td colspan="3">LIBRARY</td>
+            </tr>
+            <tr>
+                <th>Thursday</th>
+                <td>Phy</td>
+                <td>Eng</td>
+                <td>Che</td>
+                <td colspan="3">LAB</td>
+                <td>Mat</td>
+            </tr>
+            <tr>
+                <th>Friday</th>
+                <td colspan="3">LAB</td>
+                <td>Mat</td>
+                <td>Che</td>
+                <td>Eng</td>
+                <td>Phy</td>
+            </tr>
+            <tr>
+                <th>Saturday</th>
+                <td>Eng</td>
+                <td>Che</td>
+                <td>Mat</td>
+                <td colspan="3">SEMINAR</td>
+                <td>SPORTS</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

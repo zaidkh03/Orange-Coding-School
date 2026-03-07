@@ -1,0 +1,347 @@
+<!--
+===============================================================================
+PHASE 3 – HYPERLINKS & MULTIMEDIA
+
+TOPIC SUMMARY:
+This phase explores how HTML connects documents and embeds media.
+
+Concepts Covered:
+1. Hyperlinks (<a>) and routing patterns:
+   - External links
+   - Email links (mailto:)
+   - Telephone links (tel:)
+   - Security with rel="noopener noreferrer"
+2. Responsive Images:
+   - <img>
+   - <figure> & <figcaption>
+   - <picture> with <source>
+   - Lazy loading
+3. Audio & Video Embedding:
+   - <video>, <audio>
+   - Multiple <source> formats
+   - <track> for captions
+   - Fallback content
+4. External Embedded Content:
+   - <iframe>
+   - sandbox security
+   - allow permissions
+   - performance optimizations
+
+This phase is about making the web interactive, connected, and media-rich.
+Browsers are not just text renderers — they are multimedia engines.
+===============================================================================
+-->
+
+<!DOCTYPE html>
+<!-- HTML5 declaration. Prevents quirks mode rendering. -->
+
+<html lang="en">
+<!-- Root element.
+     lang="en" improves accessibility and search engine parsing.
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <!-- UTF-8 ensures universal character support. -->
+
+  <title>Phase 3: Hyperlinks & Multimedia</title>
+  <!-- Browser tab title and SEO ranking signal. -->
+
+  <!--
+  <style>
+  Internal CSS for demo purposes.
+  In production, use:
+  <link rel="stylesheet" href="styles.css">
+  -->
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+
+    img,
+    video,
+    iframe {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    figure {
+      margin: 0;
+      padding: 10px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      display: inline-block;
+    }
+
+    figcaption {
+      font-size: 0.9em;
+      color: #555;
+      text-align: center;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .demo-box {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--
+  ELEMENT: <div class="demo-box">
+
+  Generic container used for grouping and styling.
+  class="demo-box" allows multiple elements to share CSS rules.
+  -->
+  <div class="demo-box">
+
+    <!--
+    ELEMENT: <h2>
+    Section-level heading.
+    Maintains document hierarchy.
+    -->
+    <h2>Hyperlinks & Routing</h2>
+
+    <!--
+    ELEMENT: <a>
+
+    Explanation:
+    Anchor element creates hyperlinks.
+
+    Required Attribute:
+    - href → destination URL
+
+    Attributes Used:
+    - target="_blank"
+      Opens link in new tab.
+    - rel="noopener noreferrer"
+     * noopener → prevents new page from accessing window.opener (security)
+     * noreferrer → prevents sending referrer info to new page (privacy)
+      Security protection when using target="_blank".
+      Prevents reverse tabnabbing attacks.
+
+    Other Important Attributes:
+    - download → forces file download
+    - hreflang="en" → language of linked resource
+    - type="text/html"
+    - referrerpolicy
+    -->
+    <p>
+      <a href="https://developer.mozilla.org" target="_blank" rel="noopener noreferrer">
+        External Link: Open MDN Web Docs in a new tab
+      </a>
+    </p>
+
+    <!--
+    MAILTO LINK:
+    Opens default email client.
+
+    TEL LINK:
+    Initiates phone call on supported devices.
+    -->
+    <p>
+      <a href="mailto:hello@example.com">Email Us</a> |
+      <a href="tel:+1234567890">Call Us</a>
+    </p>
+  </div>
+
+
+  <div class="demo-box">
+    <h2>Responsive Images</h2>
+
+    <!--
+    ELEMENT: <img>
+
+    Explanation:
+    Embeds an image.
+
+    Required Attributes:
+    - src → image path
+    - alt → alternative text (ACCESSIBILITY CRITICAL)
+
+    Attributes Used:
+    - loading="lazy"
+      Defers loading until image enters viewport.
+
+    Other Important Attributes:
+    - width / height (improves layout stability)
+    - srcset → multiple resolutions
+    - sizes → responsive size rules
+    - decoding="async"
+    - crossorigin
+    - 
+    -->
+    <img src="https://picsum.photos/400/200" alt="A random placeholder landscape" loading="lazy">
+
+    <!--
+    ELEMENT: <figure>
+
+    Groups media with caption.
+
+    ELEMENT: <figcaption>
+    Caption describing the figure.
+    Improves semantic clarity.
+    -->
+    <figure>
+      <img src="https://picsum.photos/300/150" alt="Another placeholder image" loading="lazy">
+      <figcaption>
+        Fig 1. An example of a semantically captioned image.
+      </figcaption>
+    </figure>
+
+    <!-- Line break (not recommended for layout spacing) -->
+    <br><br>
+
+    <!--
+    ELEMENT: <picture>
+
+    Enables responsive image switching.
+
+    ELEMENT: <source>
+    Used inside <picture>, <audio>, or <video>.
+
+    Attributes:
+    - media → CSS media query condition
+    - srcset → image source
+    - type → MIME type (optional)
+
+    Browser chooses first matching source.
+    -->
+    <picture>
+      <source media="(min-width: 800px)" srcset="https://picsum.photos/800/200">
+      <source media="(min-width: 400px)" srcset="https://picsum.photos/400/200">
+      <img src="https://picsum.photos/200/100" alt="Responsive placeholder that changes based on screen width"
+        loading="lazy">
+    </picture>
+  </div>
+
+
+  <div class="demo-box">
+    <h2>Audio & Video</h2>
+
+    <!--
+    ELEMENT: <video>
+
+    Embeds video content.
+
+    Attributes Used:
+    - controls → shows play/pause UI
+    - poster → image shown before playback
+    - width → display width
+
+    Other Important Attributes:
+    - autoplay
+    - muted (required for autoplay in many browsers)
+    - loop
+    - preload="auto|metadata|none"
+    - playsinline (mobile optimization)
+    -->
+    <video controls poster="https://picsum.photos/500/300" width="500">
+
+      <!-- Multiple source formats for compatibility -->
+      <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/friday.mp4" type="video/mp4">
+
+      <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/friday.webm" type="video/webm">
+
+      <!--
+      ELEMENT: <track>
+
+      Adds subtitles, captions, metadata.
+
+      Attributes:
+      - kind="captions|subtitles|descriptions|chapters|metadata"
+      - src → .vtt file
+      - srclang → language code
+      - label → user-visible label
+      - default (boolean)
+      -->
+      <track kind="captions" src="example-captions.vtt" srclang="en" label="English">
+
+      <!-- Fallback text -->
+      Your browser does not support the video tag.
+    </video>
+
+    <br><br>
+
+    <!--
+    ELEMENT: <audio>
+
+    Similar to <video> but audio-only.
+
+    Common Attributes:
+    - controls : shows play/pause UI
+    - autoplay :  starts playing automatically (often requires muted)
+    - loop : restarts when finished
+    - muted : silences audio (required for autoplay in many browsers)
+
+    - preload : "auto|metadata|none" (controls loading behavior)
+      *auto : load entire audio when page loads
+      *metadata : load only metadata (duration, dimensions)
+      *none : do not load until user initiates playback
+    -->
+    <audio controls autoplay muted src="./media/Giza - Travis Scott.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <br>
+    <audio controls loop src="./media/Giza - Travis Scott.mp3" type="audio/mpeg" preload="none">
+      <!--you can chane the preload value with: preload="metadata" or preload="auto"-->
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+
+  <div class="demo-box">
+    <h2>External Content (Iframes)</h2>
+
+    <!--
+    ELEMENT: <iframe>
+
+    Embeds external webpage inside current page.
+
+    Attributes Used:
+    - src → URL to embed
+    - width / height
+    - title → accessibility requirement
+    - loading="lazy"
+    - sandbox → security restrictions
+    - allow → permission policies
+
+    sandbox Values:
+    - allow-scripts
+    - allow-forms
+    - allow-same-origin
+    - allow-popups
+
+    Security Note:
+    Always restrict iframe capabilities when embedding third-party content.
+    -->
+    <iframe src="https://www.youtube.com/embed/qclZUQYZTzg?si=2eWRDR8F2141WvbC" width="560" height="315"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27062.80521882846!2d36.00934219001317!3d32.01915898531182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151b66a6a2ac7d37%3A0x8bae34dbcc6ff1ed!2sRusseifa!5e0!3m2!1sen!2sjo!4v1771964764248!5m2!1sen!2sjo"
+      width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+  </div>
+
+</body>
+
+</html>

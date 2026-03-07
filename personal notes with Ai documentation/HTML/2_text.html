@@ -1,0 +1,409 @@
+<!--
+===============================================================================
+PHASE 2 – TEXT SEMANTICS & TYPOGRAPHY FOUNDATIONS
+
+TOPIC SUMMARY:
+This phase explores semantic text-level elements in HTML.
+
+Concepts Covered:
+1. Proper heading hierarchy (h1–h6).
+2. Paragraph structure.
+3. Ordered, unordered, and definition lists.
+4. Inline semantic emphasis:
+   - strong, em, mark, code, kbd
+   - del, ins
+   - sub, sup
+5. Quotations:
+   - blockquote, q, cite
+6. Abbreviations with abbr.
+7. Line breaks (br) and thematic breaks (hr).
+8. Preformatted content (pre).
+9. Global attributes like class and datetime.
+
+This phase is about meaning, not appearance. These tags tell browsers,
+search engines, and assistive technologies what your text *means*.
+===============================================================================
+-->
+
+<!DOCTYPE html>
+<!-- Same explanation as Phase 1:
+     HTML5 document declaration. Required to avoid quirks mode. -->
+
+<html lang="en">
+<!-- Root element.
+     lang="en" improves SEO and screen reader pronunciation.
+     Other global attributes:
+     - dir="rtl"
+     - class
+     - id
+     - data-* custom attributes
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Character encoding (UTF-8 supports nearly all characters globally). -->
+
+  <title>Phase 2: Text Semantics</title>
+  <!-- Browser tab title + SEO ranking factor.
+       Best practice: 50–60 characters. -->
+
+  <!-- 
+  ELEMENT: <style>
+
+  Explanation:
+  Internal CSS styling.
+
+  Best Practice:
+  Use external CSS in production:
+  <link rel="stylesheet" href="styles.css">
+  -->
+  <style>
+    body { font-family: sans-serif; color: #222; background-color: #fdfdfd; padding: 20px; }
+    h1, h2, h3 { color: #0056b3; }
+    code { background-color: #e9ecef; color: #d63384; padding: 2px 4px; border-radius: 4px; }
+    mark { background-color: #ffeb3b; color: #000; padding: 0 2px; }
+    blockquote { border-left: 4px solid #ccc; background-color: #f9f9f9; padding: 10px 20px; margin: 0; }
+    .section-box { margin-bottom: 40px; }
+  </style>
+</head>
+
+<body>
+
+  <!-- 
+  ELEMENT: <div class="section-box">
+
+  Explanation:
+  Generic container.
+  Used for grouping content for styling or scripting.
+
+  Attribute:
+  - class="section-box"
+    * Used for CSS targeting.
+    * Multiple elements can share same class.
+
+  Other Important Global Attributes:
+  - id (unique): 
+  - hidden : hides element from view and assistive technologies.
+  - tabindex : controls keyboard focus order.
+  - contenteditable  :  makes element editable by user.
+  -->
+  <div class="section-box">
+
+    <!-- 
+    ELEMENT: <h1> to <h6>
+
+    Explanation:
+    Headings define document structure.
+
+    Rules:
+    - Only one <h1> per page.
+    - Follow hierarchy (h1 → h2 → h3).
+
+    Use Case:
+    Improves accessibility and SEO.
+    -->
+    <h1>Main Page Title (H1)</h1>
+    <h2>Section Heading (H2)</h2>
+    <h3>Sub-section Heading (H3)</h3>
+
+    <!-- 
+    ELEMENT: <p>
+
+    Explanation:
+    Paragraph element.
+    Automatically adds spacing.
+
+    Use Case:
+    Body text container.
+    -->
+    <p>This is a standard paragraph. It contains the primary body text of the document.</p>
+  </div>
+
+
+  <div class="section-box">
+    <h2>Lists & Iteration</h2>
+
+    <!-- 
+    ELEMENT: <ul>
+
+    Explanation:
+    Unordered list (bulleted).
+
+    Use Case:
+    When order does NOT matter.
+
+    Attributes:
+    - type (obsolete in HTML5, use CSS instead)
+    -->
+    <ul>
+      <!-- 
+      ELEMENT: <li>
+      List item. Used inside <ul> or <ol>.
+      -->
+      <li>Apples</li>
+      <li>Oranges</li>
+    </ul>
+
+    <!-- 
+    ELEMENT: <ol>
+
+    Explanation:
+    Ordered list (numbered or lettered).
+
+    Attributes:
+    - type:
+        "1" (default numbers)
+        "A"
+        "a"
+        "I"
+        "i"
+    - start="3" → starting value.
+    - reversed → counts backward.
+    -->
+    <ol type="A" start="3">
+      <li>Step Three (Because start="3" and type="A", this is 'C')</li>
+      <li>Step Four ('D')</li>
+    </ol>
+
+    <!-- 
+    ELEMENT: <dl>
+
+    Explanation:
+    Definition list.
+
+    Use Case:
+    Terms + descriptions.
+    -->
+    <dl>
+      <!-- Term -->
+      <dt>HTML</dt>
+
+      <!-- Description -->
+      <dd>HyperText Markup Language</dd>
+
+      <dt>CSS</dt>
+      <dd>Cascading Style Sheets</dd>
+    </dl>
+  </div>
+
+
+  <div class="section-box">
+    <h2>Inline Emphases & State</h2>
+
+    <!-- 
+    ELEMENT: <strong>
+
+    Explanation:
+    Indicates strong importance.
+
+    Difference from <b>:
+    <strong> has semantic meaning.
+    <b> is purely visual.
+    -->
+    <p>
+      Warning: <strong>Do not share your password!</strong>
+    </p>
+
+    <!-- 
+    ELEMENT: <em>
+
+    Explanation:
+    Emphasis (changes meaning if removed).
+
+    Difference from <i>:
+    <em> is semantic.
+    <i> is stylistic.
+    -->
+    <p>
+      I <em>really</em> love coding in JavaScript.
+    </p>
+
+    <!-- 
+    ELEMENT: <code>
+
+    Explanation:
+    Inline code snippet.
+
+    Use Case:
+    Programming references.
+    -->
+    <p>
+      To print something in JS, use <code>console.log('hello')</code>.
+    </p>
+
+    <!-- 
+    ELEMENT: <mark>
+
+    Explanation:
+    Highlighted text (search results).
+    -->
+    <p>
+      You searched for "HTML". Here is a result containing <mark>HTML</mark>.
+    </p>
+
+    <!-- 
+    ELEMENT: <kbd>
+
+    Explanation:
+    Represents user keyboard input.
+
+    Related tags:
+    - <samp> (sample output)
+    - <var> (variable)
+    -->
+    <p>
+      To save your work, press <kbd>Ctrl</kbd> + <kbd>S</kbd>.
+    </p>
+
+    <!-- 
+    ELEMENT: <del> and <ins>
+
+    Explanation:
+    - <del> = deleted content
+    - <ins> = inserted content
+
+    Attribute:
+    - datetime="YYYY-MM-DD"
+
+    Use Case:
+    Document revisions.
+    -->
+    <p>
+      The framework's meeting is on 
+      <del datetime="2026-03-04">Wednesday</del> 
+      <ins datetime="2026-03-04">Thursday</ins>.
+    </p>
+  </div>
+
+
+  <div class="section-box">
+    <h2>Quotations & Citations</h2>
+
+    <!-- 
+    ELEMENT: <blockquote>
+
+    Explanation:
+    Block-level quotation.
+
+    Attribute:
+    - cite="URL" → source reference.
+
+    Use Case:
+    Long quotes.
+    -->
+    <blockquote cite="https://developer.mozilla.org/">
+      "The web is for everyone."
+    </blockquote>
+
+    <!-- 
+    ELEMENT: <cite>
+
+    Explanation:
+    Title of creative work.
+
+    ELEMENT: <q>
+    Inline quotation.
+
+    Attribute:
+    - cite → source link.
+    -->
+    <p>
+      As mentioned in the book <cite>Eloquent JavaScript</cite>, 
+      Brendan Eich once said 
+      <q cite="https://example.com">JavaScript had to look like Java</q>.
+    </p>
+
+    <!-- 
+    ELEMENT: <abbr>
+
+    Explanation:
+    Abbreviation.
+
+    Attribute:
+    - title="Full Meaning"
+
+    Accessibility:
+    Screen readers read full form.
+    -->
+    <p>
+      The <abbr title="Document Object Model">DOM</abbr> is an API for HTML and XML documents.
+    </p>
+  </div>
+
+  <h2>About Me</h2>
+
+  <p>hi my name is <strong>Zaid Alkhalili</strong>, i'm 22 years old</p>
+
+  <!-- HTML COMMENT:
+       Content inside <!-- --> is ignored by browser.
+  -->
+
+  <p>i love Watching <em>Football</em></p>
+
+  <p>
+    <mark>"Wake up we need to make Money"</mark>
+    ~Twenty one pilots
+  </p>
+
+  <!-- 
+  ELEMENT: <sub> and <sup>
+
+  Explanation:
+  - sub = subscript
+  - sup = superscript
+
+  Use Case:
+  Math, chemistry.
+  -->
+  <p>
+    H<sub>2</sub>O <br>
+    X <sup>2</sup>+ Y <sup>3</sup>=?
+  </p>
+
+  <!-- 
+  ELEMENT: <br>
+
+  Explanation:
+  Line break.
+  Self-closing.
+
+  Use Case:
+  Poems, addresses.
+  Avoid using for spacing.
+  -->
+
+  <p>this is an example of <del>del</del> and <ins>ins</ins></p>
+
+  <!-- 
+  ELEMENT: <hr>
+
+  Explanation:
+  Thematic break.
+  Represents topic shift.
+  Not just a visual line.
+  -->
+  <hr>
+
+  <!-- 
+  ELEMENT: <pre>
+
+  Explanation:
+  Preformatted text.
+  Preserves whitespace + indentation.
+
+  Use Case:
+  Code blocks.
+
+  Related:
+  Combine with <code> for semantics.
+  -->
+  <pre>
+        int i = 0;
+        while(i < 0)
+        {
+            i++;
+        }
+  </pre>
+
+</body>
+</html>

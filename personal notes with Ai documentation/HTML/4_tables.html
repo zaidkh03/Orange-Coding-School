@@ -1,0 +1,275 @@
+<!--
+===============================================================================
+PHASE 4 – TABULAR DATA CONSTRUCTION
+
+TOPIC SUMMARY:
+This phase explores how HTML structures structured data using tables.
+
+Concepts Covered:
+1. Core table structure:
+   - <table>, <tr>, <th>, <td>
+2. Semantic grouping:
+   - <caption>
+   - <thead>, <tbody>, <tfoot>
+3. Column grouping:
+   - <colgroup>, <col>
+4. Accessibility enhancements:
+   - scope attribute
+5. Cell spanning:
+   - colspan
+   - rowspan
+6. Structural best practices for readability and screen readers.
+
+Important Principle:
+Tables are for structured data — NOT layout. Modern layout belongs to CSS
+(Flexbox and Grid). Tables are data matrices.
+===============================================================================
+-->
+
+<!DOCTYPE html>
+<!-- HTML5 declaration. Prevents quirks mode rendering. -->
+
+<html lang="en">
+<!-- Root element.
+     lang="en" helps accessibility tools and search engines.
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <!-- UTF-8 ensures universal character compatibility. -->
+
+  <title>Phase 4: Tabular Data Construction</title>
+  <!-- Appears in browser tab and search engine results. -->
+
+  <!--
+  Internal styling for readability.
+  In production, use external stylesheet via:
+  <link rel="stylesheet" href="styles.css">
+  -->
+  <style>
+    body { font-family: system-ui, sans-serif; color: #333; padding: 20px; max-width: 900px; margin: auto; }
+    h2 { color: #2c3e50; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+    th, td { border: 1px solid #aaa; padding: 10px; text-align: left; }
+
+    caption { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; text-align: left; }
+    thead { background-color: #2c3e50; color: white; }
+    tfoot { background-color: #ecf0f1; font-weight: bold; }
+    tbody tr:nth-child(even) { background-color: #f9f9f9; }
+
+    .highlight-col { background-color: #e8f4f8; }
+  </style>
+</head>
+
+<body>
+
+  <!--
+  ELEMENT: <h2>
+  Section heading.
+  Maintains document hierarchy.
+  -->
+  <h2>Table Architecture & Semantic Grouping</h2>
+
+  <!--
+  ELEMENT: <table>
+
+  Explanation:
+  Represents tabular data organized into rows and columns.
+
+  Use Case:
+  Financial reports, schedules, comparison charts, databases.
+
+  Important Attributes:
+  - border (obsolete; use CSS instead)
+  - summary (obsolete in HTML5; use caption + ARIA instead)
+  - role="table" (rarely needed unless custom table)
+
+  Accessibility Note:
+  Always use proper <th> and scope attributes.
+  -->
+  <table>
+
+    <!--
+    ELEMENT: <caption>
+
+    Explanation:
+    Provides title/description of table.
+
+    Accessibility:
+    Screen readers announce caption before table.
+
+    Must be first child inside <table>.
+    -->
+    <caption>Employee Directory & Salary Report</caption>
+
+    <!--
+    ELEMENT: <colgroup>
+
+    Explanation:
+    Groups columns for styling or structural logic.
+
+    Use Case:
+    Apply styles to entire columns without affecting cells individually.
+    -->
+    <colgroup>
+
+      <!--
+      ELEMENT: <col>
+
+      Explanation:
+      Defines properties for one or more columns.
+
+      Attributes:
+      - span="number" → applies to multiple columns
+      - class → for styling
+      - style → inline styling
+      -->
+      <col>
+      <col class="highlight-col">
+      <col span="2">
+    </colgroup>
+
+    <!--
+    ELEMENT: <thead>
+
+    Explanation:
+    Groups header rows.
+
+    Use Case:
+    Improves readability and enables sticky headers in CSS.
+    -->
+    <thead>
+      <tr>
+        <!--
+        ELEMENT: <th>
+
+        Explanation:
+        Table header cell.
+
+        Attribute:
+        - scope="col" → defines it as column header.
+        Other scope values:
+          * row
+          * colgroup
+          * rowgroup
+        -->
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Role</th>
+        <th scope="col">Salary</th>
+      </tr>
+    </thead>
+
+    <!--
+    ELEMENT: <tbody>
+
+    Explanation:
+    Groups main body rows.
+    Optional but strongly recommended.
+    -->
+    <tbody>
+      <tr>
+        <!--
+        ELEMENT: <td>
+
+        Explanation:
+        Standard table data cell.
+
+        Important Attributes:
+        - colspan
+        - rowspan
+        - headers (for advanced accessibility)
+        -->
+        <td>001</td>
+        <td>Jane Doe</td>
+        <td>Senior Developer</td>
+        <td>$120,000</td>
+      </tr>
+
+      <tr>
+        <td>002</td>
+        <td>John Smith</td>
+        <td>UI Designer</td>
+        <td>$95,000</td>
+      </tr>
+    </tbody>
+
+    <!--
+    ELEMENT: <tfoot>
+
+    Explanation:
+    Groups footer rows.
+    Often used for totals or summary calculations.
+
+    Accessibility:
+    Screen readers recognize it as summary section.
+    -->
+    <tfoot>
+      <tr>
+        <!--
+        ATTRIBUTE: colspan="3"
+
+        Explanation:
+        Merges 3 columns into one cell.
+
+        Use Case:
+        Totals or grouped labels.
+        -->
+        <td colspan="3">Total Payroll Expense:</td>
+        <td>$215,000</td>
+      </tr>
+    </tfoot>
+
+  </table>
+
+
+  <h2>Spanning & Complex Tables (Rowspan)</h2>
+
+  <table>
+    <caption>Schedule with Row Spanning</caption>
+
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Monday</th>
+        <th scope="col">Tuesday</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <!--
+        scope="row"
+        Indicates this header labels the row.
+        -->
+        <th scope="row">9:00 AM</th>
+
+        <!--
+        ATTRIBUTE: rowspan="2"
+
+        Explanation:
+        Merges this cell vertically across 2 rows.
+
+        Use Case:
+        Multi-hour blocks, grouped data.
+        -->
+        <td rowspan="2">Deep Work Block (2 hours)</td>
+        <td>Team Standup</td>
+      </tr>
+
+      <tr>
+        <th scope="row">10:00 AM</th>
+        <td>Client Meeting</td>
+      </tr>
+
+      <tr>
+        <th scope="row">11:00 AM</th>
+        <td>Code Review</td>
+        <td>Emails & Admin</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

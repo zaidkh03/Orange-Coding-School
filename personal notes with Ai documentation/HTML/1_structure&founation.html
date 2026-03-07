@@ -1,0 +1,485 @@
+<!--
+===============================================================================
+PHASE 1 – STRUCTURAL FOUNDATIONS (Semantic HTML5 Architecture)
+
+TOPIC SUMMARY:
+This document demonstrates the foundational structure of a modern HTML5 page.
+
+Concepts Covered:
+1. Document type declaration (HTML5 standard).
+2. Root element configuration (language + text direction).
+3. Head metadata (charset, viewport, SEO canonical link, title).
+4. Internal CSS via <style>.
+5. Semantic structural elements:
+   - header
+   - nav
+   - main
+   - article
+   - section
+   - aside
+   - footer
+6. Accessibility enhancements:
+   - aria-label
+   - tabindex
+   - hidden attribute
+7. Proper heading hierarchy (h1 → h2 → h3).
+8. Global attributes and document outline logic.
+9. class vs id usage for styling and unique identification.
+
+This phase establishes how browsers, search engines, and assistive technologies
+interpret your document structure — not just how it looks.
+===============================================================================
+-->
+
+<!-- 
+ELEMENT: <!DOCTYPE html>
+
+Explanation:
+Declares the document type and version of HTML. In HTML5, this simplified
+declaration tells the browser to use standards mode.
+
+Usage:
+Always placed at the very top of the document.
+
+Important Notes:
+- Required for proper rendering.
+- Without it, browsers may enter "quirks mode".
+-->
+<!DOCTYPE html>
+
+<!-- 
+ELEMENT: <html>
+
+Explanation:
+Root element of the entire HTML document. All visible and invisible content
+must live inside this tag.
+
+Attributes Used:
+- lang="en"
+  * Specifies the primary language of the document.
+  * Critical for accessibility and SEO.
+  * Example values: "en", "ar", "fr", "es", "de".
+
+- dir="ltr"
+  * Defines text direction.
+  * Values:
+    - ltr (left to right)
+    - rtl (right to left)
+    - auto (browser determines)
+
+Other Important Global Attributes:
+- class → attach CSS classes
+- id → unique identifier
+- data-* → custom data attributes
+- style → inline styling
+-->
+<html lang="en" dir="ltr">
+
+<!-- 
+ELEMENT: <head>
+
+Explanation:
+Contains metadata and configuration for the document.
+Not displayed visually on the page.
+
+Use Case:
+Define encoding, SEO info, styling, scripts, and external resources.
+-->
+
+<head>
+
+    <!-- 
+    ELEMENT: <meta charset="UTF-8">
+
+    Explanation:
+    Defines character encoding (UTF-8 supports nearly all languages).
+
+    Why Use It:
+    Prevents broken characters (e.g., Arabic, emojis).
+
+    Other Important <meta> Types:
+    - name="description" content="Page summary for SEO"
+    - name="keywords" content="keyword1, keyword2"
+    - name="author" content="Author Name"
+    - http-equiv="refresh" content="5"
+    -->
+    <meta charset="UTF-8">
+
+    <!-- 
+    ELEMENT: <meta name="viewport">
+
+    Explanation:
+    Controls layout scaling on mobile devices.
+
+    content values explained:
+    - width=device-width → match device width
+    - initial-scale=1.0 → initial zoom level
+    - maximum-scale=1.0 → max zoom allowed
+    - user-scalable=no → disable zoom (not recommended)
+
+    Critical for responsive design.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 
+    ELEMENT: <link rel="canonical">
+
+    Explanation:
+    Tells search engines the preferred URL version.
+
+    Use Case:
+    Prevents duplicate content penalties.
+
+    Other Common rel Values:
+    - stylesheet
+    - icon (favicon)
+    - preload
+    - alternate
+    -->
+    <link rel="icon" type="image/x-icon" href="./media/icon.ico">
+    <link rel="canonical" href="https://example.com/phase1">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+
+    <!-- 
+    ELEMENT: <title>
+
+    Explanation:
+    Defines browser tab title and SEO page title.
+
+    Best Practices:
+    - 50–60 characters
+    - Include keywords
+    -->
+    <title>Phase 1: Structural Foundations</title>
+
+    <!-- 
+    ELEMENT: <style>
+
+    Explanation:
+    Internal CSS block.
+
+    Use Case:
+    Quick styling inside document.
+
+    Best Practice:
+    Use external CSS in production via:
+    <link rel="stylesheet" href="styles.css">
+    -->
+    <style>
+        body {
+            background: #f4f4f9;
+            color: #333;
+        }
+
+        header,
+        footer {
+            background: #2c3e50;
+            color: white;
+        }
+
+        nav {
+            background: #34495e;
+            color: white;
+        }
+
+        article {
+            background: white;
+        }
+
+        aside {
+            background: #ecf0f1;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5em;
+        }
+
+        section article .demo-box {
+            color: red;
+        }
+
+        section article #unique-submit-btn {
+            color: green;
+        }
+    </style>
+</head>
+
+<!-- 
+ELEMENT: <body>
+
+Explanation:
+Contains all visible content.
+
+Common Global Attributes:
+- onload
+- class
+- id
+-->
+
+<body>
+
+    <!-- 
+    ELEMENT: <header>
+
+    Explanation:
+    Introductory content container.
+    Typically contains logo, branding, heading.
+
+    Use Case:
+    Top section of page or article.
+
+    Important:
+    Multiple headers allowed (per section/article).
+    -->
+    <header id="site-header">
+        <!-- id:
+             Unique identifier.
+             Used for CSS, JS, anchors (#site-header).
+        -->
+
+        <!-- 
+        ELEMENT: <h1>
+
+        Explanation:
+        Highest-level heading.
+        Represents main page topic.
+
+        Best Practice:
+        Only ONE <h1> per page.
+        Maintain hierarchy (h1 → h2 → h3).
+        -->
+        <h1>Document Architecture Mastery</h1>
+    </header>
+
+    <!-- 
+    ELEMENT: <nav>
+
+    Explanation:
+    Defines navigation links.
+
+    Accessibility Attribute:
+    - aria-label="Main Navigation"
+      * Provides accessible name for screen readers.
+      * Useful if multiple nav elements exist.
+
+    Other ARIA attributes:
+    - aria-current="page"
+    - aria-expanded="true"
+    -->
+    <nav aria-label="Main Navigation">
+        <!-- 
+        ELEMENT: <a>
+
+        Explanation:
+        Anchor (hyperlink).
+
+        Required Attribute:
+        - href → destination URL
+
+        Other Important Attributes:
+        - target="_self" Default: Opens link in same tab
+
+        - target="_blank": Opens link in new tab
+         * Always use with rel="noopener noreferrer" for security
+        
+        - target="_parent": Opens link in parent frame
+         * Used in iframes
+         * Default if not specified
+        
+        - target="_top": Opens link in full body of window
+         * Breaks out of all frames
+        
+        - rel="noopener noreferrer"
+        - download
+        - title
+        -->
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- 
+    ELEMENT: <main>
+
+    Explanation:
+    Represents dominant content of page.
+    Only one <main> allowed per document.
+
+    Attributes:
+    - id="main-content"
+    - tabindex="-1"
+      * Makes element programmatically focusable.
+      * Used for skip-to-content accessibility.
+
+    tabindex values:
+    - 0 → natural tab order
+    - -1 → focusable via JS
+    - 1+ → custom order (avoid)
+    -->
+    <main id="main-content" tabindex="-1">
+
+        <!-- 
+        ELEMENT: <article>
+
+        Explanation:
+        Self-contained, independent content.
+
+        Examples:
+        - Blog post
+        - News article
+        - Forum post
+        -->
+        <article>
+            <h2>Understanding Semantic HTML</h2>
+
+            <!-- 
+            ELEMENT: <section>
+
+            Explanation:
+            Thematic grouping of content.
+
+            Must typically contain a heading.
+            -->
+            <section>
+                <h3>What is Semantics?</h3>
+
+                <!-- 
+                ELEMENT: <p>
+
+                Explanation:
+                Paragraph of text.
+                Most common text container.
+                -->
+                <p>
+                    Semantic HTML introduces meaning to the web page rather than just presentation.
+                </p>
+            </section>
+
+            <section>
+                <h3>Global Attributes Demo</h3>
+
+                <!-- 
+                ELEMENT: <div hidden>
+
+                Explanation:
+                Generic container.
+                Non-semantic by default.
+
+                hidden attribute:
+                - Boolean attribute.
+                - Hides element visually AND from screen readers.
+
+                Other Common Global Attributes:
+                - contenteditable="true"
+                - draggable="true"
+                - spellcheck="true"
+                -->
+                <div hidden>
+                    This content is hidden with the 'hidden' attribute.
+                </div>
+
+                <!-- 
+                ELEMENT: <div tabindex="0">
+
+                Explanation:
+                Makes normally non-focusable element keyboard accessible.
+
+                Accessibility Use Case:
+                Custom interactive components.
+
+                Warning:
+                Do not abuse tabindex > 0.
+                -->
+                <div tabindex="0">
+                    This div is focusable (tabindex="0"). Press Tab to interact with it.
+                </div>
+            </section>
+        </article>
+
+        <!-- 
+        ELEMENT: <aside>
+
+        Explanation:
+        Represents supplementary content.
+
+        Examples:
+        - Sidebar
+        - Related links
+        - Author info
+        -->
+        <aside>
+            <h3>Metadata</h3>
+
+            <!-- 
+            ENTITY: &copy;
+
+            Explanation:
+            HTML entity for © symbol.
+            -->
+            <div>Author: AI Architect</div>
+            <div>Date: 2026-03-04</div>
+        </aside>
+
+    </main>
+
+    <section id="class-vs-id-demo">
+        <h2>Class vs ID: Key Differences</h2>
+
+        <!-- 
+        ELEMENT: class vs id
+
+        class:
+        - Reusable across multiple elements
+        - Multiple classes per element (space-separated)
+        - Target with .classname in CSS
+        - Use for styling patterns and component groups
+
+        id:
+        - Unique identifier (one per element)
+        - Only one id per element
+        - Target with #idname in CSS
+        - Use for unique landmarks and JS selectors
+        -->
+
+        <article class="demo-box">
+            <h3>Example: Using Classes</h3>
+            <p>Multiple elements can share the same class for consistent styling.</p>
+            <button class="demo-box">Button 1</button>
+            <button class="demo-box">Button 2</button>
+        </article>
+
+        <article class="demo-box">
+            <h3>Example: Using IDs</h3>
+            <p>Each ID should uniquely identify a single element.</p>
+            <button id="unique-submit-btn">Submit</button>
+        </article>
+
+        <article class="demo-box">
+            <h3>Best Practice</h3>
+            <p>Use classes for styling and reusable styles; use IDs for unique landmarks and JavaScript hooks.</p>
+            <div id="main-form" class="form-container">
+                <input type="text" class="form-input" placeholder="Enter text">
+            </div>
+        </article>
+    </section>
+<br>
+    <!-- 
+    ELEMENT: <footer>
+
+    Explanation:
+    Represents footer for page or section.
+
+    Typical Content:
+    - Copyright
+    - Legal links
+    - Contact info
+    -->
+    <footer>
+        &copy; 2026 Frontend Mastery Course.
+    </footer>
+
+</body>
+
+</html>

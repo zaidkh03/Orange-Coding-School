@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>task 4</title>
+</head>
+
+<body>
+    <fieldset>
+        <legend>Form</legend>
+        <form action="https://example.com/submit" method="post" target="_blank">
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" required><br>
+            <label for="lname">Last name:</label><br>
+            <input type="text" id="lname" required><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" required><br><br>
+
+
+            <h3>Gender:</h3>
+            <input type="radio" id="male" name="gender">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender">
+            <label for="female">Female</label>
+
+            <h3>Favorite Subject:</h3>
+            <input type="checkbox" name="subject" id="cpp">
+            <label for="cpp">C++</label>
+            <input type="checkbox" name="subject" id="java">
+            <label for="java">Java</label>
+            <input type="checkbox" name="subject" id="c#">
+            <label for="c#">C#</label>
+            <input type="checkbox" name="subject" id="php">
+            <label for="php">PHP</label>
+            <input type="checkbox" name="subject" id="sql">
+            <label for="sql">SQL</label><br><br>
+
+            <h3>Your City</h3>
+
+            <label for="city">City:</label>
+            <select name="city" id="city">
+                <option value="amman">Amman</option>
+                <option value="zarqa">Zarqa</option>
+                <option value="aqaba">Aqaba</option>
+            </select><br><br>
+
+            <label for="file">Uplaod Image</label>
+            <input type="file" name="img" id="img"><br>
+
+            <label for="about">Write about yourself</label><br>
+            <textarea name="about" id="about" placeholder="write here" rows="5" cols="40"></textarea><br>
+            
+            <button type="submit" tar>Submit</button>
+
+        </form>
+    </fieldset>
+</body>
+
+</html>

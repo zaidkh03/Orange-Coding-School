@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Phase 6 — Pseudo-Classes, Pseudo-Elements & States</title>
+
+<link rel="stylesheet" href="phase6-pseudo-classes-elements-states.css">
+
+</head>
+
+<body>
+
+<header class="page-header">
+
+<!-- 
+  PAGE HEADER
+  Purpose: Introduces interaction styling
+  Related CSS: pseudo-classes
+-->
+<h1>CSS Phase 6: Pseudo-Classes, Pseudo-Elements & States</h1>
+
+<p class="subtitle">
+Styling elements based on interaction, structure, and state.
+</p>
+
+</header>
+
+
+
+<section class="section">
+
+<h2>Hover State</h2>
+
+<!-- 
+  BUTTON HOVER
+  Purpose: Demonstrates :hover interaction
+  Related CSS: :hover pseudo-class
+-->
+<button class="btn-hover">
+Hover over me
+</button>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Focus State</h2>
+
+<!-- 
+  INPUT FOCUS
+  Purpose: Demonstrates keyboard focus styling
+  Related CSS: :focus pseudo-class
+-->
+<input class="input-focus" placeholder="Click or tab into this input">
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Disabled State</h2>
+
+<!-- 
+  DISABLED BUTTON
+  Purpose: Demonstrates :disabled styling
+  Related CSS: :disabled pseudo-class
+-->
+<button class="btn-disabled" disabled>
+Disabled Button
+</button>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Structural Selectors</h2>
+
+<!-- 
+  LIST STRUCTURE
+  Purpose: Demonstrates :first-child, :last-child, :nth-child
+-->
+<ul class="demo-list">
+
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+<li>Item 4</li>
+<li>Item 5</li>
+
+</ul>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>:has() Parent Selector</h2>
+
+<!-- 
+  HAS SELECTOR DEMO
+  Purpose: Parent styling based on child existence
+-->
+<div class="card">
+
+<img src="https://picsum.photos/200/120" alt="Example image">
+
+<p>Card containing an image</p>
+
+</div>
+
+<div class="card">
+
+<p>Card without image</p>
+
+</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Pseudo-Elements</h2>
+
+<!-- 
+  BEFORE AFTER DEMO
+  Purpose: Decorative content via CSS
+  Related CSS: ::before and ::after
+-->
+<p class="quote">
+CSS can inject decorative elements.
+</p>
+
+</section>
+
+
+
+<footer class="footer">
+
+<p>End of Phase 6 Reference</p>
+
+</footer>
+
+</body>
+</html>

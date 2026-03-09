@@ -1,0 +1,313 @@
+/* =====================================================
+   PHASE 4 CSS REFERENCE
+   Flexbox & Grid Layout Systems
+===================================================== */
+
+
+/* ============================================
+   GLOBAL RESET
+============================================ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+
+
+/* ============================================
+   BODY BASE STYLE
+============================================ */
+
+body{
+
+font-family:Arial, Helvetica, sans-serif;
+background:#f4f6f9;
+padding:40px;
+line-height:1.6;
+
+}
+
+
+
+/* ============================================
+   FLEXBOX CONTAINER
+   What it is: A layout model for one-dimensional layouts
+   When to use it: navbars, menus, toolbars
+   Default value: display:block
+   Inherited: no
+============================================ */
+
+.flex-container{
+
+/* display:flex */
+/* Activates flexbox */
+
+display:flex;
+
+background:#ddd;
+padding:20px;
+
+}
+
+
+
+/* Flex item */
+
+.flex-item{
+
+background:#3498db;
+color:white;
+
+padding:20px;
+margin:5px;
+
+}
+
+
+
+/* ============================================
+   FLEX-DIRECTION
+   What it is: Defines the main axis direction
+   Values: row | column
+============================================ */
+
+.flex-row{
+
+display:flex;
+
+/* Default direction */
+
+flex-direction:row;
+
+margin-top:20px;
+
+}
+
+.flex-column{
+
+display:flex;
+
+/* Vertical stacking */
+
+flex-direction:column;
+
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   JUSTIFY-CONTENT
+   What it is: Aligns items along the main axis
+   Default value: flex-start
+============================================ */
+
+.justify-demo{
+
+display:flex;
+
+/* center → center alignment */
+/* space-between → items spread across container */
+/* space-around → equal spacing around items */
+
+justify-content:space-between;
+
+background:#eee;
+padding:20px;
+
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   ALIGN-ITEMS
+   What it is: Aligns items along cross axis
+   Default value: stretch
+============================================ */
+
+.align-demo{
+
+display:flex;
+
+align-items:center;
+
+height:120px;
+
+background:#ddd;
+margin-top:20px;
+
+}
+
+.tall{
+
+height:80px;
+
+}
+
+
+
+/* ============================================
+   FLEX-WRAP
+   What it is: Allows items to move onto new lines
+   Default value: nowrap
+============================================ */
+
+.wrap-demo{
+
+display:flex;
+
+flex-wrap:wrap;
+
+background:#eee;
+
+padding:20px;
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   GAP
+   What it is: Adds spacing between flex/grid items
+   Default value: 0
+============================================ */
+
+.gap-demo{
+
+display:flex;
+
+gap:20px;
+
+background:#ddd;
+padding:20px;
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   CSS GRID
+   What it is: Two-dimensional layout system
+   When to use it: full page layouts, dashboards
+============================================ */
+
+.grid-container{
+
+display:grid;
+
+/* 3 equal columns */
+
+grid-template-columns:1fr 1fr 1fr;
+
+/* Fractional unit distributes available space */
+
+gap:10px;
+
+background:#eee;
+padding:20px;
+margin-top:20px;
+
+}
+
+
+
+/* Grid items */
+
+.grid-item{
+
+background:#2ecc71;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+
+
+/* ============================================
+   GRID ROWS
+============================================ */
+
+.grid-rows-demo{
+
+display:grid;
+
+grid-template-columns:1fr 3fr;
+
+/* Two columns */
+
+grid-template-rows:60px 200px 60px;
+
+gap:10px;
+
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   SUBGRID
+   What it is: Allows child grid to inherit
+   parent track sizes
+============================================ */
+
+.parent-grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+margin-top:20px;
+
+}
+
+.child-grid{
+
+display:grid;
+
+/* subgrid inherits parent columns */
+
+grid-template-columns:subgrid;
+
+grid-column:1 / span 2;
+
+gap:10px;
+
+}
+
+
+
+/* ⚠️ NOTE:
+Subgrid is supported in modern browsers
+but older browsers may not support it.
+*/
+
+
+
+/* ============================================
+   PAGE STRUCTURE
+============================================ */
+
+.section{
+
+margin-top:60px;
+
+}
+
+.footer{
+
+margin-top:80px;
+text-align:center;
+color:#777;
+
+}

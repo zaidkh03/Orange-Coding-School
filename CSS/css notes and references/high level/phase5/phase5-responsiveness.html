@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      THE VIEWPORT META TAG
+      Purpose: The single most important HTML tag for responsive design.
+      What it does: Tells mobile browsers to use the DEVICE width as the
+                    layout viewport, rather than pretending to be a 980px
+                    desktop (which is the default — causing zoomed-out tiny text).
+
+      width=device-width  → match the viewport to the device's physical width
+      initial-scale=1.0   → don't zoom in or out on first load
+
+      ⚠️ Without this tag, media queries will NOT work correctly on mobile.
+         The browser will render the page at ~980px and shrink it down,
+         meaning your @media (max-width: 480px) will never trigger on phone.
+    -->
+    <title>Phase 5 – Responsiveness &amp; Adaptability Reference</title>
+    <link rel="stylesheet" href="phase5-responsiveness.css" />
+  </head>
+
+  <body>
+
+    <!-- ============================================================
+         PAGE HEADER
+         Related CSS: .page-header
+    ============================================================ -->
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 5</span>
+        <h1 class="page-title">Responsiveness &amp; Adaptability</h1>
+        <p class="page-subtitle">
+          Media queries for viewport-based breakpoints. Container queries for
+          component-based breakpoints. <code>clamp()</code> for fluid scaling.
+          <code>object-fit</code> for responsive media. Resize your browser
+          to see everything adapt.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: MEDIA QUERIES
+           Purpose: Demonstrate all forms of media query syntax.
+           Related CSS: Section "MEDIA QUERIES" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="media-queries">
+        <h2 class="section-title">1 — Media Queries</h2>
+
+        <!-- Concept intro -->
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">What Are Media Queries?</h3>
+          <p class="concept-text">
+            A media query is a conditional CSS block — "apply these rules
+            <em>only when</em> this condition is true." The most common
+            condition is viewport width. Resize your browser window to
+            see the demos below respond in real time.
+          </p>
+        </div>
+
+        <!--
+          MIN-WIDTH — MOBILE FIRST
+          Purpose: Show the recommended mobile-first approach.
+          Related CSS: .mq-mobile-first-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            Mobile-First: <code>@media (min-width: …)</code>
+          </h3>
+          <div class="mq-live-bar">
+            <div class="mq-indicator">
+              <span class="mq-dot mq-dot-xs mq-dot-active"></span>
+              <span class="mq-label-xs">≤ 599px<br>Mobile</span>
+            </div>
+            <div class="mq-indicator">
+              <span class="mq-dot mq-dot-sm"></span>
+              <span class="mq-label-sm">≥ 600px<br>Tablet</span>
+            </div>
+            <div class="mq-indicator">
+              <span class="mq-dot mq-dot-md"></span>
+              <span class="mq-label-md">≥ 900px<br>Laptop</span>
+            </div>
+            <div class="mq-indicator">
+              <span class="mq-dot mq-dot-lg"></span>
+              <span class="mq-label-lg">≥ 1200px<br>Desktop</span>
+            </div>
+          </div>
+
+          <!--
+            RESPONSIVE GRID — Mobile first
+            Purpose: A grid that reshapes across breakpoints.
+            Related CSS: .mq-grid
+          -->
+          <div class="mq-grid">
+            <div class="mq-card">
+              <div class="mq-card-icon">🎨</div>
+              <h4>Design</h4>
+              <p>Single column on mobile, expands as viewport widens.</p>
+            </div>
+            <div class="mq-card">
+              <div class="mq-card-icon">⚙️</div>
+              <h4>Engineering</h4>
+              <p>Uses min-width queries layered on a mobile-first base.</p>
+            </div>
+            <div class="mq-card">
+              <div class="mq-card-icon">📊</div>
+              <h4>Analytics</h4>
+              <p>Each breakpoint adds behaviour — never removes it.</p>
+            </div>
+            <div class="mq-card">
+              <div class="mq-card-icon">🚀</div>
+              <h4>Growth</h4>
+              <p>Inspect the CSS to see how each breakpoint layer adds columns.</p>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <strong>Mobile-first</strong> means writing base styles for small
+            screens, then using <code>min-width</code> queries to add
+            complexity as the screen gets larger. This is the recommended
+            approach because:<br>
+            1. It forces you to prioritise content over decoration.<br>
+            2. Small screens parse less CSS (no media query overhead).<br>
+            3. You add complexity, never remove it — easier to maintain.
+          </p>
+        </div>
+
+        <!--
+          MAX-WIDTH — DESKTOP FIRST
+          Purpose: Show the alternative desktop-first approach.
+          Related CSS: .mq-max-width-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            Desktop-First: <code>@media (max-width: …)</code>
+          </h3>
+          <div class="mq-max-demo">
+            <div class="mq-max-box mq-max-lg">Desktop layout (default)</div>
+            <div class="mq-max-box mq-max-md">Tablet override (max-width: 900px)</div>
+            <div class="mq-max-box mq-max-sm">Mobile override (max-width: 600px)</div>
+          </div>
+          <p class="demo-note">
+            <code>max-width</code> queries apply styles when the viewport is
+            <em>at most</em> that wide. This is desktop-first — you write
+            the large-screen layout as the default, then override it for
+            smaller screens.
+            <br><br>
+            ⚠️ Desktop-first is harder to maintain because you're
+            <em>subtracting</em> features as screens shrink. Prefer
+            mobile-first (<code>min-width</code>) for new projects.
+            You'll still use <code>max-width</code> for targeted small-screen
+            fixes on existing desktop-first codebases.
+          </p>
+        </div>
+
+        <!--
+          RANGE SYNTAX — Modern media query syntax
+          Purpose: Show the cleaner modern range syntax (CSS Media Queries Level 4).
+          Related CSS: .mq-range-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            Modern Range Syntax — <code>@media (600px &lt;= width &lt; 900px)</code>
+          </h3>
+          <div class="mq-range-demo">
+            <div class="mq-range-box mq-range-xs">width &lt; 600px</div>
+            <div class="mq-range-box mq-range-sm">600px ≤ width &lt; 900px</div>
+            <div class="mq-range-box mq-range-md">900px ≤ width &lt; 1200px</div>
+            <div class="mq-range-box mq-range-lg">width ≥ 1200px</div>
+          </div>
+          <p class="demo-note">
+            CSS Media Queries Level 4 introduced a cleaner range syntax.
+            Instead of <code>@media (min-width: 600px) and (max-width: 899px)</code>,
+            you can write <code>@media (600px &lt;= width &lt; 900px)</code>.
+            <br><br>
+            Browser support: all modern browsers. The old syntax still works
+            everywhere — use whichever reads more clearly to your team.
+          </p>
+        </div>
+
+        <!--
+          OTHER MEDIA FEATURES
+          Purpose: Demonstrate non-width media features (orientation, hover, prefers-color-scheme).
+          Related CSS: .mq-features-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Beyond Width — Other Media Features</h3>
+
+          <div class="mq-features-grid">
+            <!--
+              PREFERS-COLOR-SCHEME
+              Purpose: Dark mode detection.
+              Related CSS: @media (prefers-color-scheme: dark)
+            -->
+            <div class="mq-feature-card mq-feat-scheme">
+              <p class="mq-feat-label">prefers-color-scheme</p>
+              <div class="mq-scheme-demo">
+                <div class="scheme-box scheme-light">Light mode styles</div>
+                <div class="scheme-box scheme-dark">Dark mode styles</div>
+              </div>
+              <code>@media (prefers-color-scheme: dark)</code>
+            </div>
+
+            <!--
+              PREFERS-REDUCED-MOTION
+              Purpose: Accessibility — respect user's motion preference.
+              Related CSS: @media (prefers-reduced-motion: reduce)
+            -->
+            <div class="mq-feature-card mq-feat-motion">
+              <p class="mq-feat-label">prefers-reduced-motion</p>
+              <div class="mq-motion-demo">
+                <div class="motion-box motion-animated">Animating…</div>
+              </div>
+              <code>@media (prefers-reduced-motion: reduce)</code>
+            </div>
+
+            <!--
+              HOVER
+              Purpose: Detect if device has a pointer that can hover.
+              Related CSS: @media (hover: hover)
+            -->
+            <div class="mq-feature-card mq-feat-hover">
+              <p class="mq-feat-label">hover</p>
+              <div class="mq-hover-demo">
+                <div class="hover-box">Hover over me</div>
+              </div>
+              <code>@media (hover: hover)</code>
+            </div>
+
+            <!--
+              ORIENTATION
+              Purpose: Detect landscape vs portrait orientation.
+              Related CSS: @media (orientation: landscape)
+            -->
+            <div class="mq-feature-card mq-feat-orient">
+              <p class="mq-feat-label">orientation</p>
+              <div class="mq-orient-demo">
+                <div class="orient-box">
+                  <span class="orient-portrait">Portrait</span>
+                  <span class="orient-landscape">Landscape</span>
+                </div>
+              </div>
+              <code>@media (orientation: portrait/landscape)</code>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            Media queries can test far more than width. Critical ones:<br>
+            <code>prefers-color-scheme: dark</code> — respects OS dark mode.<br>
+            <code>prefers-reduced-motion: reduce</code> — essential accessibility.
+            Always wrap animations in a check for this. Users with vestibular
+            disorders can be harmed by excessive motion.<br>
+            <code>hover: hover</code> — touch devices have <code>hover: none</code>.
+            Don't rely on hover-only interactions for critical UI.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: CONTAINER QUERIES
+           Purpose: Component-level responsiveness — based on parent size,
+                    not the viewport.
+           Related CSS: Section "CONTAINER QUERIES" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="container-queries">
+        <h2 class="section-title">2 — Container Queries</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">The Problem Media Queries Can't Solve</h3>
+          <p class="concept-text">
+            Imagine a card component. On a full-width page it has a
+            horizontal layout. When placed in a sidebar, it should switch to
+            vertical — but the viewport width hasn't changed. A media query
+            can't know the card is in a sidebar. A <strong>container query</strong>
+            can — it watches the card's <em>parent container</em> instead.
+          </p>
+        </div>
+
+        <!--
+          CONTAINER QUERY DEMO
+          Purpose: Same card component that adapts to its container, not the viewport.
+          Related CSS: .cq-wrapper, .cq-card
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>@container (min-width: 400px)</code> — Same Component, Different Contexts
+          </h3>
+          <p class="sub-label">Same card component placed in three different container widths:</p>
+
+          <div class="cq-demo-row">
+            <!--
+              NARROW CONTAINER (~240px)
+              Purpose: Card in a sidebar — should stack vertically.
+              Related CSS: .cq-container-narrow
+            -->
+            <div class="cq-wrapper cq-wrapper-narrow">
+              <p class="cq-width-label">~240px container</p>
+              <!--
+                CQ CARD
+                Purpose: The component that changes based on container width.
+                Related CSS: .cq-card and @container rules in .css
+              -->
+              <div class="cq-card">
+                <div class="cq-card-img"></div>
+                <div class="cq-card-body">
+                  <h4 class="cq-card-title">Card Title</h4>
+                  <p class="cq-card-text">Description text that may wrap.</p>
+                  <button class="cq-card-btn">Action</button>
+                </div>
+              </div>
+            </div>
+
+            <!--
+              MEDIUM CONTAINER (~380px)
+              Purpose: Card below threshold — still stacks.
+              Related CSS: .cq-container-mid
+            -->
+            <div class="cq-wrapper cq-wrapper-mid">
+              <p class="cq-width-label">~380px container</p>
+              <div class="cq-card">
+                <div class="cq-card-img"></div>
+                <div class="cq-card-body">
+                  <h4 class="cq-card-title">Card Title</h4>
+                  <p class="cq-card-text">Description text that may wrap.</p>
+                  <button class="cq-card-btn">Action</button>
+                </div>
+              </div>
+            </div>
+
+            <!--
+              WIDE CONTAINER (~500px+)
+              Purpose: Card above threshold — switches to horizontal layout.
+              Related CSS: .cq-container-wide
+            -->
+            <div class="cq-wrapper cq-wrapper-wide">
+              <p class="cq-width-label">~500px container ✅ horizontal</p>
+              <div class="cq-card">
+                <div class="cq-card-img"></div>
+                <div class="cq-card-body">
+                  <h4 class="cq-card-title">Card Title</h4>
+                  <p class="cq-card-text">Description text that may wrap.</p>
+                  <button class="cq-card-btn">Action</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            The card component has zero knowledge of where it lives. The
+            parent declares itself a <code>container</code>, and the card's
+            CSS adapts to the container's measured width — not the viewport.
+            <br><br>
+            Two required steps:<br>
+            <strong>1.</strong> On the parent: <code>container-type: inline-size</code>
+            (and optionally <code>container-name: card-container</code>).<br>
+            <strong>2.</strong> On the component: <code>@container (min-width: 400px) &#123; … &#125;</code>
+            <br><br>
+            Browser support: all modern browsers since 2023. Safe for production.
+          </p>
+        </div>
+
+        <!--
+          CONTAINER QUERY UNITS
+          Purpose: Show cqi, cqb, cqw, cqh — relative to container size.
+          Related CSS: .cq-units-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Container Query Units: <code>cqi</code>, <code>cqw</code>, <code>cqb</code></h3>
+
+          <div class="cq-units-container">
+            <p class="cq-units-label">Container width drives font size via <code>cqi</code></p>
+            <p class="cq-units-text">This text is <code>5cqi</code> — 5% of the container's inline size.</p>
+            <p class="cq-units-text-sm">This text is <code>3cqi</code> — also relative to container width.</p>
+          </div>
+
+          <p class="demo-note">
+            Container query units are like <code>vw/vh</code> but relative
+            to the nearest named container instead of the viewport.<br>
+            <code>cqi</code> = 1% of the container's <em>inline</em> size (usually width).<br>
+            <code>cqb</code> = 1% of the container's <em>block</em> size (usually height).<br>
+            <code>cqw</code> / <code>cqh</code> = 1% of container width / height explicitly.<br>
+            Ideal for headings inside cards that need to scale with the card, not the page.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: FLUID SIZING WITH CLAMP()
+           Purpose: Demonstrate clamp() for fluid type and spacing.
+           Related CSS: Section "CLAMP" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="clamp">
+        <h2 class="section-title">3 — Fluid Sizing with <code>clamp()</code></h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">
+            <code>clamp(minimum, preferred, maximum)</code>
+          </h3>
+          <p class="concept-text">
+            <code>clamp()</code> constrains a value between a minimum and maximum,
+            with a preferred fluid value in between. It's the cleanest way to
+            create type and spacing that scales continuously — no breakpoints needed.
+            The preferred value is usually a viewport unit like <code>4vw</code>.
+          </p>
+        </div>
+
+        <!--
+          CLAMP() TYPOGRAPHY SCALE
+          Purpose: Show fluid type that scales smoothly between breakpoints.
+          Related CSS: .clamp-type-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Fluid Typography — Resize the browser to see scaling</h3>
+
+          <!--
+            CLAMP HEADINGS
+            Purpose: Each heading uses clamp() with different ranges.
+            Related CSS: .clamp-h1, .clamp-h2, .clamp-h3, .clamp-body
+          -->
+          <div class="clamp-type-demo">
+            <p class="clamp-h1">Display Heading</p>
+            <p class="clamp-code-label"><code>font-size: clamp(2rem, 5vw, 4rem)</code></p>
+
+            <p class="clamp-h2">Section Heading</p>
+            <p class="clamp-code-label"><code>font-size: clamp(1.4rem, 3vw, 2.2rem)</code></p>
+
+            <p class="clamp-h3">Subheading</p>
+            <p class="clamp-code-label"><code>font-size: clamp(1.1rem, 2vw, 1.5rem)</code></p>
+
+            <p class="clamp-body">
+              Body text scales too. This paragraph uses
+              <code>font-size: clamp(0.9rem, 1.2vw, 1.1rem)</code> — it's
+              never smaller than 0.9rem or larger than 1.1rem, flowing
+              smoothly between those extremes as the viewport changes width.
+            </p>
+          </div>
+
+          <p class="demo-note">
+            Without <code>clamp()</code>, type only changes at hard
+            breakpoints — you'd need a media query for every font-size
+            change. With <code>clamp()</code>, type scales continuously.<br><br>
+            <strong>Reading the formula:</strong><br>
+            <code>clamp(2rem, 5vw, 4rem)</code><br>
+            — At viewport ≤ 640px: <code>5vw</code> = 32px → min kicks in → stays 2rem (32px) ✅<br>
+            — At viewport = 800px: <code>5vw</code> = 40px → preferred value used<br>
+            — At viewport ≥ 1280px: <code>5vw</code> = 64px → max kicks in → stays 4rem (64px) ✅
+          </p>
+        </div>
+
+        <!--
+          CLAMP() FOR SPACING
+          Purpose: Show clamp on padding and gap, not just font-size.
+          Related CSS: .clamp-spacing-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Fluid Spacing — <code>clamp()</code> on <code>padding</code> and <code>gap</code></h3>
+
+          <div class="clamp-spacing-demo">
+            <div class="clamp-spacing-card">
+              <h4>Fluid padding</h4>
+              <p><code>padding: clamp(1rem, 3vw, 3rem)</code></p>
+              <p>This card's padding grows with the viewport — tight on mobile, generous on desktop.</p>
+            </div>
+            <div class="clamp-spacing-card">
+              <h4>Fluid padding</h4>
+              <p><code>padding: clamp(1rem, 3vw, 3rem)</code></p>
+              <p>Same component. Same rule. No breakpoints needed for spacing transitions.</p>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>clamp()</code> works on any length property —
+            <code>font-size</code>, <code>padding</code>, <code>margin</code>,
+            <code>gap</code>, <code>width</code>, <code>border-radius</code>.
+            It pairs perfectly with the <code>rem</code> + <code>vw</code>
+            unit combination for accessible fluid scaling.
+          </p>
+        </div>
+
+        <!--
+          MIN() AND MAX() — Siblings of clamp
+          Purpose: Show min() and max() as building blocks.
+          Related CSS: .minmax-fn-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            Siblings: <code>min()</code> and <code>max()</code>
+          </h3>
+          <div class="minmax-fn-demo">
+            <div class="minmax-box min-demo">
+              <span>width: min(100%, 600px)</span>
+              <p>Takes the SMALLER of 100% and 600px — fluid but capped. Better than max-width + width: 100% in one step.</p>
+            </div>
+            <div class="minmax-box max-demo">
+              <span>width: max(300px, 50%)</span>
+              <p>Takes the LARGER of 300px and 50% — never smaller than 300px. A responsive min-width in one step.</p>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>clamp(a, b, c)</code> is actually equivalent to
+            <code>max(a, min(b, c))</code> — max enforces the floor,
+            min enforces the ceiling. Knowing this helps debug unexpected
+            clamp behaviour.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 4: OBJECT-FIT & OBJECT-POSITION
+           Purpose: Responsive image and video handling.
+           Related CSS: Section "OBJECT-FIT" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="object-fit">
+        <h2 class="section-title">4 — <code>object-fit</code> &amp; <code>object-position</code></h2>
+
+        <!--
+          OBJECT-FIT ALL VALUES
+          Purpose: Show what each value does to an image in a fixed box.
+          Related CSS: .of-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">All <code>object-fit</code> Values — Same image, same 240×160 box</h3>
+
+          <div class="of-demo-grid">
+
+            <!--
+              OBJECT-FIT: FILL (default)
+              Purpose: Image stretches to fill — may distort.
+              Related CSS: .of-fill
+            -->
+            <div class="of-item">
+              <div class="of-box of-fill">
+                <!--
+                  The gradient simulates an image with a clear subject.
+                  In real use this would be an <img> tag.
+                -->
+                <div class="of-fake-img"></div>
+              </div>
+              <p class="of-label">fill (default)</p>
+              <p class="of-desc">Stretches to fill — distorts aspect ratio ⚠️</p>
+            </div>
+
+            <!--
+              OBJECT-FIT: CONTAIN
+              Purpose: Image scales to fit without cropping.
+              Related CSS: .of-contain
+            -->
+            <div class="of-item">
+              <div class="of-box of-contain">
+                <div class="of-fake-img"></div>
+              </div>
+              <p class="of-label">contain</p>
+              <p class="of-desc">Scales to fit — letterboxed, no crop</p>
+            </div>
+
+            <!--
+              OBJECT-FIT: COVER
+              Purpose: The most useful value — fills box, crops edges.
+              Related CSS: .of-cover
+            -->
+            <div class="of-item">
+              <div class="of-box of-cover">
+                <div class="of-fake-img"></div>
+              </div>
+              <p class="of-label">cover ✅ Most used</p>
+              <p class="of-desc">Fills box, crops edges — preserves ratio</p>
+            </div>
+
+            <!--
+              OBJECT-FIT: NONE
+              Purpose: Image at natural size, may overflow.
+              Related CSS: .of-none
+            -->
+            <div class="of-item">
+              <div class="of-box of-none">
+                <div class="of-fake-img"></div>
+              </div>
+              <p class="of-label">none</p>
+              <p class="of-desc">Natural size — may overflow the box</p>
+            </div>
+
+            <!--
+              OBJECT-FIT: SCALE-DOWN
+              Purpose: smaller of none or contain.
+              Related CSS: .of-scaledown
+            -->
+            <div class="of-item">
+              <div class="of-box of-scaledown">
+                <div class="of-fake-img of-fake-small"></div>
+              </div>
+              <p class="of-label">scale-down</p>
+              <p class="of-desc">Smaller of none/contain — won't upscale</p>
+            </div>
+
+          </div>
+
+          <p class="demo-note">
+            <code>object-fit</code> only works on <strong>replaced elements</strong>:
+            <code>&lt;img&gt;</code>, <code>&lt;video&gt;</code>,
+            <code>&lt;iframe&gt;</code>, <code>&lt;canvas&gt;</code>.
+            The element must have an explicit <code>width</code> and
+            <code>height</code> (or be inside a sized container) for
+            <code>object-fit</code> to have anything to fit <em>into</em>.
+            <br><br>
+            <code>cover</code> is the workhorse — use it for hero images,
+            card thumbnails, avatars, and any image container with
+            a fixed aspect ratio.
+          </p>
+        </div>
+
+        <!--
+          OBJECT-POSITION
+          Purpose: Control which part of the image is visible when cropped.
+          Related CSS: .op-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>object-position</code> — Control the Crop Point
+          </h3>
+
+          <div class="op-demo-grid">
+            <div class="op-item">
+              <div class="op-box">
+                <div class="op-img op-top-left"></div>
+              </div>
+              <code>object-position: top left</code>
+            </div>
+            <div class="op-item">
+              <div class="op-box">
+                <div class="op-img op-center"></div>
+              </div>
+              <code>object-position: center (default)</code>
+            </div>
+            <div class="op-item">
+              <div class="op-box">
+                <div class="op-img op-bottom-right"></div>
+              </div>
+              <code>object-position: bottom right</code>
+            </div>
+            <div class="op-item">
+              <div class="op-box">
+                <div class="op-img op-custom"></div>
+              </div>
+              <code>object-position: 30% 20%</code>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>object-position</code> works just like
+            <code>background-position</code> — keywords
+            (<code>top</code>, <code>center</code>, <code>bottom</code>,
+            <code>left</code>, <code>right</code>) or percentage/pixel values.
+            Use it to keep the focal point of an image in view after
+            cropping — e.g., <code>object-position: top center</code>
+            keeps faces visible in portrait photos used as landscape thumbnails.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 5: RESPONSIVE PATTERNS COMBINED
+           Purpose: Real-world component using all Phase 5 techniques.
+           Related CSS: .real-world-* classes
+      ============================================================ -->
+      <section class="ref-section" id="real-world">
+        <h2 class="section-title">5 — Real-World Example — Responsive Blog Layout</h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">
+            All Phase 5 Techniques — Media Query + Container Query + clamp() + object-fit
+          </h3>
+
+          <!--
+            BLOG LAYOUT
+            Purpose: A full responsive layout combining all techniques.
+            Related CSS: .blog-* classes
+          -->
+          <div class="blog-layout">
+
+            <!-- Featured article — spans full width on all sizes -->
+            <article class="blog-featured">
+              <div class="blog-featured-img"></div>
+              <div class="blog-featured-body">
+                <span class="blog-tag">Featured</span>
+                <h2 class="blog-featured-title">
+                  The Future of Layout: Container Queries Change Everything
+                </h2>
+                <p class="blog-featured-excerpt">
+                  For years, responsive design meant designing components
+                  around the viewport. Container queries finally let
+                  components be truly self-aware. Here's why that matters
+                  and how to start using them today.
+                </p>
+                <div class="blog-featured-meta">
+                  <span>By Priya Mehta</span>
+                  <span>·</span>
+                  <span>8 min read</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Grid of smaller articles -->
+            <div class="blog-grid">
+              <article class="blog-card">
+                <div class="blog-card-img blog-img-b"></div>
+                <div class="blog-card-body">
+                  <span class="blog-tag blog-tag-b">Tutorial</span>
+                  <h3 class="blog-card-title">Mastering clamp() for Fluid Typography</h3>
+                  <p class="blog-card-excerpt">No more brittle font-size media queries.</p>
+                </div>
+              </article>
+
+              <article class="blog-card">
+                <div class="blog-card-img blog-img-c"></div>
+                <div class="blog-card-body">
+                  <span class="blog-tag blog-tag-c">Deep Dive</span>
+                  <h3 class="blog-card-title">Grid vs Flexbox: Choosing the Right Tool</h3>
+                  <p class="blog-card-excerpt">A framework for making the decision every time.</p>
+                </div>
+              </article>
+
+              <article class="blog-card">
+                <div class="blog-card-img blog-img-d"></div>
+                <div class="blog-card-body">
+                  <span class="blog-tag blog-tag-d">Quick Tip</span>
+                  <h3 class="blog-card-title">object-fit: cover is All You Need for Images</h3>
+                  <p class="blog-card-excerpt">Stop fighting image dimensions. One property fixes it.</p>
+                </div>
+              </article>
+            </div>
+
+          </div>
+
+          <p class="demo-note">
+            This layout uses:<br>
+            — <code>@media (min-width: …)</code> to switch the featured
+            article from stacked to side-by-side.<br>
+            — <code>@container</code> on the blog grid so cards adapt to
+            their column width, not the page width.<br>
+            — <code>clamp()</code> on all headings for smooth font scaling.<br>
+            — <code>object-fit: cover</code> on all images so they fill
+            their containers without distortion.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 6: BREAKPOINT REFERENCE
+           Purpose: A permanent quick-reference for common breakpoints.
+           Related CSS: .bp-table
+      ============================================================ -->
+      <section class="ref-section" id="breakpoints">
+        <h2 class="section-title">6 — Breakpoint Quick Reference</h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">Common Breakpoint Systems</h3>
+          <div class="bp-table">
+            <div class="bp-row bp-header">
+              <span>Name</span>
+              <span>Min-width value</span>
+              <span>Target devices</span>
+              <span>Common use</span>
+            </div>
+            <div class="bp-row">
+              <span class="bp-name">xs</span>
+              <span class="bp-val">0 (base)</span>
+              <span>Small phones</span>
+              <span>Base mobile styles</span>
+            </div>
+            <div class="bp-row">
+              <span class="bp-name">sm</span>
+              <span class="bp-val">480px / 30rem</span>
+              <span>Large phones</span>
+              <span>2-col card grid</span>
+            </div>
+            <div class="bp-row">
+              <span class="bp-name">md</span>
+              <span class="bp-val">768px / 48rem</span>
+              <span>Tablets</span>
+              <span>Sidebar appears, nav expands</span>
+            </div>
+            <div class="bp-row">
+              <span class="bp-name">lg</span>
+              <span class="bp-val">1024px / 64rem</span>
+              <span>Laptops</span>
+              <span>3-col layout, wider containers</span>
+            </div>
+            <div class="bp-row">
+              <span class="bp-name">xl</span>
+              <span class="bp-val">1280px / 80rem</span>
+              <span>Desktops</span>
+              <span>Max content width, 4-col grids</span>
+            </div>
+            <div class="bp-row">
+              <span class="bp-name">2xl</span>
+              <span class="bp-val">1536px / 96rem</span>
+              <span>Large monitors</span>
+              <span>Wider max-width, extra padding</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            ⚠️ Don't treat breakpoints as sacred. The best breakpoints
+            are where your <em>content</em> breaks — not where a particular
+            device happens to be. Design your layout, then add breakpoints
+            where things start looking wrong.<br><br>
+            Using <code>rem</code>-based breakpoints is preferred — if the
+            user increases their base font size, the breakpoint triggers
+            sooner (when the layout starts to feel cramped), which is the
+            correct behaviour.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ============================================================
+         PAGE FOOTER
+         Related CSS: .page-footer
+    ============================================================ -->
+    <footer class="page-footer">
+      <p>
+        CSS Reference — Phase 5: Responsiveness &amp; Adaptability &nbsp;|&nbsp;
+        Design for the smallest screen first. Then enhance.
+      </p>
+    </footer>
+
+  </body>
+</html>

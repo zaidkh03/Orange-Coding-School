@@ -1,0 +1,1754 @@
+/* ================================================================
+   PHASE 6 — PSEUDO-CLASSES, PSEUDO-ELEMENTS & STATES
+   File: phase6-pseudo.css
+   Companion to: phase6-pseudo.html
+
+   PURPOSE: A permanent, richly-commented reference covering:
+
+   PSEUDO-CLASSES (single colon — select elements in a STATE):
+   - :hover, :focus, :focus-visible, :active
+   - :disabled, :enabled, :checked
+   - :link, :visited
+   - :first-child, :last-child
+   - :nth-child(), :nth-last-child(), :nth-of-type()
+   - :not(), :is(), :where()
+   - :has() — the parent selector
+
+   PSEUDO-ELEMENTS (double colon — target PARTS of elements):
+   - ::before, ::after
+   - ::first-line, ::first-letter
+   - ::placeholder, ::selection
+
+   COMMENTING CONVENTION:
+   ┌─────────────────────────────────────────┐
+   │  SELECTOR NAME                          │
+   │  What it is:   one-sentence description │
+   │  When to use:  practical scenario       │
+   │  Default:      browser default value    │
+   │  Inherited:    yes / no                 │
+   └─────────────────────────────────────────┘
+================================================================ */
+
+
+/* ================================================================
+   TABLE OF CONTENTS
+   1.  GLOBAL RESET & ROOT VARIABLES
+   2.  :hover
+   3.  :focus & :focus-visible
+   4.  :active
+   5.  :disabled & :enabled
+   6.  :checked
+   7.  :link & :visited
+   8.  :first-child & :last-child
+   9.  :nth-child() & :nth-of-type()
+   10. :not(), :is(), :where()
+   11. :has() — the parent selector
+   12. ::before & ::after
+   13. ::first-line & ::first-letter
+   14. ::placeholder & ::selection
+   15. REAL-WORLD FORM DEMO
+   16. PAGE LAYOUT
+================================================================ */
+
+
+/* ================================================================
+   1. GLOBAL RESET & ROOT VARIABLES
+================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #08080f;
+  --color-surface:     #0d0d1a;
+  --color-surface-alt: #111120;
+  --color-surface-hi:  #171730;
+  --color-border:      #1e1e3a;
+  --color-border-hi:   #2a2a50;
+
+  --color-accent:      #a78bfa;   /* violet */
+  --color-accent-dim:  rgba(167, 139, 250, 0.12);
+  --color-accent-b:    #34d399;   /* emerald */
+  --color-accent-b-dim:rgba(52, 211, 153, 0.12);
+  --color-warm:        #fbbf24;   /* amber */
+  --color-warm-dim:    rgba(251, 191, 36, 0.12);
+  --color-rose:        #f87171;
+  --color-rose-dim:    rgba(248, 113, 113, 0.12);
+  --color-sky:         #38bdf8;
+
+  --color-text-1:      #e8e4ff;
+  --color-text-2:      #7870a0;
+  --color-text-3:      #302850;
+  --color-code-bg:     #050510;
+  --color-code-text:   #a78bfa;
+
+  --sp-1: 0.25rem; --sp-2: 0.5rem;  --sp-3: 0.75rem;
+  --sp-4: 1rem;    --sp-5: 1.25rem; --sp-6: 1.5rem;
+  --sp-8: 2rem;    --sp-10: 2.5rem; --sp-12: 3rem; --sp-16: 4rem;
+
+  --r-sm: 4px; --r-md: 8px; --r-lg: 14px; --r-xl: 20px; --r-pill: 999px;
+
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+}
+
+
+/* ================================================================
+   2. :hover
+================================================================ */
+
+/* ============================================
+   :hover
+   What it is: Matches an element while a pointing device (mouse)
+               is positioned over it.
+   When to use: Visual feedback for interactive elements — buttons,
+               links, cards, nav items. Also to reveal hidden content.
+   Default value: N/A — pseudo-class, not a property.
+   Inherited: No — but descendant styles can inherit from the hovered el.
+   ⚠️ NOTE: Touch screens have no hover. Guard touch-specific interactions
+            with @media (hover: hover) to avoid stuck hover states on mobile.
+============================================ */
+
+.hover-btn {
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  color: var(--color-text-2);
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* The :hover rule — fires on mouse-over */
+.hover-btn:hover {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(167, 139, 250, 0.2);
+}
+
+.hover-link {
+  color: var(--color-text-2);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hover-link:hover {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+.hover-card {
+  position: relative;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+.hover-card p { margin: 0; font-size: 0.85rem; color: var(--color-text-2); }
+
+/* Hidden content revealed on :hover — parent :hover exposes child */
+.hover-reveal {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-accent-b);
+  margin-top: var(--sp-1);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+/* When the CARD is hovered, show the child .hover-reveal */
+.hover-card:hover .hover-reveal {
+  opacity: 1;
+  transform: translateY(0);
+  /* This is "hover on parent reveals child" — a very common pattern.
+     The selector reads: when .hover-card is hovered, apply to .hover-reveal inside it. */
+}
+.hover-card:hover {
+  border-color: var(--color-accent-b);
+}
+
+
+/* ================================================================
+   3. :focus & :focus-visible
+================================================================ */
+
+/* ============================================
+   :focus
+   What it is: Matches an element that has received input focus —
+               via keyboard Tab, mouse click, or programmatic focus().
+   When to use: Style the focused element to aid keyboard navigation.
+   Default value: Browser provides a default focus ring (usually outline).
+   Inherited: No.
+
+   :focus-visible
+   What it is: Matches an element that has focus AND the browser
+               decides a visible focus indicator is warranted.
+               Keyboard focus: yes. Mouse click focus: usually no.
+   When to use: Use INSTEAD of :focus in most cases — provides
+               clean mouse UX while keeping keyboard accessibility.
+   ⚠️ CRITICAL ACCESSIBILITY RULE: Never remove focus indicators
+               without providing an alternative. Keyboard users NEED
+               to see where focus is. Use :focus-visible, not none.
+============================================ */
+
+.focus-input, .focus-btn, .focus-link,
+.focus-visible-btn, .focus-visible-input {
+  padding: var(--sp-2) var(--sp-4);
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  border-radius: var(--r-md);
+  transition: all 0.15s ease;
+  outline: none; /* We replace the default outline with our own */
+}
+
+.focus-input, .focus-visible-input {
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  color: var(--color-text-1);
+}
+
+.focus-btn, .focus-visible-btn {
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  color: var(--color-text-2);
+  cursor: pointer;
+}
+
+.focus-link {
+  color: var(--color-text-2);
+  text-decoration: none;
+  display: inline-block;
+  border-radius: var(--r-sm);
+}
+
+/* :focus — fires for ALL focus methods (keyboard AND mouse) */
+.focus-input:focus,
+.focus-btn:focus,
+.focus-link:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+  /* This shows on EVERY focus — including mouse clicks.
+     Some find this visually cluttered. Use :focus-visible instead. */
+}
+
+/* :focus-visible — fires only when browser deems it necessary
+   (keyboard navigation, programmatic focus, not mouse clicks on buttons) */
+.focus-visible-btn:focus-visible,
+.focus-visible-input:focus-visible {
+  border-color: var(--color-accent-b);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.3);
+  outline: 2px solid var(--color-accent-b);
+  outline-offset: 2px;
+}
+
+/* Inputs benefit from :focus even for mouse clicks — user may type */
+.focus-visible-input:focus {
+  border-color: var(--color-accent-b);
+}
+
+
+/* ================================================================
+   4. :active
+================================================================ */
+
+/* ============================================
+   :active
+   What it is: Matches an element while it is being activated —
+               the instant between mousedown and mouseup (or touch).
+   When to use: Simulate a physical "press" on buttons — slight
+               downward movement + reduced shadow = tactile feel.
+   Default value: Browser may provide a default (e.g. blue flash on links).
+   Inherited: No.
+   ⚠️ NOTE: :active and :hover can overlap. Order matters in the cascade —
+            write :hover before :active so :active wins on click.
+============================================ */
+
+.active-btn {
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-md);
+  color: var(--color-accent);
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.2);
+  transform: translateY(0);
+}
+
+.active-btn:hover {
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.3);
+  transform: translateY(-2px);
+}
+
+.active-btn:active {
+  /* The "press" effect — moves DOWN and shadow shrinks */
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px rgba(167, 139, 250, 0.15);
+  /* Note: transition is fast (0.08s) so the press feels snappy */
+}
+
+.active-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--r-sm);
+  transition: background 0.08s;
+}
+.active-link:active {
+  background: var(--color-accent-dim);
+  color: var(--color-text-1);
+}
+
+
+/* ================================================================
+   5. :disabled & :enabled
+================================================================ */
+
+/* ============================================
+   :disabled
+   What it is: Matches form elements that have the disabled HTML attribute.
+   When to use: Style inactive controls — grayed out, no hover, no cursor.
+   Default value: Browser has a default (usually grey and muted).
+   Inherited: No — but opacity on parent affects children visually.
+   ⚠️ NOTE: pointer-events: none prevents mouse interaction but does NOT
+            make an element truly disabled — it's still in the tab order.
+            Only the HTML disabled attribute fully disables a form element.
+============================================ */
+
+.disabled-btn, .enabled-btn {
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--r-md);
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  border: 1px solid var(--color-border-hi);
+  transition: all 0.15s;
+}
+
+.enabled-btn {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  cursor: pointer;
+}
+.enabled-btn:hover {
+  background: rgba(167, 139, 250, 0.2);
+}
+
+/* Style disabled buttons — remove interactivity cues */
+.disabled-btn:disabled {
+  background: var(--color-surface-alt);
+  border-color: var(--color-border);
+  color: var(--color-text-3);
+  cursor: not-allowed;    /* shows ⊘ cursor — visual cue it's inactive */
+  opacity: 0.5;
+}
+
+.disabled-input, .enabled-input {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  color: var(--color-text-1);
+}
+
+.disabled-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--color-surface);
+  /* Use :disabled pseudo-class on the element itself, not the parent,
+     to avoid accidentally hiding other things in a fieldset */
+}
+
+
+/* ================================================================
+   6. :checked
+================================================================ */
+
+/* ============================================
+   :checked
+   What it is: Matches checkboxes and radio buttons that are selected.
+   When to use: Build fully custom checkbox/radio UI by hiding the
+               native input and styling a sibling element.
+   Default value: Browser-native checkmark appearance.
+   Inherited: No.
+
+   THE PATTERN:
+   1. Hide the real input (opacity: 0 or appearance: none)
+   2. Style a sibling <span> as the visual control
+   3. Use "input:checked + .cb-box" to style the sibling when checked
+   
+   ⚠️ NOTE: The sibling combinator (+) only works if .cb-box immediately
+            follows the input in the DOM — keep them adjacent.
+============================================ */
+
+/* Custom checkbox container */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hide the native input — keep it accessible */
+.cb-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  /* We use opacity: 0 rather than display: none so it stays in the
+     tab order and focus still fires on keyboard navigation. */
+}
+
+/* The visual checkbox box */
+.cb-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-border-hi);
+  border-radius: var(--r-sm);
+  background: var(--color-surface-hi);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+/* The checkmark via ::after pseudo-element */
+.cb-box::after {
+  content: "";
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg) scale(0);
+  opacity: 0;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  margin-top: -2px;
+}
+
+/* When the hidden input is checked, style the ADJACENT sibling .cb-box */
+.cb-input:checked + .cb-box {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.cb-input:checked + .cb-box::after {
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+}
+
+/* Focus ring on the visual box when the real input is focused */
+.cb-input:focus-visible + .cb-box {
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+}
+
+.cb-label { font-size: 0.88rem; color: var(--color-text-2); }
+
+/* Custom radio buttons — same pattern */
+.custom-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  cursor: pointer;
+  user-select: none;
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-border-hi);
+  border-radius: 50%;        /* circles for radio buttons */
+  background: var(--color-surface-hi);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+/* Inner dot via ::after */
+.radio-circle::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: white;
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+
+.radio-input:checked + .radio-circle {
+  border-color: var(--color-accent);
+  background: var(--color-accent-dim);
+}
+
+.radio-input:checked + .radio-circle::after {
+  transform: scale(1);
+  background: var(--color-accent);
+}
+
+.radio-input:focus-visible + .radio-circle {
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+}
+
+.radio-label { font-size: 0.88rem; color: var(--color-text-2); }
+
+.checked-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+}
+
+.radio-demo {
+  display: flex;
+  gap: var(--sp-6);
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  flex-wrap: wrap;
+}
+
+
+/* ================================================================
+   7. :link & :visited
+================================================================ */
+
+/* ============================================
+   :link
+   What it is: Matches unvisited <a> elements that have an href.
+   :visited
+   What it is: Matches <a> elements that the browser has in history.
+   When to use: Distinguish visited from unvisited links.
+   Default value: :link = blue underlined, :visited = purple.
+   Inherited: No.
+   ⚠️ PRIVACY NOTE: Browsers restrict :visited to colour-only properties
+               for security. JS cannot read :visited styles. This prevents
+               sites from fingerprinting browsing history.
+   ORDER RULE (LVHA): :link, :visited, :hover, :active — always in this order.
+============================================ */
+
+.link-state {
+  display: inline-block;
+  font-size: 0.88rem;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  transition: color 0.15s, background 0.15s;
+}
+
+/* L — unvisited links */
+.link-state:link {
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+}
+
+/* V — visited links (colour-only properties allowed here) */
+.link-state:visited {
+  color: var(--color-text-2);
+  background: var(--color-surface-alt);
+  border-color: var(--color-border);
+}
+
+/* H — hover (both link and visited get same hover) */
+.link-state:hover {
+  color: var(--color-text-1);
+  background: var(--color-surface-hi);
+}
+
+/* A — active (clicking) */
+.link-state:active {
+  color: var(--color-warm);
+}
+
+
+/* ================================================================
+   8. :first-child & :last-child
+================================================================ */
+
+/* ============================================
+   :first-child
+   What it is: Matches an element that is the first sibling
+               among all its parent's children.
+   :last-child
+   What it is: Matches an element that is the last sibling.
+   When to use: Remove borders/margins from first/last list items.
+               Style a leading or trailing item differently.
+   Default value: N/A.
+   Inherited: No.
+   ⚠️ NOTE: :first-child checks position among ALL siblings, not just
+            elements of the same type. If a <p> precedes your <li>,
+            li:first-child won't match. Use :first-of-type for type-specific.
+============================================ */
+
+.struct-list {
+  list-style: none;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.struct-list li {
+  padding: var(--sp-3) var(--sp-5);
+  font-size: 0.85rem;
+  color: var(--color-text-2);
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.15s;
+}
+
+.struct-list li:last-child {
+  border-bottom: none;  /* remove the last separator — very common pattern */
+}
+
+/* :first-child and :last-child styling for fl-list */
+.fl-list li:first-child {
+  color: var(--color-accent-b);
+  background: var(--color-accent-b-dim);
+  font-weight: 600;
+}
+
+.fl-list li:last-child {
+  color: var(--color-rose);
+  background: var(--color-rose-dim);
+  font-weight: 600;
+  border-bottom: none;
+}
+
+
+/* ================================================================
+   9. :nth-child() & :nth-of-type()
+================================================================ */
+
+/* ============================================
+   :nth-child(An+B)
+   What it is: Matches elements based on their position among siblings
+               using a formula. n auto-increments from 0.
+   When to use: Zebra-stripe tables, highlight every 3rd item,
+               select the first N elements.
+   Default value: N/A.
+   Inherited: No.
+
+   FORMULA CHEATSHEET:
+   odd / 2n+1    → 1st, 3rd, 5th…
+   even / 2n     → 2nd, 4th, 6th…
+   3n            → 3rd, 6th, 9th…
+   3n+2          → 2nd, 5th, 8th…
+   -n+3          → 1st, 2nd, 3rd (first 3 only)
+   n+4           → 4th, 5th, 6th… (from 4th onwards)
+============================================ */
+
+/* Zebra-stripe table */
+.nth-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.nth-table td {
+  padding: var(--sp-3) var(--sp-5);
+  color: var(--color-text-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nth-table tr:last-child td { border-bottom: none; }
+
+/* Zebra-stripe — odd rows get background tint */
+.nth-table tr:nth-child(odd) {
+  background: var(--color-surface-alt);
+}
+
+/* Formula demo boxes */
+.nth-boxes {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.nth-box {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-2);
+  font-weight: 600;
+}
+
+/* :nth-child(3n+2) → 2nd, 5th, 8th */
+.nth-box:nth-child(3n+2) {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* :nth-last-child() — count from the END */
+.nth-last-list li:nth-last-child(2) {
+  color: var(--color-warm);
+  background: var(--color-warm-dim);
+  font-weight: 600;
+}
+
+/* ============================================
+   :nth-of-type()
+   What it is: Like :nth-child() but counts only siblings of the SAME type.
+   When to use: Mixed content (paragraphs AND headings) where you need to
+               target a specific element type independently.
+   ⚠️ DIFFERENCE: :nth-child(2) = second element regardless of type.
+                  :nth-of-type(2) = second element OF THAT SPECIFIC TAG.
+============================================ */
+
+.type-demo {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.type-demo h4 {
+  font-size: 0.95rem;
+  color: var(--color-text-1);
+  font-weight: 700;
+}
+
+.type-demo p {
+  font-size: 0.85rem;
+  color: var(--color-text-2);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Style the SECOND paragraph specifically — ignoring headings */
+.type-demo p:nth-of-type(2) {
+  color: var(--color-accent-b);
+  background: var(--color-accent-b-dim);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  border-left: 3px solid var(--color-accent-b);
+}
+
+/* Style the LAST h4 — again ignoring paragraphs */
+.type-demo h4:last-of-type {
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+}
+
+
+/* ================================================================
+   10. :not(), :is(), :where()
+================================================================ */
+
+/* ============================================
+   :not(selector)
+   What it is: Matches elements that do NOT match the given selector.
+   When to use: Apply styles to all-but-one elements without adding a class.
+   Specificity: Takes the specificity of its argument.
+   Modern :not() accepts: complex selectors, comma lists.
+============================================ */
+
+/* Style all list items EXCEPT .featured ones */
+.not-list li:not(.featured) {
+  color: var(--color-text-2);
+  padding-left: var(--sp-6);
+  position: relative;
+}
+
+.not-list li:not(.featured)::before {
+  content: "–";
+  position: absolute;
+  left: var(--sp-4);
+  color: var(--color-text-3);
+}
+
+.not-list li.featured {
+  color: var(--color-warm);
+  background: var(--color-warm-dim);
+  padding-left: var(--sp-5);
+  font-weight: 600;
+}
+
+/* ============================================
+   :is(selector-list)
+   What it is: Matches any element that matches any selector in the list.
+               Reduces repetition in compound selectors.
+   Specificity: Takes the specificity of the MOST SPECIFIC argument.
+   
+   :where(selector-list)
+   What it is: Identical to :is() but always has ZERO specificity.
+               Easiest to override — great for design system base styles.
+============================================ */
+
+.is-demo {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.is-demo p {
+  font-size: 0.85rem;
+  color: var(--color-text-2);
+  margin: 0;
+}
+
+/* :is() groups these three into one rule instead of three separate rules
+   Old way: .is-demo h2, .is-demo h3, .is-demo h4 { ... }
+   New way: */
+.is-demo :is(h2, h3, h4) {
+  color: var(--color-accent);
+  font-weight: 700;
+  padding-left: var(--sp-3);
+  border-left: 2px solid var(--color-accent);
+}
+
+.is-demo h2 { font-size: 1.1rem; }
+.is-demo h3 { font-size: 0.95rem; }
+.is-demo h4 { font-size: 0.85rem; }
+
+
+/* ================================================================
+   11. :has() — THE PARENT SELECTOR
+================================================================ */
+
+/* ============================================
+   :has(selector)
+   What it is: Matches an element IF it contains a descendant matching
+               the given selector. The "parent selector" CSS never had.
+   When to use: Style containers based on their contents. Cards with images
+               vs without. Forms with errors. Rows with checkboxes checked.
+   Specificity: Follows its argument's specificity.
+   Browser support: All modern browsers since 2023.
+   ⚠️ NOTE: Cannot be nested inside other pseudo-elements or :not() in all browsers.
+============================================ */
+
+.has-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--sp-4);
+}
+
+/* Base card */
+.has-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Style the card differently WHEN it contains a .has-fake-img */
+.has-card:has(.has-fake-img) {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent-dim);
+  /* Without :has(), this would require adding a class in JavaScript.
+     With :has(), it's pure CSS — the card self-styles based on content. */
+}
+
+.has-fake-img {
+  height: 80px;
+  background: linear-gradient(135deg, var(--color-accent-dim), rgba(167, 139, 250, 0.05));
+  border-bottom: 1px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+}
+
+.has-card-body {
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.has-card-body h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.has-card-body p {
+  font-size: 0.78rem;
+  color: var(--color-text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.has-card-body code {
+  font-size: 0.78em;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* :has() for form validation */
+.has-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--color-code-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--r-lg);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+/* When the form CONTAINS an invalid input that's been interacted with */
+.has-form:has(input:invalid:not(:placeholder-shown)) {
+  border-color: var(--color-rose);
+  background: var(--color-rose-dim);
+}
+
+.has-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.has-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+}
+
+.has-input {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  color: var(--color-text-1);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.has-input:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+/* When an input inside .has-field has focus, style the field wrapper */
+.has-field:has(input:focus) {
+  /* :has() lets us style the PARENT FIELD based on child focus state —
+     previously impossible without JavaScript! */
+}
+
+.has-input:invalid:not(:placeholder-shown) {
+  border-color: var(--color-rose);
+}
+
+.has-field-error {
+  font-size: 0.75rem;
+  color: var(--color-rose);
+  display: none;
+}
+
+/* Show error message when the field CONTAINS an invalid non-empty input */
+.has-field:has(input:invalid:not(:placeholder-shown)) .has-field-error {
+  display: block;
+}
+
+.has-submit {
+  padding: var(--sp-2) var(--sp-6);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--r-md);
+  color: white;
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: opacity 0.15s;
+}
+.has-submit:hover { opacity: 0.85; }
+
+
+/* ================================================================
+   12. ::before & ::after
+================================================================ */
+
+/* ============================================
+   ::before / ::after
+   What it is: Inserts a generated pseudo-element as the first/last
+               child of the matched element. Not in the DOM.
+   When to use: Decorative content (quotes, badges, arrows, icons),
+               layout tricks (clearfix, decorative lines),
+               custom list bullets, overlays.
+   Default value: Not rendered — requires content: "" at minimum.
+   Inherited: No — it's a generated element.
+   ⚠️ NOTE: ::before/::after are purely visual and ignored by most
+            screen readers. Don't put meaningful content here.
+            Works on most elements but NOT on void/replaced elements:
+            <img>, <input>, <br>, <hr> cannot have pseudo-elements.
+============================================ */
+
+/* Decorative quote using ::before and ::after */
+.pe-quote {
+  position: relative;
+  padding: var(--sp-5) var(--sp-8);
+  background: var(--color-surface-alt);
+  border-radius: var(--r-lg);
+  font-size: 0.9rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.pe-quote code {
+  font-size: 0.85em;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-style: normal;
+}
+
+/* The opening quotation mark */
+.pe-quote::before {
+  content: "\201C";       /* Unicode open double-quote " */
+  position: absolute;
+  top: -0.2rem;
+  left: var(--sp-3);
+  font-size: 4rem;
+  color: var(--color-accent);
+  opacity: 0.3;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+/* The closing quotation mark */
+.pe-quote::after {
+  content: "\201D";       /* Unicode close double-quote " */
+  position: absolute;
+  bottom: -1.5rem;
+  right: var(--sp-3);
+  font-size: 4rem;
+  color: var(--color-accent);
+  opacity: 0.3;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+/* Badge "New" label via ::before */
+.pe-badge-new,
+.pe-badge-hot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-size: 0.85rem;
+  color: var(--color-text-1);
+  position: relative;
+}
+
+.pe-badge-new::before {
+  content: "NEW";
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.1rem 0.35rem;
+  background: var(--color-accent-b);
+  color: #000;
+  border-radius: var(--r-sm);
+}
+
+.pe-badge-hot::before {
+  content: "🔥";
+  font-size: 0.9rem;
+}
+
+/* Required asterisk via ::after on label */
+.pe-required {
+  font-size: 0.9rem;
+  color: var(--color-text-1);
+  font-weight: 600;
+}
+
+.pe-required::after {
+  content: " *";
+  color: var(--color-rose);
+  font-weight: 700;
+  /* This pattern avoids cluttering HTML with <span class="required">*</span>
+     everywhere — the CSS handles the asterisk automatically */
+}
+
+/* Divider with "or" text using ::before and ::after */
+.pe-divider-demo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: 0.85rem;
+  color: var(--color-text-2);
+}
+
+.pe-or-divider {
+  position: relative;
+  font-size: 0.75rem;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pe-or-divider::before,
+.pe-or-divider::after {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 60px;
+  background: var(--color-border-hi);
+  /* content: "" — empty string is required. Without it the element won't render.
+     Even for purely visual pseudo-elements, content is mandatory. */
+}
+
+/* Clearfix — historical but important to understand */
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+  /* The classic clearfix. ::after creates an invisible block after the floated
+     content, forcing the parent to expand around it. Now replaced by
+     display: flow-root, flex, or grid — but you'll see this in legacy code. */
+}
+
+.pe-clearfix-demo {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+  font-size: 0.82rem;
+  color: var(--color-text-2);
+}
+
+.pe-floated {
+  float: left;
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-sm);
+  padding: var(--sp-2) var(--sp-4);
+  margin-right: var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-accent);
+}
+
+.pe-clearfix-demo p { margin: 0; }
+
+/* Custom list bullets via ::before */
+.pe-custom-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pe-custom-list li {
+  position: relative;
+  padding-left: var(--sp-6);
+  font-size: 0.88rem;
+  color: var(--color-text-2);
+  counter-increment: list-counter;
+  /* counter-increment pairs with counter() in content — see below */
+}
+
+.pe-custom-list {
+  counter-reset: list-counter;
+  /* Initialise a CSS counter named "list-counter" at 0.
+     Each list item increments it via counter-increment. */
+}
+
+.pe-custom-list li::before {
+  content: counter(list-counter, decimal-leading-zero);
+  /* counter() inserts the current counter value. decimal-leading-zero
+     formats as 01, 02, 03... very useful for ordered lists. */
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  top: 2px;
+}
+
+
+/* ================================================================
+   13. ::first-line & ::first-letter
+================================================================ */
+
+/* ============================================
+   ::first-letter
+   What it is: Matches the first typographic character of a block element.
+   When to use: Drop caps in editorial/article layouts.
+   Limited properties: font, text, color, background, margin, padding,
+                       border, float, vertical-align, line-height.
+   Inherited: No.
+
+   ::first-line
+   What it is: Matches the first rendered line of a block element.
+               Reflows dynamically as viewport width changes.
+   When to use: Pull-quote styling, newspaper-style first-line emphasis.
+   Limited properties: font, text, color, background, word-spacing,
+                       letter-spacing, line-height.
+============================================ */
+
+.pe-article-demo {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+/* Drop cap via ::first-letter */
+.pe-first-letter-para {
+  font-size: 0.92rem;
+  color: var(--color-text-2);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.pe-first-letter-para::first-letter {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  float: left;
+  line-height: 0.85;
+  margin-right: 0.1em;
+  margin-top: 0.05em;
+  /* float: left is the classic drop cap technique — the first letter
+     floats left and the rest of the text wraps around it. */
+}
+
+.pe-first-line-para {
+  font-size: 0.92rem;
+  color: var(--color-text-2);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.pe-first-line-para::first-line {
+  color: var(--color-text-1);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  /* This line is highlighted — resize the browser and watch
+     the styling automatically follow the rendered first line. */
+}
+
+
+/* ================================================================
+   14. ::placeholder & ::selection
+================================================================ */
+
+/* ============================================
+   ::placeholder
+   What it is: Styles the placeholder text shown in empty inputs/textareas.
+   When to use: Match placeholder to your design system — lighter colour,
+               different font style.
+   Inherited: No.
+   ⚠️ NOTE: Keep placeholder contrast lower than real input text to visually
+            distinguish hint from entered value, but not below 3:1 contrast.
+============================================ */
+
+.placeholder-input {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.placeholder-demo-a {
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  color: var(--color-text-1);
+}
+
+.placeholder-demo-a::placeholder {
+  color: var(--color-text-3);
+  font-style: italic;
+  /* Italic + muted colour = visually distinct from real text */
+}
+
+.placeholder-demo-a:focus { border-color: var(--color-accent); }
+
+.placeholder-demo-b {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-accent-b);
+  color: var(--color-accent-b);
+}
+
+.placeholder-demo-b::placeholder {
+  color: rgba(52, 211, 153, 0.35);
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+}
+
+/* ============================================
+   ::selection
+   What it is: Styles the highlighted text when the user selects it.
+   When to use: Match your brand colour — subtle but delightful touch.
+   Only accepts: color, background-color, text-shadow.
+   Inherited: No — each element needs its own ::selection rule if specific.
+============================================ */
+
+.selection-demo {
+  font-size: 0.92rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--color-surface-alt);
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border);
+  user-select: text;
+}
+
+/* Custom selection highlight */
+.selection-demo::selection {
+  background-color: var(--color-accent);
+  color: #0d0020;
+  /* Light text on dark background or dark text on light selection.
+     Ensure at least 4.5:1 contrast ratio between selected text and selection bg. */
+}
+
+
+/* ================================================================
+   15. REAL-WORLD FORM DEMO
+================================================================ */
+
+.rw-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-xl);
+}
+
+.rw-form-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  margin-bottom: var(--sp-1);
+}
+
+.rw-form-header p {
+  font-size: 0.85rem;
+  color: var(--color-text-2);
+  margin: 0;
+}
+
+/* Field wrapper */
+.rw-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+/* Highlight the entire field row when its input is focused — using :has() */
+.rw-field:has(input:focus, textarea:focus, select:focus) {
+  border-color: var(--color-border-hi);
+  background: var(--color-surface-alt);
+}
+
+.rw-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-family: var(--font-mono);
+}
+
+/* Required field label gets an asterisk via ::after */
+.rw-field-required .rw-label::after {
+  content: " *";
+  color: var(--color-rose);
+  font-weight: 700;
+  /* Pure CSS required marker — no extra HTML span needed */
+}
+
+.rw-input, .rw-textarea, .rw-select {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  color: var(--color-text-1);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.rw-textarea { resize: vertical; min-height: 80px; }
+
+.rw-input::placeholder,
+.rw-textarea::placeholder {
+  color: var(--color-text-3);
+  font-style: italic;
+}
+
+/* :focus-visible — keyboard focus ring */
+.rw-input:focus-visible,
+.rw-textarea:focus-visible,
+.rw-select:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+/* :invalid after interaction (not on initial page load) */
+.rw-input:invalid:not(:placeholder-shown) {
+  border-color: var(--color-rose);
+}
+
+.rw-helper {
+  font-size: 0.75rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+}
+
+/* Fieldset for checkboxes */
+.rw-fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.rw-legend {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-2);
+  font-family: var(--font-mono);
+  padding: 0 var(--sp-2);
+}
+
+/* Custom checkboxes using :checked — same pattern as main demo */
+.rw-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--color-text-2);
+  user-select: none;
+}
+
+.rw-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.rw-cb-box {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border-hi);
+  border-radius: var(--r-sm);
+  background: var(--color-surface-hi);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.rw-cb-box::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s;
+}
+
+.rw-checkbox input:checked + .rw-cb-box {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.rw-checkbox input:checked + .rw-cb-box::after {
+  transform: rotate(45deg) scale(1);
+}
+
+/* Submit / reset buttons */
+.rw-actions {
+  display: flex;
+  gap: var(--sp-3);
+  padding-top: var(--sp-2);
+}
+
+.rw-submit {
+  padding: var(--sp-2) var(--sp-6);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-md);
+  color: #1a0a3a;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.08s;
+}
+
+.rw-submit:hover   { opacity: 0.88; }
+.rw-submit:active  { transform: translateY(1px); }
+.rw-submit:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.rw-reset {
+  padding: var(--sp-2) var(--sp-5);
+  background: transparent;
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  color: var(--color-text-2);
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.rw-reset:hover { border-color: var(--color-text-2); color: var(--color-text-1); }
+
+
+/* ================================================================
+   16. PAGE LAYOUT (supporting styles)
+================================================================ */
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-1);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+p { margin-bottom: var(--sp-4); color: var(--color-text-2); line-height: 1.7; }
+p:last-child { margin-bottom: 0; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--color-border);
+}
+
+strong { font-weight: 700; color: var(--color-text-1); }
+
+.page-header {
+  background: linear-gradient(to bottom, hsl(250, 50%, 6%), hsl(250, 50%, 4%));
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--sp-16) var(--sp-8) var(--sp-12);
+  text-align: center;
+}
+.header-inner { max-width: 700px; margin: 0 auto; }
+.phase-badge {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #1a0030;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-pill);
+  margin-bottom: var(--sp-4);
+}
+.page-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: var(--sp-4);
+}
+.page-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.page-main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--sp-12) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.ref-section { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  padding-bottom: var(--sp-3);
+  border-bottom: 2px solid var(--color-border);
+}
+.section-title code { background: transparent; border: none; color: var(--color-accent); padding: 0; }
+
+.demo-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.concept-card { background: var(--color-surface-alt); border-color: var(--color-border-hi); }
+
+.demo-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+.demo-label code { background: transparent; border: none; color: var(--color-accent); padding: 0; font-size: 1em; }
+
+.demo-note {
+  background: var(--color-code-bg);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 0.875rem;
+  color: var(--color-text-2);
+  line-height: 1.75;
+}
+.demo-note code { background: transparent; border: none; color: var(--color-warm); font-size: 0.85em; font-weight: 600; padding: 0; }
+.demo-note strong { color: var(--color-text-1); }
+
+.concept-text { font-size: 0.92rem; color: var(--color-text-2); line-height: 1.75; margin: 0; }
+.concept-text em { color: var(--color-accent); font-style: normal; font-weight: 600; }
+.concept-text strong { color: var(--color-text-1); }
+.concept-text code { background: transparent; border: none; color: var(--color-accent); padding: 0; }
+
+.sub-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  margin-top: var(--sp-2);
+  margin-bottom: calc(-1 * var(--sp-2));
+}
+
+.state-demo-row {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: center;
+  flex-wrap: wrap;
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+}
+
+.pe-demo-row {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.page-footer {
+  text-align: center;
+  padding: var(--sp-8);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+}
+.page-footer p { margin: 0; color: var(--color-text-3); }
+
+/* ================================================================
+   END OF PHASE 6 REFERENCE
+   Next → Phase 7: UI Polish, Aesthetics & Motion
+   (border-radius, box-shadow, filter, transform, transition, @keyframes)
+================================================================ */

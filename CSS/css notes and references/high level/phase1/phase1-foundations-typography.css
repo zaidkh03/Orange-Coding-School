@@ -1,0 +1,915 @@
+/* ================================================================
+   PHASE 1 — CSS FOUNDATIONS & TYPOGRAPHY
+   File: phase1-foundations-typography.css
+   Companion to: phase1-foundations-typography.html
+
+   PURPOSE: A permanent, richly-commented reference covering:
+   - CSS Inclusion Methods
+   - Basic Selectors
+   - Color Systems
+   - Typography Properties (font-family, font-size, font-weight,
+     text-align, line-height)
+
+   HOW TO READ THIS FILE:
+   Every property block follows this commenting convention:
+
+   ┌─────────────────────────────────────────┐
+   │  PROPERTY-NAME                          │
+   │  What it is:   one-sentence description │
+   │  When to use:  practical scenario       │
+   │  Default:      browser default value    │
+   │  Inherited:    yes / no                 │
+   └─────────────────────────────────────────┘
+
+   Specific values are explained inline inside rule blocks.
+================================================================ */
+
+
+/* ================================================================
+   TABLE OF CONTENTS
+   1. GLOBAL RESET & ROOT
+   2. CSS INCLUSION METHODS (documented in HTML — see .html file)
+   3. BASIC SELECTORS
+   4. COLOR SYSTEMS
+   5. TYPOGRAPHY
+   6. PAGE LAYOUT (supporting styles for the reference page itself)
+================================================================ */
+
+
+/* ================================================================
+   1. GLOBAL RESET & ROOT
+================================================================ */
+
+/* ============================================
+   UNIVERSAL SELECTOR — * {}
+   What it is: Targets every single element on the page.
+   When to use: Only for CSS resets and box-sizing normalization.
+   Default value: N/A — applies to all elements.
+   Inherited: No — each element matched independently.
+============================================ */
+
+*,
+*::before,
+*::after {
+  /* ============================================
+     BOX-SIZING
+     What it is: Determines what the width/height values include.
+     When to use: ALWAYS set this globally. It is the single most
+                  important CSS rule for predictable layouts.
+     Default value: content-box
+     Inherited: No
+  ============================================ */
+
+  /* value: border-box → width/height includes padding AND border.
+            A 200px box with 20px padding stays 200px wide. ✅ */
+  /* value: content-box (default) → padding and border ADD to width.
+            A 200px box with 20px padding becomes 240px wide. 😱 */
+  box-sizing: border-box;
+
+  /* Zero out browser default margins and paddings for consistency.
+     Different browsers apply slightly different default spacing. */
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   :ROOT PSEUDO-CLASS
+   What it is: Selects the <html> element (highest-level ancestor).
+   When to use: Declare CSS Custom Properties (variables) here so
+                they are available globally across the whole document.
+   Default value: N/A
+   Inherited: Yes — variables declared here cascade everywhere.
+============================================ */
+:root {
+  /* Design Tokens — the color palette for this reference page */
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-alt: #222636;
+  --color-border: #2e3348;
+  --color-accent: #5b8dee;
+  --color-accent-warm: #e07b54;
+  --color-text-primary: #e8eaf0;
+  --color-text-secondary: #9099b0;
+  --color-text-muted: #5a6179;
+  --color-code-bg: #12151f;
+  --color-code-text: #79d4b5;
+
+  /* Typography scale */
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+
+  /* Spacing scale (Phase 2 will deep-dive units — preview here) */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* ⚠️ NOTE: rem units here are relative to the <html> font-size.
+     If the user has changed their browser base font to 20px,
+     1rem = 20px. This is a FEATURE — it respects accessibility
+     settings. Never override the root font-size with px! */
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+/* ================================================================
+   3. BASIC SELECTORS
+================================================================ */
+
+/* ============================================
+   ELEMENT SELECTOR
+   What it is: Targets all instances of a specific HTML tag.
+   When to use: Set base/default styles for raw HTML elements
+               (body font, heading scale, link appearance).
+   Default value: Browser stylesheet (user-agent stylesheet) applies.
+   Inherited: Varies by property.
+   ⚠️ NOTE: Element selectors have low specificity (0,0,1).
+            They are easily overridden by classes and IDs.
+============================================ */
+
+/* Targeting the <body> element to set page-wide defaults */
+body {
+  /* Set the default font for the entire document */
+  font-family: var(--font-sans);
+
+  /* A comfortable base size that scales with user preferences */
+  font-size: 1rem;         /* = 16px at browser default */
+
+  /* Unitless value — scales proportionally with any font-size */
+  line-height: 1.6;
+
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+
+  /* Smooth font rendering on macOS/webkit */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Targeting all <p> elements for consistent paragraph spacing */
+p {
+  /* margin-bottom creates vertical rhythm between paragraphs */
+  margin-bottom: var(--space-md);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* Removing the margin from the last paragraph in any container
+   prevents extra space at the bottom of cards and sections */
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Targeting <code> elements globally */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;   /* em = relative to PARENT font-size */
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* Targeting all <strong> elements */
+strong {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+
+/* ============================================
+   CLASS SELECTOR — .classname {}
+   What it is: Targets all elements with a matching class="" attribute.
+   When to use: 90%+ of your CSS should use class selectors.
+                Reusable, composable, and mid-level specificity.
+   Default value: N/A — applied only where you add the class.
+   Inherited: No (but inherited properties like color cascade down).
+   ⚠️ NOTE: A class selector has specificity (0,1,0) — higher than
+            element selectors but lower than ID selectors.
+============================================ */
+
+/* Button base class — shared by ALL button variants */
+.btn {
+  /* Inline-block lets us set width/height while keeping flow */
+  display: inline-block;
+
+  /* Shorthand: top/bottom padding, then left/right padding */
+  padding: 0.6rem 1.4rem;
+
+  /* font-size needs to be explicit on buttons — browsers reset it */
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+
+  /* Remove the default underline link style if used on <a> tags */
+  text-decoration: none;
+
+  /* Rounded corners — covered deeply in Phase 7 */
+  border-radius: var(--radius-md);
+
+  /* Smooth color transitions on hover — covered in Phase 7 */
+  transition: background-color 0.2s ease, transform 0.15s ease,
+    box-shadow 0.2s ease;
+
+  cursor: pointer;
+  border: 2px solid transparent;
+  letter-spacing: 0.02em;
+}
+
+/* Variant class — extends .btn with a specific color theme */
+.btn-primary {
+  /* Solid background button — highest visual emphasis */
+  background-color: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.btn-primary:hover {
+  background-color: #4a7cdc;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(91, 141, 238, 0.35);
+}
+
+.btn-secondary {
+  /* Filled with a neutral surface color */
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-border);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  /* No fill — transparent background, accent border */
+  background-color: transparent;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn-ghost:hover {
+  background-color: rgba(91, 141, 238, 0.1);
+  transform: translateY(-1px);
+}
+
+
+/* ============================================
+   ID SELECTOR — #id {}
+   What it is: Targets a single element with a matching id="" attribute.
+   When to use: Rarely for styling. Better for JS querySelector or
+                as anchor link targets (#section-id in href).
+   Default value: N/A.
+   Inherited: No.
+   ⚠️ NOTE: ID specificity is (1,0,0) — very high! Overriding an ID
+            rule requires another ID selector or !important.
+            Prefer classes for styling to keep specificity low and
+            styles flexible.
+============================================ */
+
+#unique-hero {
+  /* Only ONE element on the page should ever have id="unique-hero" */
+  background: linear-gradient(
+    135deg,
+    hsl(225, 35%, 18%) 0%,
+    hsl(225, 35%, 12%) 100%
+  );
+  border: 1px solid var(--color-accent);
+  border-left: 4px solid var(--color-accent);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+
+/* ============================================
+   UNIVERSAL SELECTOR — * {}
+   What it is: Matches every element in the document.
+   When to use: Global resets (box-sizing, margin/padding zero-out).
+   When NOT to use: For anything beyond resets — too broad, may have
+                    performance implications on very large DOMs.
+   Default value: N/A.
+   Inherited: No.
+   (See top of file — already applied in reset section)
+============================================ */
+
+/* Scoped universal demo (only inside .universal-demo container) */
+.universal-demo {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: var(--space-md);
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.universal-demo * {
+  /* Targeting EVERY child element inside .universal-demo */
+  /* This shows what * does — it hits span, em, strong, code */
+  padding: 0.4rem 0.8rem;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-accent-warm);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+
+/* ================================================================
+   4. COLOR SYSTEMS
+================================================================ */
+
+/* ============================================
+   NAMED COLORS
+   What it is: 147 predefined color keywords (red, blue, tomato, etc.)
+   When to use: Quick prototyping and teaching examples.
+   When NOT to use: Production sites with a brand color system.
+   Inherited: Yes (color property is inherited by children).
+============================================ */
+
+/* Named colors are demonstrated inline via style="" in the HTML
+   because they don't benefit from class abstraction for this demo.
+   The swatch row layout class is below: */
+
+.swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.color-swatch {
+  flex: 1;
+  min-width: 100px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.color-swatch span {
+  /* ⚠️ NOTE: Avoid nesting deep class selectors like this in
+     production. Covered in Phase 8 with CSS Nesting. */
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+
+/* ============================================
+   HEX COLORS
+   What it is: Hexadecimal notation for RGB values (#RRGGBB).
+   When to use: Design-tool export values, exact brand colors.
+   When NOT to use: When you need dynamic transparency (use rgba/hsla).
+   Syntax: #000000 (black) to #ffffff (white).
+           3-digit shorthand: #abc = #aabbcc
+           8-digit with alpha: #RRGGBBAA
+   Inherited: Yes (color property).
+============================================ */
+
+/* HEX swatches — demonstrating a real dark-mode palette */
+.hex-1 { background-color: #1a1a2e; }  /* deep navy */
+.hex-2 { background-color: #e94560; }  /* vivid crimson */
+.hex-3 { background-color: #0f3460; }  /* ocean blue */
+.hex-4 { background-color: #f5f5f5; color: #1a1a2e; }  /* off-white */
+.hex-5 { background-color: #16213e; }  /* midnight */
+
+
+/* ============================================
+   RGB / RGBA
+   What it is: Functional color notation using Red, Green, Blue
+               channels (0–255) with optional Alpha (0–1).
+   When to use: When you need transparency (rgba) — overlays,
+                semi-opaque backgrounds, shadow tints.
+   When NOT to use: Instead of HEX when you don't need transparency.
+   Inherited: Yes (color property).
+   ⚠️ NOTE: Modern CSS also supports: rgb(255 0 0 / 50%) without commas.
+            Both syntaxes are valid.
+============================================ */
+
+.rgba-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+  background-color: #e07b54;  /* warm bg to show transparency effect */
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.rgba-swatch {
+  height: 80px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.rgba-swatch span {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+
+
+/* ============================================
+   HSL / HSLA
+   What it is: Hue (0-360°), Saturation (0-100%), Lightness (0-100%),
+               with optional Alpha.
+   When to use: Building color palettes — vary only lightness for
+                consistent shade scales. Most human-readable format.
+   When NOT to use: When copying values from design tools (those
+                    typically output HEX/RGB).
+   Inherited: Yes (color property).
+   ⚠️ NOTE: hsl(0,100%,50%) = red, hsl(120,100%,50%) = green,
+            hsl(240,100%,50%) = blue. Think of hue as a color wheel.
+============================================ */
+
+/* HSL swatches are applied inline in HTML to clearly show the values.
+   The swatch container reuses .swatch-row and .color-swatch above. */
+
+
+/* ================================================================
+   5. TYPOGRAPHY
+================================================================ */
+
+/* ============================================
+   FONT-FAMILY
+   What it is: Specifies the font face(s) to use for text.
+   When to use: Set once on body for sitewide font, override on
+                specific components (e.g., code blocks, display titles).
+   Default value: Browser default (usually Times New Roman or serif).
+   Inherited: YES — one of the most important inherited properties.
+   ⚠️ NOTE: Always supply a FONT STACK (multiple values) as fallbacks.
+            The browser uses the first available font in the list.
+            End with a generic family keyword as the final fallback.
+============================================ */
+
+/* Serif font stack */
+.font-serif {
+  /* Serif fonts have small decorative strokes at letter ends.
+     Traditional, literary, authoritative feel.
+     Use for: editorial sites, books, long-form articles. */
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Sans-serif font stack */
+.font-sans {
+  /* Sans-serif = without serifs. Clean, modern, screen-optimized.
+     Use for: UI, apps, dashboards, most web interfaces. */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Monospace font stack */
+.font-mono {
+  /* Monospace = every character has equal width.
+     Use for: code blocks, terminals, tabular data, pricing columns. */
+  font-family: 'Cascadia Code', 'Fira Code', 'Courier New', Courier, monospace;
+}
+
+
+/* ============================================
+   FONT-SIZE
+   What it is: Controls the size of the rendered text.
+   When to use: Establish a typographic scale (headings, body, captions).
+   Default value: 1rem (= 16px in most browsers).
+   Inherited: YES — child elements inherit parent font-size.
+   ⚠️ NOTE: Prefer rem for type to respect browser/OS accessibility
+            font size settings. Use em when you want a component to
+            scale relative to its own parent.
+============================================ */
+
+.font-size-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.fs-12px  { font-size: 12px;    color: var(--color-text-muted); }
+.fs-16px  { font-size: 16px;    color: var(--color-text-secondary); }
+.fs-1rem  { font-size: 1rem;    color: var(--color-text-secondary); }
+.fs-1-25rem { font-size: 1.25rem; color: var(--color-text-primary); }
+.fs-2rem  { font-size: 2rem;    color: var(--color-text-primary); font-weight: 300; }
+.fs-3rem  {
+  font-size: 3rem;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  line-height: 1; /* tighten leading for large display type */
+  letter-spacing: -0.02em; /* slight negative tracking for large sizes */
+}
+
+
+/* ============================================
+   FONT-WEIGHT
+   What it is: Controls the thickness/boldness of the typeface.
+   When to use: Define visual hierarchy — thin for decoration,
+                heavy for emphasis.
+   Default value: normal (= 400).
+   Inherited: YES.
+   ⚠️ NOTE: If the font file doesn't include the requested weight,
+            the browser synthesizes it (usually poorly). Only use
+            weights your imported font actually has.
+============================================ */
+
+.weight-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 1.05rem;
+}
+
+.fw-300 { font-weight: 300; color: var(--color-text-secondary); }
+  /* 300 — Light. Use for: large hero text, elegant sub-headings */
+
+.fw-400 { font-weight: 400; color: var(--color-text-secondary); }
+  /* 400 — Normal. Default. Use for: body copy, descriptions */
+
+.fw-500 { font-weight: 500; color: var(--color-text-primary); }
+  /* 500 — Medium. Use for: nav links, labels, table headers */
+
+.fw-600 { font-weight: 600; color: var(--color-text-primary); }
+  /* 600 — Semibold. Use for: card titles, section headings */
+
+.fw-700 { font-weight: 700; color: var(--color-text-primary); }
+  /* 700 — Bold. Classic bold. Use for: emphasis, CTAs, alerts */
+
+.fw-900 {
+  font-weight: 900;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+}
+  /* 900 — Black/ExtraBold. Use for: hero display, impact text */
+
+
+/* ============================================
+   TEXT-ALIGN
+   What it is: Controls horizontal alignment of text within its box.
+   When to use: Center headings/heroes; left-align body text;
+                right-align numeric table data.
+   Default value: left (in LTR languages), right (in RTL languages).
+   Inherited: YES.
+   ⚠️ NOTE: text-align applies to inline content inside a block.
+            To center the block itself, use margin: 0 auto (Phase 2)
+            or flexbox/grid (Phase 4).
+============================================ */
+
+.align-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.align-box {
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.align-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-accent-warm);
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.align-left    { text-align: left; }
+  /* left — Flush to left edge. Default for LTR. Most readable for body. */
+
+.align-center  { text-align: center; }
+  /* center — Horizontally centered. Use for headings, heroes, short labels.
+     NOT for long paragraphs — harder to find the next line start. */
+
+.align-right   { text-align: right; }
+  /* right — Flush to right edge. Use for: prices, timestamps,
+     Arabic/Hebrew text direction. */
+
+.align-justify { text-align: justify; }
+  /* justify — Stretches lines to fill the full width. Print-style.
+     ⚠️ WARNING: Can create "rivers of white space" — avoid in narrow
+     columns. Works best in wide, multi-column magazine layouts. */
+
+
+/* ============================================
+   LINE-HEIGHT
+   What it is: Sets the height of a line box. Controls spacing
+               between lines of text (also called "leading").
+   When to use: Set globally on body. Tighten for display headings,
+                loosen for body text readability.
+   Default value: normal (browser-defined, approx 1.2).
+   Inherited: YES — and inherited as a ratio, not a pixel value.
+   ⚠️ NOTE: Always use UNITLESS values like 1.5, not 24px or 150%.
+            Unitless values multiply with each element's own font-size.
+            Fixed values (like 24px) won't scale with nested font sizes.
+============================================ */
+
+.line-height-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.lh-box {
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.lh-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-accent-warm);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lh-1 {
+  line-height: 1;
+  /* line-height: 1 — Each line is exactly 1× the font-size.
+     Lines pack tightly. Use ONLY for large display type (h1, hero),
+     never for body text — descenders (g, p, y) will clip ascenders. */
+}
+
+.lh-1-5 {
+  line-height: 1.5;
+  /* line-height: 1.5 — WCAG 2.1 recommended minimum for body text.
+     Excellent balance of density and readability. */
+}
+
+.lh-2 {
+  line-height: 2;
+  /* line-height: 2 — Very open. Use for educational/legal content,
+     wide columns, or deliberate airy UI layouts.
+     Can feel "double-spaced" — use intentionally. */
+}
+
+
+/* ================================================================
+   6. PAGE LAYOUT
+   (Supporting styles to make the reference page visually clean.
+   These use basic properties from Phase 1 + preview of Phase 2/4.)
+================================================================ */
+
+/* ---- Page Header ---- */
+
+.page-header {
+  background: linear-gradient(
+    to bottom,
+    hsl(225, 35%, 14%) 0%,
+    hsl(225, 35%, 11%) 100%
+  );
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+}
+
+.header-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.phase-badge {
+  display: inline-block;
+  background-color: var(--color-accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+  margin-bottom: var(--space-md);
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: var(--space-md);
+}
+
+.page-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
+/* ---- Page Main ---- */
+
+.page-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+
+/* ---- Reference Sections ---- */
+
+.ref-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+}
+
+
+/* ---- Demo Cards ---- */
+
+.demo-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.demo-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.demo-note {
+  background-color: var(--color-code-bg);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-top: var(--space-xs);
+}
+
+.demo-note code {
+  /* Slightly lighter code in notes for contrast */
+  background-color: transparent;
+  border: none;
+  color: var(--color-accent-warm);
+  font-weight: 600;
+}
+
+.highlight-box {
+  background-color: rgba(91, 141, 238, 0.1);
+  border: 1px solid rgba(91, 141, 238, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text-primary);
+  line-height: 1.7;
+}
+
+.button-row {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.selectors-demo {
+  padding: var(--space-md);
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.selectors-demo p {
+  /* Override the global p style for this scoped context */
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+}
+
+
+/* ---- Article Demo ---- */
+
+.article-demo {
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  max-width: 640px;
+}
+
+.article-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  background-color: rgba(91, 141, 238, 0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  margin-bottom: var(--space-md);
+}
+
+.article-title {
+  /* font-family: inherited from body (var(--font-sans)) */
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.25;        /* tighter for headings */
+  letter-spacing: -0.025em; /* negative tracking for large bold type */
+  margin-bottom: var(--space-sm);
+}
+
+.article-meta {
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-mono);
+  letter-spacing: 0.01em;
+}
+
+.article-meta strong {
+  /* font-weight: 700 — from the global strong rule */
+  color: var(--color-text-secondary);
+}
+
+.article-body {
+  font-size: 1rem;
+  line-height: 1.75;        /* generous for body reading comfort */
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  text-align: left;
+}
+
+.article-body code {
+  font-size: 0.85em;  /* em — scales relative to .article-body's 1rem */
+}
+
+.article-link {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  margin-top: var(--space-xs);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.article-link:hover {
+  border-bottom-color: var(--color-accent);
+}
+
+
+/* ---- Page Footer ---- */
+
+.page-footer {
+  text-align: center;
+  padding: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+
+/* ================================================================
+   END OF PHASE 1 REFERENCE
+   Next up → Phase 2: The Box Model & Sizing Units
+   (width, height, padding, border, margin, box-sizing, px/rem/em/vh)
+================================================================ */

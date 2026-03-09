@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Phase 3 — Document Flow & Positioning</title>
+
+  <!-- 
+  EXTERNAL STYLESHEET
+  Purpose: Standard CSS inclusion method
+-->
+  <link rel="stylesheet" href="phase3-document-flow-positioning.css">
+
+</head>
+
+<body>
+
+  <header class="page-header">
+
+    <!-- 
+  ELEMENT: h1
+  Purpose: Section heading
+  Related CSS: typography, layout spacing
+-->
+    <h1>CSS Phase 3: Document Flow & Positioning</h1>
+
+    <p class="subtitle">
+      Understanding how elements move inside and outside normal layout flow.
+    </p>
+
+  </header>
+
+
+
+  <section class="section">
+
+    <h2>Display Property</h2>
+
+    <!-- 
+  BLOCK ELEMENT DEMO
+  Purpose: Shows block-level behavior
+  Related CSS: display:block
+-->
+    <div class="display-demo block-demo">
+      Block element (takes full width)
+    </div>
+
+    <!-- 
+  INLINE ELEMENT DEMO
+  Purpose: Shows inline behavior
+  Related CSS: display:inline
+-->
+    <span class="display-demo inline-demo">
+      Inline element
+    </span>
+
+    <span class="display-demo inline-demo">
+      Another inline element
+    </span>
+
+    <!-- 
+  INLINE-BLOCK DEMO
+  Purpose: Combines inline flow with block sizing
+  Related CSS: display:inline-block
+-->
+    <div class="display-demo inline-block-demo">
+      Inline-block element
+    </div>
+
+    <div class="display-demo inline-block-demo">
+      Inline-block element
+    </div>
+
+  </section>
+
+
+
+  <section class="section">
+
+    <h2>Display None</h2>
+
+    <!-- 
+  DISPLAY NONE
+  Purpose: Element removed from layout entirely
+  Related CSS: display:none
+-->
+    <div class="hidden-box">
+      You should NOT see this box.
+    </div>
+
+    <p>
+      The hidden element exists in the HTML but does not render.
+    </p>
+
+  </section>
+
+
+
+  <section class="section">
+
+    <h2>Relative & Absolute Positioning</h2>
+
+    <!-- 
+  RELATIVE CONTAINER
+  Purpose: Parent container for absolute positioning
+  Related CSS: position:relative
+-->
+    <div class="relative-container">
+
+      Parent container
+
+      <!-- 
+        ABSOLUTE CHILD
+        Purpose: Demonstrates positioning relative to nearest relative parent
+        Related CSS: position:absolute
+      -->
+      <div class="absolute-child">
+        Absolute
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <section class="section">
+
+    <h2>Fixed Position</h2>
+
+    <!-- 
+  FIXED POSITION
+  Purpose: Demonstrates element pinned to viewport
+  Related CSS: position:fixed
+-->
+    <div class="fixed-banner">
+      Fixed banner (stays on screen)
+    </div>
+
+    <p>
+      Scroll the page and the banner remains in place.
+    </p>
+
+  </section>
+
+
+
+  <section class="section">
+
+    <h2>Sticky Position</h2>
+
+    <!-- 
+  STICKY HEADER
+  Purpose: Demonstrates sticky scrolling behavior
+  Related CSS: position:sticky
+-->
+    <div class="sticky-header">
+      Sticky Section Header
+    </div>
+
+    <p class="long-text">
+      Scroll to see sticky behavior. Sticky elements behave like relative elements until a scroll threshold is reached,
+      then they behave like fixed elements.
+    </p>
+
+  </section>
+
+
+
+  <section class="section">
+
+    <h2>Z-Index Stacking</h2>
+
+    <!-- 
+  STACKING DEMO
+  Purpose: Shows overlapping elements
+  Related CSS: z-index
+-->
+    <div class="stack-container">
+
+      <div class="box red-box">z-index:1</div>
+
+      <div class="box blue-box">z-index:2</div>
+
+      <div class="box green-box">z-index:3</div>
+
+    </div>
+
+  </section>
+
+
+
+  <footer class="footer">
+
+    <p>End of Phase 3 Reference</p>
+
+  </footer>
+
+</body>
+
+</html>

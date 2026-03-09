@@ -1,0 +1,346 @@
+/* =====================================================
+   PHASE 2 CSS REFERENCE
+   Box Model & Sizing Units
+===================================================== */
+
+
+/* ============================================
+   UNIVERSAL RESET
+============================================ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+
+
+/* ============================================
+   BODY BASE STYLING
+============================================ */
+
+body{
+
+font-family:Arial, Helvetica, sans-serif;
+background:#f4f6f9;
+padding:40px;
+line-height:1.6;
+
+}
+
+
+
+/* ============================================
+   WIDTH
+   What it is: Defines the horizontal size of content.
+   When to use it: Layout control and responsive components.
+   Default value: auto
+   Inherited: no
+============================================ */
+
+.fixed-box{
+
+/* width: 200px */
+/* Fixed size regardless of screen */
+
+width:200px;
+
+
+/* height: 120px */
+/* Defines vertical dimension */
+
+height:120px;
+
+background:#3498db;
+color:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-bottom:20px;
+
+}
+
+
+
+/* Percentage width */
+
+.fluid-box{
+
+/* width: 50% */
+/* Element becomes half the width of its parent */
+
+width:50%;
+
+background:#2ecc71;
+color:white;
+
+padding:20px;
+
+}
+
+
+
+/* ============================================
+   PADDING
+   What it is: Inner spacing between content and border
+   When to use it: Creating breathing room inside components
+   Default value: 0
+   Inherited: no
+============================================ */
+
+.padding-demo{
+
+/* padding:20px */
+/* Equal padding on all sides */
+
+padding:10px;
+
+background:#fff;
+border:1px solid #ccc;
+
+margin-top:10px;
+
+}
+
+
+
+/* ============================================
+   MARGIN
+   What it is: Outer spacing between elements
+   When to use it: Layout spacing between components
+   Default value: 0
+   Inherited: no
+============================================ */
+
+.margin-demo{
+
+background:#f8f9fa;
+border:1px solid #ddd;
+
+padding:20px;
+
+/* margin-top:20px */
+/* Adds space above the element */
+
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   BORDER
+   What it is: Line surrounding padding
+   Syntax: border: width style color
+   Default value: none
+   Inherited: no
+============================================ */
+
+.border-demo{
+
+padding:20px;
+margin-top:15px;
+
+}
+
+/* Border styles */
+
+.solid{
+
+border:3px solid black;
+
+}
+
+.dashed{
+
+border:3px dashed black;
+
+}
+
+.dotted{
+
+border:3px dotted black;
+
+}
+
+
+
+/* ============================================
+   BOX-SIZING
+   What it is: Controls how width/height are calculated
+   When to use it: Always set border-box for predictable layouts
+   Default value: content-box
+   Inherited: no
+============================================ */
+
+
+/* Default browser behavior */
+
+.content-box{
+
+box-sizing:content-box;
+
+/* width excludes padding & border */
+
+width:200px;
+padding:20px;
+border:5px solid red;
+
+background:#ffe6e6;
+margin-top:20px;
+
+}
+
+
+/* Recommended modern behavior */
+
+.border-box{
+
+box-sizing:border-box;
+
+/* width includes padding & border */
+
+width:200px;
+padding:20px;
+border:5px solid green;
+
+background:#e6ffe6;
+margin-top:20px;
+
+}
+
+
+
+/* ⚠️ NOTE:
+Most frameworks (Bootstrap, Tailwind, etc.)
+globally set box-sizing:border-box.
+*/
+
+
+
+/* ============================================
+   PX UNIT
+   What it is: Absolute pixel measurement
+   When to use it: Borders, shadows, small details
+============================================ */
+
+.px-unit{
+
+width:200px;
+background:#8e44ad;
+color:white;
+padding:20px;
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   REM UNIT
+   What it is: Relative to root font size
+   When to use it: Scalable typography and spacing
+============================================ */
+
+.rem-unit{
+
+width:15rem;
+
+background:#e67e22;
+color:white;
+padding:1.5rem;
+margin-top:20px;
+
+}
+
+
+
+/* ============================================
+   EM UNIT
+   What it is: Relative to parent font size
+   When to use it: Component-level scaling
+============================================ */
+
+.em-parent{
+
+font-size:20px;
+background:#ecf0f1;
+padding:20px;
+margin-top:20px;
+
+}
+
+.em-child{
+
+font-size:2em;
+
+/* 2 × parent font size (40px) */
+
+background:#16a085;
+color:white;
+padding:10px;
+margin-top:10px;
+
+}
+
+
+
+/* ============================================
+   VIEWPORT UNITS
+   What it is: Size relative to screen viewport
+============================================ */
+
+.viewport-demo{
+
+height:50vh;
+
+/* vh = viewport height */
+/* 50vh = half the screen height */
+
+background:#34495e;
+color:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-top:30px;
+
+}
+
+
+
+/* ============================================
+   MODERN VIEWPORT UNITS
+============================================ */
+
+/* ⚠️ NOTE:
+svh = small viewport height
+dvh = dynamic viewport height
+lvh = large viewport height
+
+These fix mobile browser toolbar issues.
+*/
+
+
+
+/* ============================================
+   GENERAL SECTION LAYOUT
+============================================ */
+
+.section{
+
+margin-top:50px;
+
+}
+
+.footer{
+
+margin-top:80px;
+text-align:center;
+color:#777;
+
+}

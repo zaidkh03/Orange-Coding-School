@@ -1,0 +1,144 @@
+/* ==========================================================================
+   THE ULTIMATE CSS SELECTORS & SPECIFICITY CHEAT SHEET
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. COMBINATORS (The Order of Elements & Relationships)
+   -------------------------------------------------------------------------- */
+/* How browser reads: Right to Left (Finds the target, then checks its parents) 
+   How we write: Left to Right (Grandparent -> Parent -> Child) */
+
+/* A. DESCENDANT COMBINATOR (Space) - "Anywhere inside" */
+/* Targets ANY <a> that lives ANYWHERE inside a .nav-container */
+.nav-container a {
+    text-decoration: none;
+    color: blue;
+}
+
+/* B. CHILD COMBINATOR (>) - "Directly inside (1 level deep)" */
+/* Targets a <ul> ONLY if its immediate parent is .nav-container. 
+   If there was a <div> wrapping the <ul>, this rule would NOT work. */
+.nav-container > ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* C. ADJACENT SIBLING COMBINATOR (+) - "Directly next to" */
+/* Targets a <p> ONLY if it is placed immediately after an <h1> */
+h1.page-title + p.subtitle {
+    margin-top: 0;
+    color: gray;
+}
+
+/* D. GENERAL SIBLING COMBINATOR (~) - "Anywhere after, sharing the same parent" */
+/* Targets ALL <p> elements that come after an <h1> inside the same container */
+h1.page-title ~ p {
+    font-size: 14px;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. SPACING VS. NO SPACING (Chaining vs. Descendants)
+   -------------------------------------------------------------------------- */
+
+/* --- WITH SPACE (Descendant) --- */
+/* "Find an element with .required-field INSIDE .form-layout" */
+.form-layout .required-field {
+    border-left: 4px solid red;
+}
+
+/* --- NO SPACE (Chaining / Multiple Conditions) --- */
+/* "Find an element that is ALL of these things at the exact same time." */
+
+/* 1. Chaining two classes */
+/* Must have BOTH classes on the same HTML tag: <header class="site-header dark-theme"> */
+.site-header.dark-theme {
+    background-color: #333;
+    color: white;
+}
+
+/* 2. Chaining Tag + Class */
+/* Must be specifically an <input> tag WITH the class .form-control */
+input.form-control {
+    width: 100%;
+    padding: 10px;
+}
+
+/* 3. Chaining Tag + ID + Attribute */
+/* Highly specific: An <input>, with ID #email, that is disabled */
+input#email[disabled] {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. CSS SPECIFICITY (The Math of "Who Wins?")
+   -------------------------------------------------------------------------- */
+/* Specificity is calculated using a 4-column points system: (0, 0, 0, 0)
+   Column 1: Inline Styles (1, 0, 0, 0) - Worth 1000 points
+   Column 2: IDs           (0, 1, 0, 0) - Worth 100 points
+   Column 3: Classes, Attributes, Pseudo-classes (:hover) (0, 0, 1, 0) - Worth 10 points
+   Column 4: Elements/Tags, Pseudo-elements (::before)    (0, 0, 0, 1) - Worth 1 point
+*/
+
+
+
+/* SCORE: 0, 0, 0, 1 (1 point) - Very Weak */
+button {
+    border: none;
+    padding: 10px 20px;
+}
+
+/* SCORE: 0, 0, 1, 0 (10 points) - Beats the element selector */
+.btn {
+    border-radius: 4px;
+    background-color: gray;
+}
+
+/* SCORE: 0, 0, 2, 0 (20 points) - Two classes chain. Beats one class. */
+.btn.btn-primary {
+    background-color: blue;
+}
+
+/* SCORE: 0, 1, 0, 0 (100 points) - One ID destroys all classes and tags above. */
+#save-btn {
+    font-weight: bold;
+    text-transform: uppercase;
+    /* NOTE: In index.html, we have style="background-color: #ff5722;" 
+       That Inline CSS scores 1,000 points. It will ALWAYS beat our background-color here. */
+}
+
+/* COMPLEX SPECIFICITY MATH EXAMPLE: */
+/* Let's calculate: ul#nav-list li.item a:hover */
+/* 1 ID (#nav-list) = 100 */
+/* 2 Classes/Pseudo-classes (.item, :hover) = 20 */
+/* 2 Tags (ul, li, a) = 3 */
+/* Total Score = 123 points */
+
+
+/* --------------------------------------------------------------------------
+   4. THE CASCADE & SOURCE ORDER (When Specificity is Tied)
+   -------------------------------------------------------------------------- */
+/* If two rules have the exact same specificity score, the CASCADE decides the winner.
+   The rule that is read LAST by the browser wins.
+*/
+
+.special-link {
+    color: green; /* Read first */
+}
+
+.special-link {
+    color: purple; /* Read second. THIS WINS! The link will be purple. */
+}
+
+/* --- THE NUCLEAR OPTION: !important --- */
+/* Adding !important overrides EVERYTHING. It breaks the specificity system entirely.
+   It even beats Inline CSS. 
+   WARNING: Use this as an absolute last resort. It makes debugging a nightmare. 
+*/
+#save-btn {
+    /* Even though the HTML has inline CSS making the button orange (#ff5722), 
+       this !important rule will crush it and force the button to be black. */
+    background-color: black !important; 
+}

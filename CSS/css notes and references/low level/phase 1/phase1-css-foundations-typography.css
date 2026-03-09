@@ -1,0 +1,322 @@
+/* ============================================================
+   PHASE 1 CSS REFERENCE
+   CSS Foundations & Typography
+============================================================ */
+
+
+/* ============================================
+   UNIVERSAL SELECTOR (*)
+   What it is: Targets every element on the page.
+   When to use it: Global resets or baseline rules.
+   Default value: n/a
+   Inherited: n/a
+============================================ */
+
+* {
+
+    /* margin: 0; */
+    /* Removes browser default spacing */
+
+    /* padding: 0; */
+    /* Removes default padding */
+
+    /* box-sizing: border-box; 
+    description: The width and height properties 
+    (and min-width, max-width, min-height, max-height)
+    include content, padding, and border, but not margin.*/
+
+    /* box-sizing: content-box;
+    description: The width and height properties 
+    (and min-width, max-width, min-height, max-height)
+    include only the content, but not the padding, border, or margin. */
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+/* ============================================
+   ELEMENT SELECTOR
+   What it is: Targets HTML elements directly.
+   When to use it: Base styling for typography or layout.
+   Default value: browser dependent
+   Inherited: many typography properties
+============================================ */
+
+body {
+
+    /* font-family */
+    /* Defines which fonts the browser should use */
+
+    /* serif → traditional fonts (Times) */
+    /* sans-serif → modern fonts (Arial) */
+    /* monospace → coding fonts (Courier) */
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    /* line-height */
+    /* Controls vertical spacing between lines */
+
+    line-height: 1.6;
+
+    background: #f5f7fa;
+    padding: 40px;
+    color: #333;
+}
+
+
+
+/* ============================================
+   CLASS SELECTOR (.class)
+   What it is: Targets reusable components.
+   When to use it: Most UI styling.
+   Default value: none
+   Inherited: no
+============================================ */
+
+.page-header {
+
+    text-align: center;
+    margin-bottom: 40px;
+
+}
+
+
+
+.subtitle {
+
+    color: #666;
+}
+
+
+
+/* ============================================
+   FONT-SIZE
+   What it is: Controls text size.
+   When to use it: Typography scaling.
+   Default value: usually 16px
+   Inherited: yes
+============================================ */
+
+h1 {
+
+    /* font-size values */
+
+    /* px → fixed size */
+    /* rem → scalable relative to root font size */
+    /* em → relative to parent */
+
+    font-size: 2.2rem;
+
+    font-weight: 700;
+
+}
+
+
+
+/* ============================================
+   TEXT-ALIGN
+   What it is: Horizontal alignment of text.
+   When to use it: Headers, layout components.
+   Default value: left
+   Inherited: yes
+============================================ */
+
+.text-demo {
+
+    text-align: left;
+
+    max-width: 600px;
+
+    margin: 20px auto;
+
+}
+
+
+
+/* ============================================
+   FONT-WEIGHT
+   What it is: Thickness of characters.
+   When to use it: Emphasizing headings.
+   Default value: normal (400)
+   Inherited: yes
+============================================ */
+
+h3 {
+
+    font-weight: 700;
+
+}
+
+
+
+/* ============================================
+   EXTERNAL CSS DEMO
+============================================ */
+
+.external-style-demo {
+
+    background: #d1ecf1;
+    padding: 10px;
+    border: 1px solid #bee5eb;
+
+}
+
+
+
+/* ============================================
+   BUTTON COMPONENT
+============================================ */
+
+.btn {
+
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 6px;
+
+    font-weight: 600;
+
+}
+
+
+
+/* ============================================
+   COLOR SYSTEMS
+============================================ */
+
+
+/* Named Color */
+
+.color-named {
+
+    background: red;
+
+}
+
+
+/* HEX */
+
+.color-hex {
+
+    background: #3498db;
+
+}
+
+
+/* RGB */
+
+.color-rgb {
+
+    background: rgb(46, 204, 113);
+
+}
+
+
+/* RGBA */
+
+.color-rgba {
+
+    background: rgba(155, 89, 182, 0.6);
+
+}
+
+
+/* HSL */
+
+.color-hsl {
+
+    background: hsl(35, 100%, 50%);
+
+}
+
+
+
+/* ============================================
+   COLOR DEMO BOX
+============================================ */
+
+.color-demo {
+
+    padding: 20px;
+    color: white;
+    margin-bottom: 10px;
+    border-radius: 6px;
+
+}
+
+
+
+/* ============================================
+   BUTTON VARIANTS
+============================================ */
+
+.primary {
+
+    background: #007bff;
+    color: white;
+
+}
+
+
+.secondary {
+
+    background: #6c757d;
+    color: white;
+
+}
+
+
+
+/* ============================================
+   ID SELECTOR (#id)
+   What it is: Targets one unique element.
+   When to use it: Rarely. Prefer classes.
+   Default value: none
+   Inherited: no
+============================================ */
+
+#unique-box {
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    background: #fff;
+
+    border: 2px solid #333;
+
+}
+
+
+
+/* ============================================
+   FOOTER
+============================================ */
+
+.footer {
+
+    margin-top: 60px;
+    text-align: center;
+    color: #777;
+
+}
+
+
+
+/* ⚠️ NOTE:
+IDs have very high specificity.
+Too many IDs make CSS harder to override.
+
+Professional CSS architectures rely mostly
+on CLASS selectors instead.
+*/
+
+/* 
+1. The Order of Nested Elements (Parent to Child)
+2. The Order of CSS Properties in a Rule
+3. The Order of CSS Rules in a Stylesheet
+*/

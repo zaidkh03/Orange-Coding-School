@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 8 – Advanced Architecture &amp; Modern CSS Features</title>
+    <link rel="stylesheet" href="phase8-architecture.css" />
+  </head>
+  <body>
+
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 8</span>
+        <h1 class="page-title">Advanced Architecture &amp; Modern Features</h1>
+        <p class="page-subtitle">
+          Custom properties as a design token system. Native CSS nesting.
+          Logical properties for writing-mode-agnostic layouts.
+          Cascade layers for conflict-free specificity management.
+          The tools that make CSS at scale maintainable.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: CSS CUSTOM PROPERTIES (VARIABLES)
+           Purpose: Deep dive into custom properties — not just variables
+                    but a live token system with inheritance and scoping.
+      ============================================================ -->
+      <section class="ref-section" id="custom-properties">
+        <h2 class="section-title">1 — CSS Custom Properties (Variables)</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">Beyond Simple Variables</h3>
+          <p class="concept-text">
+            CSS custom properties aren't just preprocessor variables with a
+            different syntax. They live in the DOM, inherit through the tree,
+            can be read and written by JavaScript, and change dynamically at
+            runtime. They are the foundation of every modern design token system.
+          </p>
+        </div>
+
+        <!--
+          DECLARATION & USAGE
+          Purpose: Basic --var syntax and var() function.
+          Related CSS: :root declarations
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Declaration, Usage &amp; Fallback Values</h3>
+
+          <p class="sub-label">Basic var() usage with fallback</p>
+          <div class="var-basic-demo">
+            <div class="var-box var-direct">Uses --color-accent directly</div>
+            <div class="var-box var-fallback">
+              Uses <code>var(--undefined-color, #f59e0b)</code> — fallback fires
+            </div>
+            <div class="var-box var-chained">
+              <code>var(--missing, var(--color-accent))</code> — chained fallback
+            </div>
+          </div>
+
+          <p class="demo-note">
+            Syntax: <code>--property-name: value</code> (declaration, must start with --)<br>
+            Usage: <code>var(--property-name)</code><br>
+            Fallback: <code>var(--property-name, fallback-value)</code><br>
+            Chained: <code>var(--a, var(--b, hardcoded))</code><br><br>
+            ⚠️ Custom properties are <strong>case-sensitive</strong>:
+            <code>--Color</code> ≠ <code>--color</code>.<br>
+            ⚠️ Fallback values can themselves be <code>var()</code> calls — but
+            don't nest too deep. Infinite loops are impossible but tangled
+            chains are hard to debug.
+          </p>
+        </div>
+
+        <!--
+          SCOPING & INHERITANCE
+          Purpose: Show how custom properties scope to DOM subtrees.
+          Related CSS: .cp-scope-* rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Scoping &amp; Inheritance — The Core Power</h3>
+
+          <!--
+            SCOPED TOKENS
+            Purpose: Same component, different theme via scoped custom property override.
+            Related CSS: .cp-theme-* wrappers
+          -->
+          <div class="cp-scope-grid">
+            <!-- Default theme — inherits from :root -->
+            <div class="cp-theme-default">
+              <p class="cp-theme-label">:root defaults</p>
+              <div class="cp-themed-card">
+                <div class="cp-card-icon">✦</div>
+                <h4>Default Theme</h4>
+                <p>Inherits <code>--accent</code> from <code>:root</code>.</p>
+                <button class="cp-card-btn">Action</button>
+              </div>
+            </div>
+
+            <!-- Blue override scope -->
+            <div class="cp-theme-blue">
+              <p class="cp-theme-label">Scoped blue override</p>
+              <div class="cp-themed-card">
+                <div class="cp-card-icon">✦</div>
+                <h4>Blue Theme</h4>
+                <p>Parent sets <code>--accent: #38bdf8</code> — card inherits it.</p>
+                <button class="cp-card-btn">Action</button>
+              </div>
+            </div>
+
+            <!-- Warm override scope -->
+            <div class="cp-theme-warm">
+              <p class="cp-theme-label">Scoped warm override</p>
+              <div class="cp-themed-card">
+                <div class="cp-card-icon">✦</div>
+                <h4>Warm Theme</h4>
+                <p>Parent sets <code>--accent: #fb923c</code> — same card, different feel.</p>
+                <button class="cp-card-btn">Action</button>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            Custom properties <strong>inherit</strong> down the DOM tree
+            just like <code>color</code> or <code>font-family</code>.
+            Override at any ancestor and all descendants see the new value.
+            <br><br>
+            This is how design tokens work at scale: define a component using
+            <code>--accent</code>. Place it inside a <code>.theme-blue</code>
+            wrapper that redefines <code>--accent</code>. The component changes
+            colour automatically — no new CSS classes needed on the component.
+          </p>
+        </div>
+
+        <!--
+          DARK MODE WITH CUSTOM PROPERTIES
+          Purpose: Implement OS-level dark mode by swapping token values.
+          Related CSS: @media prefers-color-scheme + :root tokens
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Dark Mode via Custom Property Token Swap</h3>
+
+          <!--
+            DARK MODE DEMO
+            Purpose: A UI component that adapts to OS dark/light mode via
+                     custom property redefinition under @media.
+            Related CSS: @media (prefers-color-scheme: dark)
+          -->
+          <div class="dm-demo">
+            <div class="dm-card">
+              <div class="dm-card-header">
+                <div class="dm-avatar">AJ</div>
+                <div>
+                  <p class="dm-name">Ada Johnson</p>
+                  <p class="dm-role">Lead Engineer</p>
+                </div>
+              </div>
+              <p class="dm-bio">
+                Tokens are defined once. The <code>:root</code> swaps the
+                values under <code>prefers-color-scheme</code>. Every element
+                using the tokens updates for free.
+              </p>
+              <div class="dm-stats">
+                <div class="dm-stat">
+                  <span class="dm-stat-n">248</span>
+                  <span class="dm-stat-l">Commits</span>
+                </div>
+                <div class="dm-stat">
+                  <span class="dm-stat-n">34</span>
+                  <span class="dm-stat-l">PRs</span>
+                </div>
+                <div class="dm-stat">
+                  <span class="dm-stat-n">12</span>
+                  <span class="dm-stat-l">Reviews</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            The pattern:<br>
+            <code>:root { --bg: #ffffff; --text: #0f172a; }</code><br>
+            <code>@media (prefers-color-scheme: dark) &#123;</code><br>
+            <code>&nbsp; :root { --bg: #0f172a; --text: #f1f5f9; }</code><br>
+            <code>&#125;</code><br><br>
+            Every element using <code>var(--bg)</code> and <code>var(--text)</code>
+            automatically responds to OS dark mode — with zero per-component
+            media queries. The whole system updates from the root.
+          </p>
+        </div>
+
+        <!--
+          COMPUTED VALUES & MATH
+          Purpose: Show @property, calc() and CSS math with custom properties.
+          Related CSS: .cp-math-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Custom Properties in <code>calc()</code> — Dynamic Math</h3>
+
+          <div class="cp-math-demo">
+            <div class="cp-math-bar" style="--progress: 0.25">
+              <div class="cp-math-fill">25%</div>
+            </div>
+            <div class="cp-math-bar" style="--progress: 0.6">
+              <div class="cp-math-fill">60%</div>
+            </div>
+            <div class="cp-math-bar" style="--progress: 0.85">
+              <div class="cp-math-fill">85%</div>
+            </div>
+            <div class="cp-math-bar" style="--progress: 1">
+              <div class="cp-math-fill">100%</div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>--progress</code> is set inline (0–1). The CSS reads:
+            <code>width: calc(var(--progress) * 100%)</code>
+            <br><br>
+            Custom properties integrate seamlessly with <code>calc()</code>,
+            <code>clamp()</code>, <code>min()</code>, and <code>max()</code>.
+            They can hold unitless numbers, colors, strings, or even full
+            property values (though unitless numbers are most flexible for math).
+            <br><br>
+            ⚠️ Custom properties are substituted as raw tokens before the
+            value is interpreted — so <code>--n: 10</code> and then
+            <code>width: var(--n)px</code> will NOT work. Use
+            <code>width: calc(var(--n) * 1px)</code> to add units in calc().
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: NATIVE CSS NESTING
+           Purpose: Reference for the & selector and nested rules.
+      ============================================================ -->
+      <section class="ref-section" id="nesting">
+        <h2 class="section-title">2 — Native CSS Nesting</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">No More Preprocessor Required</h3>
+          <p class="concept-text">
+            CSS nesting is now native — no Sass or PostCSS needed. Write
+            related styles together, and the browser resolves the full
+            selector automatically. The <code>&amp;</code> selector refers
+            to the parent selector, enabling precise control over how
+            rules compound.
+          </p>
+        </div>
+
+        <div class="demo-card">
+          <h3 class="demo-label">Nesting Syntax — the <code>&amp;</code> selector</h3>
+
+          <p class="sub-label">A nesting showcase — hover and focus the card below</p>
+          <!--
+            NESTING DEMO CARD
+            Purpose: All CSS for this card is written with native nesting.
+            Related CSS: .nest-card { ... } block in .css file
+          -->
+          <div class="nest-demo">
+            <div class="nest-card">
+              <div class="nest-card-header">
+                <span class="nest-tag">Article</span>
+                <span class="nest-date">March 2026</span>
+              </div>
+              <h3 class="nest-card-title">Native Nesting in Production</h3>
+              <p class="nest-card-body">
+                All the CSS for this card — including hover states, child
+                selectors, pseudo-elements, and media query — is nested
+                inside a single <code>.nest-card { }</code> block.
+              </p>
+              <div class="nest-card-footer">
+                <div class="nest-avatar"></div>
+                <span>Ada Johnson</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            Key rules:<br>
+            <code>&amp;</code> = the parent selector (required when the nested selector
+            starts with a non-element character like <code>.</code>, <code>:</code>, <code>[</code>)<br>
+            <code>&amp;:hover</code> → <code>.parent:hover</code><br>
+            <code>&amp; .child</code> → <code>.parent .child</code> (descendant)<br>
+            <code>&amp; + .sibling</code> → <code>.parent + .sibling</code><br>
+            <code>.other &amp;</code> → <code>.other .parent</code> (reverse context)<br>
+            <code>@media</code> can be nested directly — the selector context is preserved.<br><br>
+            Browser support: All modern browsers (Chrome 112+, Firefox 117+, Safari 16.5+).
+            Safe for production. No build step required.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: LOGICAL PROPERTIES
+           Purpose: Writing-mode-agnostic layout properties.
+      ============================================================ -->
+      <section class="ref-section" id="logical-properties">
+        <h2 class="section-title">3 — Logical Properties</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">Physical vs Logical — Writing-Mode Independence</h3>
+          <p class="concept-text">
+            Physical properties (<code>margin-left</code>, <code>padding-top</code>)
+            are anchored to screen directions. Logical properties
+            (<code>margin-inline-start</code>, <code>padding-block-start</code>)
+            are anchored to the <em>writing direction</em> — so a component
+            written for English (left-to-right) automatically mirrors correctly
+            in Arabic (right-to-left) and handles vertical writing modes too.
+          </p>
+        </div>
+
+        <!--
+          LOGICAL VS PHYSICAL COMPARISON
+          Purpose: Side-by-side comparison of equivalent physical/logical rules.
+          Related CSS: .lp-compare-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Physical → Logical Property Mapping</h3>
+
+          <div class="lp-table">
+            <div class="lp-row lp-header">
+              <span>Physical Property</span>
+              <span>Logical Equivalent</span>
+              <span>Meaning</span>
+            </div>
+            <div class="lp-row">
+              <code>width</code>
+              <code>inline-size</code>
+              <span>Size in the inline (text flow) direction</span>
+            </div>
+            <div class="lp-row">
+              <code>height</code>
+              <code>block-size</code>
+              <span>Size in the block (stacking) direction</span>
+            </div>
+            <div class="lp-row">
+              <code>margin-left</code>
+              <code>margin-inline-start</code>
+              <span>Space at the start of the inline axis</span>
+            </div>
+            <div class="lp-row">
+              <code>margin-right</code>
+              <code>margin-inline-end</code>
+              <span>Space at the end of the inline axis</span>
+            </div>
+            <div class="lp-row">
+              <code>margin-top</code>
+              <code>margin-block-start</code>
+              <span>Space at the start of the block axis</span>
+            </div>
+            <div class="lp-row">
+              <code>margin-bottom</code>
+              <code>margin-block-end</code>
+              <span>Space at the end of the block axis</span>
+            </div>
+            <div class="lp-row">
+              <code>padding-left/right</code>
+              <code>padding-inline</code>
+              <span>Shorthand for both inline sides</span>
+            </div>
+            <div class="lp-row">
+              <code>padding-top/bottom</code>
+              <code>padding-block</code>
+              <span>Shorthand for both block sides</span>
+            </div>
+            <div class="lp-row">
+              <code>border-left</code>
+              <code>border-inline-start</code>
+              <span>Border at the text-start edge</span>
+            </div>
+            <div class="lp-row">
+              <code>top / bottom</code>
+              <code>inset-block-start / end</code>
+              <span>Offset on the block axis</span>
+            </div>
+            <div class="lp-row">
+              <code>left / right</code>
+              <code>inset-inline-start / end</code>
+              <span>Offset on the inline axis</span>
+            </div>
+            <div class="lp-row">
+              <code>top/right/bottom/left</code>
+              <code>inset</code>
+              <span>Shorthand for all four offsets</span>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <strong>Axes:</strong><br>
+            <code>inline</code> = the direction text flows (left↔right in LTR English,
+            right↔left in Arabic, top↔bottom in vertical Japanese).<br>
+            <code>block</code> = the direction blocks stack (top↔bottom in horizontal
+            writing, right↔left in vertical writing).<br><br>
+            For most English-only projects, logical and physical are equivalent.
+            Start using logical properties now so your codebase is
+            internationalisation-ready by default — the cost is zero.
+          </p>
+        </div>
+
+        <!--
+          INSET SHORTHAND
+          Purpose: Show the inset shorthand for positioned elements.
+          Related CSS: .lp-inset-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>inset</code> — The Positioned Element Shorthand</h3>
+
+          <div class="lp-inset-demo">
+            <!--
+              INSET: 0
+              Purpose: Cover a parent entirely in one declaration.
+              Related CSS: .lp-inset-cover
+            -->
+            <div class="lp-inset-parent">
+              <div class="lp-inset-cover">
+                <code>inset: 0</code>
+                <small>Covers parent entirely</small>
+              </div>
+            </div>
+
+            <div class="lp-inset-parent">
+              <div class="lp-inset-partial">
+                <code>inset: 16px 24px</code>
+                <small>block / inline</small>
+              </div>
+            </div>
+
+            <div class="lp-inset-parent">
+              <div class="lp-inset-tb">
+                <code>inset-block: 20px</code>
+                <small>top + bottom only</small>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>inset: 0</code> is now the standard way to overlay an
+            element over its positioned parent — replacing
+            <code>top: 0; right: 0; bottom: 0; left: 0</code>.
+            One declaration instead of four.<br><br>
+            Shorthand follows the same TRBL order as <code>margin</code>:
+            <code>inset: top right bottom left</code>.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 4: CASCADE LAYERS (@layer)
+           Purpose: Explicit control over the cascade — beyond specificity.
+      ============================================================ -->
+      <section class="ref-section" id="layers">
+        <h2 class="section-title">4 — Cascade Layers (<code>@layer</code>)</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">The Specificity War, Ended</h3>
+          <p class="concept-text">
+            Before <code>@layer</code>, overriding library styles meant writing
+            higher-specificity selectors or using <code>!important</code>.
+            Cascade layers let you declare an explicit priority order —
+            styles in a higher layer always win, regardless of specificity.
+            No more specificity arms races.
+          </p>
+        </div>
+
+        <!--
+          LAYER ORDER DEMO
+          Purpose: Demonstrate how layer order determines winner independent of specificity.
+          Related CSS: @layer declarations in .css file
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Layer Priority — Lower Specificity Wins When in a Higher Layer</h3>
+
+          <!--
+            LAYER WINNER BOXES
+            Purpose: Each box is styled by multiple layers — show which layer wins.
+            Related CSS: @layer base, @layer components, @layer utilities
+          -->
+          <div class="layer-demo-row">
+            <div class="layer-box lbox-a">
+              <p class="layer-winner-label">Layer: utilities wins</p>
+              <p>Class <code>.text-accent</code> is in <code>@layer utilities</code>
+                 (highest). The base layer's <code>h4</code> rule has higher
+                 specificity but lower layer — it loses.</p>
+            </div>
+            <div class="layer-box lbox-b">
+              <p class="layer-winner-label">Layer: components wins</p>
+              <p>The <code>.layer-box</code> rule is in <code>@layer components</code>.
+                 A <code>div</code> base rule with no class would have lower
+                 specificity AND lower layer.</p>
+            </div>
+            <div class="layer-box lbox-c">
+              <p class="layer-winner-label">Unlayered CSS always wins</p>
+              <p>Styles outside any <code>@layer</code> are treated as the highest
+                 priority layer — they always beat layered styles.</p>
+            </div>
+          </div>
+
+          <!--
+            LAYER ORDER TABLE
+            Purpose: Visual priority stack.
+          -->
+          <div class="layer-stack">
+            <div class="layer-item layer-unlayered">
+              <span>Unlayered CSS (highest priority)</span>
+              <code>No @layer wrapper</code>
+            </div>
+            <div class="layer-item layer-utilities-item">
+              <span>@layer utilities</span>
+              <code>Declared 3rd → highest layered priority</code>
+            </div>
+            <div class="layer-item layer-components-item">
+              <span>@layer components</span>
+              <code>Declared 2nd</code>
+            </div>
+            <div class="layer-item layer-base-item">
+              <span>@layer base (lowest priority)</span>
+              <code>Declared 1st → lowest layered priority</code>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            Layer priority is determined by <strong>declaration order</strong>.
+            Last declared = highest priority. First declared = lowest priority.
+            <br><br>
+            You can pre-declare the order at the top of your CSS to make intent explicit:<br>
+            <code>@layer base, components, utilities;</code><br>
+            Then add rules to each layer anywhere in the file — the order above
+            always governs priority.
+            <br><br>
+            <strong>The workflow this enables:</strong><br>
+            Put third-party library CSS in <code>@layer vendor</code>.
+            Your own base in <code>@layer base</code>. Components in
+            <code>@layer components</code>. One-off overrides in
+            <code>@layer utilities</code>. Unlayered CSS stays above all.
+            Zero <code>!important</code> needed. Zero specificity hacks.
+          </p>
+        </div>
+
+        <!--
+          LAYER IMPORT PATTERN
+          Purpose: Show how to wrap third-party CSS in a layer.
+          Related CSS: @import ... layer() pattern (shown as code)
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Wrapping Third-Party CSS in a Layer</h3>
+
+          <div class="layer-code-demo">
+            <pre class="layer-code-block"><code>/* Declare layer order at the very top of your CSS */
+@layer vendor, base, components, utilities;
+
+/* Wrap a library import in a layer */
+@import url("normalize.css") layer(vendor);
+@import url("some-ui-lib.css") layer(vendor);
+
+/* Your base styles — override vendor safely */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  body { font-family: var(--font-sans); }
+  a { color: inherit; }
+}
+
+/* Component styles */
+@layer components {
+  .card { border-radius: var(--r-lg); }
+  .btn  { cursor: pointer; }
+}
+
+/* Utility classes — highest layered priority */
+@layer utilities {
+  .sr-only { position: absolute; clip: rect(0 0 0 0); }
+  .hidden  { display: none; }
+}</code></pre>
+          </div>
+
+          <p class="demo-note">
+            <code>@import url(…) layer(name)</code> wraps all styles from the
+            imported file into the named layer. Even if the library uses
+            <code>!important</code> internally, your unlayered styles still
+            win (because unlayered beats all layers).
+            <br><br>
+            Browser support: All modern browsers (Chrome 99+, Firefox 97+,
+            Safari 15.4+). Safe for production today.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 5: MODERN SELECTORS & CSS FEATURES ROUNDUP
+           Purpose: color-mix(), :where(), has(), math functions, scroll-driven
+      ============================================================ -->
+      <section class="ref-section" id="modern-features">
+        <h2 class="section-title">5 — Modern Features Roundup</h2>
+
+        <!--
+          COLOR-MIX()
+          Purpose: Native CSS colour blending without pre-processors.
+          Related CSS: .cm-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>color-mix()</code> — Native Colour Blending</h3>
+
+          <div class="cm-demo-row">
+            <div class="cm-box cm-0">0%</div>
+            <div class="cm-box cm-25">25%</div>
+            <div class="cm-box cm-50">50%</div>
+            <div class="cm-box cm-75">75%</div>
+            <div class="cm-box cm-100">100%</div>
+          </div>
+          <p class="sub-label">Mixing the page accent with black — tints and shades in pure CSS</p>
+          <div class="cm-demo-row">
+            <div class="cm-shade cm-s1">shade 1</div>
+            <div class="cm-shade cm-s2">shade 2</div>
+            <div class="cm-shade cm-s3">shade 3</div>
+            <div class="cm-shade cm-s4">shade 4</div>
+            <div class="cm-shade cm-s5">shade 5</div>
+          </div>
+
+          <p class="demo-note">
+            <code>color-mix(in oklab, #e879f9 50%, white)</code><br>
+            Mix any two colours in any colour space (srgb, oklab, oklch, hsl…).
+            <code>oklab</code> produces perceptually uniform mixes — the 50% point
+            looks visually halfway between the two colours.
+            <br><br>
+            This replaces preprocessor <code>lighten()</code> / <code>darken()</code>
+            functions natively. Browser support: Chrome 111+, Firefox 113+, Safari 16.2+.
+          </p>
+        </div>
+
+        <!--
+          CSS MATH FUNCTIONS RECAP
+          Purpose: Show newer math functions — round(), mod(), rem(), abs(), sign()
+          Related CSS: .math-fn-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">CSS Math Functions — <code>round()</code>, <code>mod()</code>, <code>abs()</code></h3>
+
+          <div class="math-fn-grid">
+            <div class="math-fn-card">
+              <p class="math-fn-label"><code>round()</code></p>
+              <div class="math-fn-bar round-demo">
+                <span>Snaps to nearest 50px grid</span>
+              </div>
+              <p class="math-fn-desc">
+                <code>width: round(33.7%, 1%)</code> → snaps to
+                nearest valid step. Great for pixel-grid alignment.
+              </p>
+            </div>
+            <div class="math-fn-card">
+              <p class="math-fn-label"><code>mod() / rem()</code></p>
+              <div class="math-fn-bar mod-demo">
+                <span>Remainder value</span>
+              </div>
+              <p class="math-fn-desc">
+                <code>padding: mod(100px, 30px)</code> → 10px (100 mod 30).
+                Useful for keeping values within a rhythm grid.
+              </p>
+            </div>
+            <div class="math-fn-card">
+              <p class="math-fn-label"><code>abs()</code></p>
+              <div class="math-fn-bar abs-demo">
+                <span>Always positive</span>
+              </div>
+              <p class="math-fn-desc">
+                <code>margin: abs(var(--offset))</code> → always positive
+                regardless of the variable's sign.
+              </p>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            These are CSS Values Level 4 functions landing in browsers now.
+            <code>round()</code>, <code>mod()</code>, <code>rem()</code>,
+            <code>sin()</code>, <code>cos()</code>, <code>tan()</code>,
+            <code>abs()</code>, <code>sign()</code> — full math library.
+            Check MDN for current browser support per function.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 6: REAL-WORLD — Design Token System
+           Purpose: A complete token-driven component library foundation.
+      ============================================================ -->
+      <section class="ref-section" id="real-world">
+        <h2 class="section-title">6 — Real-World — Token-Driven Component System</h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">
+            All Phase 8 Features — Custom Properties + Nesting + Logical + Layers
+          </h3>
+
+          <!--
+            TOKEN SYSTEM DEMO
+            Purpose: A UI demonstrating a full token-driven, theme-switchable design.
+            Related CSS: .token-* classes
+          -->
+          <div class="token-system-demo">
+
+            <!-- Light section -->
+            <div class="token-theme token-light">
+              <p class="token-theme-label">Light Theme</p>
+              <div class="token-ui">
+                <div class="token-card">
+                  <div class="token-card-top">
+                    <div class="token-avatar">EL</div>
+                    <div>
+                      <p class="token-name">Elena Liu</p>
+                      <p class="token-sub">Product Designer</p>
+                    </div>
+                    <span class="token-badge">Active</span>
+                  </div>
+                  <p class="token-body">
+                    Design tokens propagate through custom properties.
+                    Switch the theme wrapper and all tokens update.
+                  </p>
+                  <div class="token-actions">
+                    <button class="token-btn token-btn-primary">Follow</button>
+                    <button class="token-btn token-btn-ghost">Message</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dark section -->
+            <div class="token-theme token-dark">
+              <p class="token-theme-label">Dark Theme</p>
+              <div class="token-ui">
+                <div class="token-card">
+                  <div class="token-card-top">
+                    <div class="token-avatar">EL</div>
+                    <div>
+                      <p class="token-name">Elena Liu</p>
+                      <p class="token-sub">Product Designer</p>
+                    </div>
+                    <span class="token-badge">Active</span>
+                  </div>
+                  <p class="token-body">
+                    Same HTML. Same CSS classes. Different
+                    <code>token-theme</code> ancestor redefines the tokens.
+                  </p>
+                  <div class="token-actions">
+                    <button class="token-btn token-btn-primary">Follow</button>
+                    <button class="token-btn token-btn-ghost">Message</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <p class="demo-note">
+            The token layer approach: define <code>--token-bg</code>,
+            <code>--token-surface</code>, <code>--token-text</code>,
+            <code>--token-accent</code> in each theme class.
+            Components use <em>only</em> token variables.
+            Switching from light to dark = changing one ancestor class.
+            No per-component dark mode rules ever needed.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>
+        CSS Reference — Phase 8: Advanced Architecture &amp; Modern Features
+        &nbsp;|&nbsp;
+        Tokens cascade. Layers compose. Properties inherit.
+        This is the CSS architecture endgame.
+      </p>
+    </footer>
+
+  </body>
+</html>

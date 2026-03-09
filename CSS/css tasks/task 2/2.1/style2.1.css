@@ -1,0 +1,98 @@
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 20px;
+}
+
+section {
+    justify-items: center;
+    text-align: center;
+}
+
+#form {
+    /* justify-items: center; */
+    text-align: left;
+    border: 1px solid black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2);
+    border: 0px;
+}
+
+.buttons {
+    width: 100%;
+    border-radius: 50px;
+    border: 0px;
+    padding: 10px 0px;
+    margin: 5px 0px;
+}
+
+#buttons-section {
+    text-align: center;
+}
+
+#signIn_button {
+    background-color: rgb(68, 151, 230);
+    color: white;
+}
+
+#signIn-apple {
+    background-color: white;
+    border: 1px solid;
+}
+
+#form p {
+    font-size: small;
+}
+
+input {
+    width: 100%;
+    padding: 8px 3px;
+    margin: 5px 0px;
+}
+
+#forgot {
+    color: rgb(68, 151, 230);
+    margin: 5px 0px;
+}
+
+#inputs {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    margin: 10px 0px;
+}
+
+p {
+    text-align: center;
+    margin: 20px 0px;
+    font-size: small;
+}
+
+span {
+    color: rgb(68, 151, 230);
+}
+
+footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+#container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: baseline;
+    padding: 20px 0px;
+    flex-wrap: wrap;
+    align-content: space-evenly;
+    gap: 1em;
+}
+

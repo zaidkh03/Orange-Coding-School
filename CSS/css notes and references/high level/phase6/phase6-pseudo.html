@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 6 – Pseudo-Classes, Pseudo-Elements &amp; States Reference</title>
+    <link rel="stylesheet" href="phase6-pseudo.css" />
+  </head>
+
+  <body>
+
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 6</span>
+        <h1 class="page-title">Pseudo-Classes, Pseudo-Elements &amp; States</h1>
+        <p class="page-subtitle">
+          Style elements based on user interaction, structural position, and
+          injected content — all without adding a single extra HTML class.
+          Interact with every demo below to see states fire in real time.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: INTERACTION STATE PSEUDO-CLASSES
+           Purpose: :hover, :focus, :active, :visited, :disabled, :checked
+      ============================================================ -->
+      <section class="ref-section" id="interaction-states">
+        <h2 class="section-title">1 — Interaction State Pseudo-Classes</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">What Is a Pseudo-Class?</h3>
+          <p class="concept-text">
+            A pseudo-class selects an element based on a <em>state</em> or
+            <em>condition</em> that cannot be expressed by a plain HTML
+            attribute — like "the user's mouse is over this element" or
+            "this checkbox is checked." They always start with a single colon
+            <code>:state</code>.
+          </p>
+        </div>
+
+        <!--
+          :hover
+          Purpose: Fires when the mouse pointer is over the element.
+          Related CSS: :hover rules in .css file
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:hover</code> — Mouse Over</h3>
+          <div class="state-demo-row">
+            <button class="state-btn hover-btn">Hover over me</button>
+            <a href="#" class="hover-link">Hover this link</a>
+            <div class="hover-card">
+              <p>Hover the card</p>
+              <span class="hover-reveal">Hidden content revealed on hover ✓</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>:hover</code> triggers when the pointing device is over an element.
+            Use it for visual feedback — colour changes, underlines, shadows, reveals.
+            <br><br>
+            ⚠️ Touch devices have no hover state — never hide critical
+            content or actions behind <code>:hover</code> alone.
+            Guard with <code>@media (hover: hover)</code> (Phase 5).
+          </p>
+        </div>
+
+        <!--
+          :focus
+          Purpose: Fires when element receives keyboard or programmatic focus.
+          Related CSS: :focus rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:focus</code> &amp; <code>:focus-visible</code> — Keyboard Focus</h3>
+          <div class="state-demo-row">
+            <input class="focus-input" type="text" placeholder="Tab to me…" />
+            <button class="focus-btn">Focus me (Tab key)</button>
+            <a href="#" class="focus-link">Focus me too</a>
+          </div>
+          <div class="state-demo-row" style="margin-top: 1rem;">
+            <button class="focus-visible-btn">:focus-visible only</button>
+            <input class="focus-visible-input" type="text" placeholder="Click or Tab…" />
+          </div>
+          <p class="demo-note">
+            <code>:focus</code> fires on <em>any</em> focus — click or keyboard.<br>
+            <code>:focus-visible</code> fires only when the browser determines a
+            focus ring is useful — keyboard navigation yes, mouse click usually no.
+            <br><br>
+            ⚠️ <strong>Accessibility rule:</strong> NEVER write
+            <code>:focus &#123; outline: none; &#125;</code> without providing an
+            alternative visual indicator. Keyboard users depend on the focus ring
+            to know where they are on the page. Use <code>:focus-visible</code>
+            to show the ring only for keyboard users while hiding it for mouse clicks.
+          </p>
+        </div>
+
+        <!--
+          :active
+          Purpose: Fires while element is being clicked/pressed.
+          Related CSS: :active rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:active</code> — Currently Being Clicked</h3>
+          <div class="state-demo-row">
+            <button class="active-btn">Click &amp; hold me</button>
+            <a href="#" class="active-link">Click &amp; hold link</a>
+          </div>
+          <p class="demo-note">
+            <code>:active</code> applies while the element is being activated —
+            the moment between mousedown and mouseup. Use it for "press" effects
+            on buttons: a slight downward <code>transform: translateY(1px)</code>
+            and reduced shadow mimics a physical button being pressed.
+          </p>
+        </div>
+
+        <!--
+          :disabled & :enabled
+          Purpose: Form elements that are inactive.
+          Related CSS: :disabled rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:disabled</code> &amp; <code>:enabled</code></h3>
+          <div class="state-demo-row">
+            <button class="disabled-btn" disabled>Disabled Button</button>
+            <input class="disabled-input" type="text" placeholder="Disabled input" disabled />
+            <button class="enabled-btn">Enabled Button</button>
+            <input class="enabled-input" type="text" placeholder="Enabled input" />
+          </div>
+          <p class="demo-note">
+            <code>:disabled</code> matches any form element with the
+            <code>disabled</code> HTML attribute. Use it to style inactive
+            controls — reduce opacity, change cursor, remove hover effects.
+            <br><br>
+            ⚠️ <code>pointer-events: none</code> prevents clicks but doesn't
+            make an element truly disabled — it's still in the tab order and
+            accessible. Only the HTML <code>disabled</code> attribute truly
+            disables a form element.
+          </p>
+        </div>
+
+        <!--
+          :checked
+          Purpose: Checkboxes and radio buttons that are selected.
+          Related CSS: :checked rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:checked</code> — Selected Checkboxes &amp; Radios</h3>
+          <div class="checked-demo">
+            <label class="custom-checkbox">
+              <input type="checkbox" class="cb-input" />
+              <span class="cb-box"></span>
+              <span class="cb-label">Option Alpha</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" class="cb-input" checked />
+              <span class="cb-box"></span>
+              <span class="cb-label">Option Beta (pre-checked)</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" class="cb-input" />
+              <span class="cb-box"></span>
+              <span class="cb-label">Option Gamma</span>
+            </label>
+          </div>
+          <div class="radio-demo">
+            <label class="custom-radio">
+              <input type="radio" name="plan" class="radio-input" value="a" />
+              <span class="radio-circle"></span>
+              <span class="radio-label">Starter</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="plan" class="radio-input" value="b" checked />
+              <span class="radio-circle"></span>
+              <span class="radio-label">Pro</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="plan" class="radio-input" value="c" />
+              <span class="radio-circle"></span>
+              <span class="radio-label">Enterprise</span>
+            </label>
+          </div>
+          <p class="demo-note">
+            Custom checkbox/radio styling requires hiding the native input with
+            <code>appearance: none</code> (or <code>opacity: 0</code>) and
+            building the visual with a sibling element styled via
+            <code>input:checked + .cb-box</code>. The adjacent sibling
+            combinator (<code>+</code>) selects the element immediately
+            after the input in the DOM.
+          </p>
+        </div>
+
+        <!--
+          :visited, :link
+          Purpose: Link states.
+          Related CSS: :link, :visited rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:link</code> &amp; <code>:visited</code> — Link States</h3>
+          <div class="state-demo-row">
+            <a href="#never-visited" class="link-state">Unvisited link (:link)</a>
+            <a href="https://example.com" class="link-state visited-demo">
+              Visited link (:visited) — if you've been to example.com
+            </a>
+          </div>
+          <p class="demo-note">
+            The full link state order: <strong>LVHA</strong> — Link, Visited,
+            Hover, Active. Always write them in this order to avoid specificity
+            conflicts overriding each other.
+            <br><br>
+            ⚠️ Browsers heavily restrict what CSS can be applied via
+            <code>:visited</code> for privacy — only colour properties are
+            allowed (<code>color</code>, <code>background-color</code>,
+            <code>border-color</code>, <code>outline-color</code>).
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: STRUCTURAL PSEUDO-CLASSES
+           Purpose: :first-child, :last-child, :nth-child, :nth-of-type, :only-child, :not()
+      ============================================================ -->
+      <section class="ref-section" id="structural">
+        <h2 class="section-title">2 — Structural Pseudo-Classes</h2>
+
+        <!--
+          :first-child & :last-child
+          Purpose: Target the first/last sibling among all elements.
+          Related CSS: :first-child, :last-child
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:first-child</code> &amp; <code>:last-child</code></h3>
+          <ul class="struct-list fl-list">
+            <li>Item 1 — :first-child ← styled</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>
+            <li>Item 5 — :last-child ← styled</li>
+          </ul>
+          <p class="demo-note">
+            <code>:first-child</code> selects an element that is the first
+            sibling among ALL its siblings (regardless of type).
+            <code>:last-child</code> selects the last sibling.
+            <br><br>
+            Common pattern: remove the bottom border/margin from the last item
+            in a list so there's no dangling separator —
+            <code>li:last-child &#123; border-bottom: none; &#125;</code>
+          </p>
+        </div>
+
+        <!--
+          :nth-child()
+          Purpose: Select elements based on their position using formulas.
+          Related CSS: :nth-child()
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:nth-child()</code> — Formula-Based Selection</h3>
+
+          <p class="sub-label">:nth-child(odd) — alternating table rows</p>
+          <table class="nth-table">
+            <tbody>
+              <tr><td>Row 1</td><td>January</td><td>$1,240</td></tr>
+              <tr><td>Row 2</td><td>February</td><td>$980</td></tr>
+              <tr><td>Row 3</td><td>March</td><td>$1,510</td></tr>
+              <tr><td>Row 4</td><td>April</td><td>$2,040</td></tr>
+              <tr><td>Row 5</td><td>May</td><td>$1,730</td></tr>
+              <tr><td>Row 6</td><td>June</td><td>$2,290</td></tr>
+            </tbody>
+          </table>
+
+          <p class="sub-label">:nth-child(An+B) formula — every 3rd starting from 2nd</p>
+          <div class="nth-boxes">
+            <div class="nth-box">1</div>
+            <div class="nth-box">2</div>
+            <div class="nth-box">3</div>
+            <div class="nth-box">4</div>
+            <div class="nth-box">5</div>
+            <div class="nth-box">6</div>
+            <div class="nth-box">7</div>
+            <div class="nth-box">8</div>
+            <div class="nth-box">9</div>
+          </div>
+
+          <p class="sub-label">:nth-last-child(2) — second from last</p>
+          <ul class="struct-list nth-last-list">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3 — :nth-last-child(2) ← styled</li>
+            <li>Item 4 — :last-child</li>
+          </ul>
+
+          <p class="demo-note">
+            The <code>An+B</code> formula:<br>
+            <code>n</code> = 0, 1, 2, 3… (auto-increments)<br>
+            <code>A</code> = the step (every Ath element)<br>
+            <code>B</code> = the offset (start counting from Bth)<br><br>
+            Practical examples:<br>
+            <code>:nth-child(2n)</code>   → even elements (2, 4, 6…)<br>
+            <code>:nth-child(2n+1)</code> → odd elements (1, 3, 5…) = <code>odd</code><br>
+            <code>:nth-child(3n+2)</code> → 2, 5, 8, 11… (every 3rd from 2nd)<br>
+            <code>:nth-child(-n+3)</code> → first 3 elements only<br>
+            <code>:nth-child(n+4)</code>  → all elements from 4th onwards
+          </p>
+        </div>
+
+        <!--
+          :nth-of-type()
+          Purpose: Like nth-child but counts only same-type siblings.
+          Related CSS: :nth-of-type()
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:nth-of-type()</code> — Count Within Type</h3>
+          <div class="type-demo">
+            <h4>Heading (h4:first-of-type)</h4>
+            <p>First paragraph (p:nth-of-type(1))</p>
+            <p>Second paragraph (p:nth-of-type(2)) ← styled</p>
+            <p>Third paragraph (p:nth-of-type(3))</p>
+            <h4>Second Heading (h4:last-of-type) ← styled</h4>
+          </div>
+          <p class="demo-note">
+            <code>:nth-of-type()</code> counts only elements of the <em>same tag type</em>
+            among siblings. This differs from <code>:nth-child()</code> which counts
+            ALL siblings regardless of type.
+            <br><br>
+            Rule of thumb: <code>:nth-child</code> for uniform lists (all
+            <code>&lt;li&gt;</code>). <code>:nth-of-type</code> for mixed
+            content where you need to target by element type independently.
+          </p>
+        </div>
+
+        <!--
+          :not()
+          Purpose: Selects everything that does NOT match a selector.
+          Related CSS: :not()
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:not()</code> — Exclusion Selector</h3>
+          <ul class="struct-list not-list">
+            <li>Item 1</li>
+            <li class="featured">Item 2 — .featured (excluded from :not)</li>
+            <li>Item 3</li>
+            <li class="featured">Item 4 — .featured (excluded)</li>
+            <li>Item 5</li>
+          </ul>
+          <p class="demo-note">
+            <code>:not(.featured)</code> applies to every list item that
+            does NOT have the <code>.featured</code> class — the inverse selector.
+            Modern <code>:not()</code> accepts complex selectors and comma lists:
+            <code>:not(.featured, .hidden, :disabled)</code>.
+          </p>
+        </div>
+
+        <!--
+          :is() and :where()
+          Purpose: Group selectors cleanly.
+          Related CSS: :is(), :where()
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>:is()</code> &amp; <code>:where()</code> — Selector Grouping</h3>
+          <div class="is-demo">
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <p>Paragraph — unchanged</p>
+          </div>
+          <p class="demo-note">
+            <code>:is(h2, h3, h4)</code> matches any of the listed selectors.
+            <strong>Specificity:</strong> <code>:is()</code> takes the specificity
+            of its MOST SPECIFIC argument. <code>:where()</code> is identical
+            but always has ZERO specificity — making it safe to override.
+            <br><br>
+            Old way: <code>h2 a, h3 a, h4 a &#123; color: red; &#125;</code><br>
+            New way: <code>:is(h2, h3, h4) a &#123; color: red; &#125;</code>
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: :has() — The Parent Selector
+           Purpose: Style elements based on what they contain.
+      ============================================================ -->
+      <section class="ref-section" id="has">
+        <h2 class="section-title">3 — <code>:has()</code> — The Parent Selector</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">The Game-Changer</h3>
+          <p class="concept-text">
+            For 25 years CSS had no way to style a parent based on its
+            children. <code>:has()</code> changes everything — it selects an
+            element IF it contains a matching descendant. Style the card
+            differently when it has an image. Style the form when it contains
+            an error. Style the nav when it contains the active link.
+          </p>
+        </div>
+
+        <!--
+          :has() demo — cards with and without images
+          Related CSS: .has-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>div:has(img)</code> — Style a Card That Contains an Image</h3>
+          <div class="has-demo-grid">
+            <!--
+              Card WITH an image — :has(img) fires
+              Related CSS: .has-card:has(img)
+            -->
+            <div class="has-card">
+              <div class="has-fake-img">📸 Image</div>
+              <div class="has-card-body">
+                <h4>Card with Image</h4>
+                <p>This card <code>:has(.has-fake-img)</code> — the border turns
+                   accent and the layout shifts.</p>
+              </div>
+            </div>
+
+            <!--
+              Card WITHOUT an image — :has(img) does not fire
+              Related CSS: .has-card (base only)
+            -->
+            <div class="has-card">
+              <div class="has-card-body">
+                <h4>Card without Image</h4>
+                <p>No image inside — the card uses its default neutral border style.</p>
+              </div>
+            </div>
+
+            <div class="has-card">
+              <div class="has-fake-img">📸 Image</div>
+              <div class="has-card-body">
+                <h4>Another Image Card</h4>
+                <p>Also has an image, also gets the accent treatment via <code>:has()</code>.</p>
+              </div>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>:has()</code> is also called the "relational pseudo-class."
+            It accepts any complex selector inside.
+            <br><br>
+            Real patterns:<br>
+            <code>form:has(input:invalid)</code> — style a form with errors<br>
+            <code>label:has(+ input:required)</code> — mark required field labels<br>
+            <code>li:has(ul)</code> — style list items that have nested sub-lists<br>
+            <code>.card:has(:hover)</code> — style the card when ANY child is hovered<br>
+            Browser support: All modern browsers since 2023.
+          </p>
+        </div>
+
+        <!--
+          :has() for form validation state
+          Related CSS: .has-form-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>form:has(input:invalid)</code> — Style Forms Based on Validity</h3>
+          <form class="has-form" novalidate>
+            <div class="has-field">
+              <label for="has-email">Email address</label>
+              <input type="email" id="has-email" class="has-input"
+                     placeholder="Type an invalid email to see the form change…" />
+              <span class="has-field-error">Please enter a valid email address.</span>
+            </div>
+            <div class="has-field">
+              <label for="has-name">Full name</label>
+              <input type="text" id="has-name" class="has-input" placeholder="Your name…" />
+            </div>
+            <button type="submit" class="has-submit">Submit</button>
+          </form>
+          <p class="demo-note">
+            Type an invalid email above — the entire form's border changes
+            colour and a submit-disabled message appears, all driven by
+            <code>form:has(input:invalid)</code> without a single line of
+            JavaScript.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 4: PSEUDO-ELEMENTS
+           Purpose: ::before, ::after, ::first-line, ::first-letter, ::placeholder, ::selection
+      ============================================================ -->
+      <section class="ref-section" id="pseudo-elements">
+        <h2 class="section-title">4 — Pseudo-Elements</h2>
+
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">Pseudo-Classes vs Pseudo-Elements</h3>
+          <p class="concept-text">
+            Pseudo-classes (<code>:single-colon</code>) select elements in
+            special <em>states</em>. Pseudo-elements (<code>::double-colon</code>)
+            create or target <em>parts</em> of an element that don't exist as
+            separate DOM nodes — like the first letter of a paragraph, or
+            injected decorative content.
+          </p>
+        </div>
+
+        <!--
+          ::before & ::after
+          Purpose: Inject generated content before/after the element's content.
+          Related CSS: ::before, ::after rules
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>::before</code> &amp; <code>::after</code> — Injected Content</h3>
+
+          <p class="sub-label">Basic content injection</p>
+          <div class="pe-demo-row">
+            <div class="pe-quote">
+              This blockquote has decorative quotation marks injected via
+              <code>::before</code> and <code>::after</code>. No HTML needed.
+            </div>
+          </div>
+
+          <p class="sub-label">Decorative badges and labels</p>
+          <div class="pe-demo-row">
+            <div class="pe-badge-new">New Feature</div>
+            <div class="pe-badge-hot">Trending</div>
+            <div class="pe-required">Required field label</div>
+          </div>
+
+          <p class="sub-label">Visual separators and dividers</p>
+          <div class="pe-divider-demo">
+            <span>Section A</span>
+            <div class="pe-or-divider">or</div>
+            <span>Section B</span>
+          </div>
+
+          <p class="sub-label">The clearfix hack (historical — now replaced by flex/grid)</p>
+          <div class="pe-clearfix-demo clearfix">
+            <div class="pe-floated">Floated element</div>
+            <p>The container wraps around the float because of
+            <code>.clearfix::after &#123; content: ""; display: block; clear: both; &#125;</code></p>
+          </div>
+
+          <p class="sub-label">Icon counters and bullets</p>
+          <ul class="pe-custom-list">
+            <li>CSS Custom Properties</li>
+            <li>Flexbox &amp; Grid</li>
+            <li>Container Queries</li>
+            <li>Cascade Layers</li>
+          </ul>
+
+          <p class="demo-note">
+            <code>::before</code> and <code>::after</code> <strong>require</strong>
+            <code>content: ""</code> — even if the value is empty — or they
+            won't render at all. The content value can be a string, a URL
+            (for images), a counter, or a CSS variable.<br><br>
+            These pseudo-elements are <em>visual only</em> — they are not
+            in the DOM, cannot be selected by JavaScript, and are generally
+            ignored by screen readers (don't put important text here).
+          </p>
+        </div>
+
+        <!--
+          ::first-line & ::first-letter
+          Purpose: Style the first line or first character of text blocks.
+          Related CSS: ::first-line, ::first-letter
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>::first-line</code> &amp; <code>::first-letter</code></h3>
+          <div class="pe-article-demo">
+            <p class="pe-first-letter-para">
+              Typography in editorial design has always elevated the first
+              letter as a visual anchor — the drop cap. With
+              <code>::first-letter</code>, CSS can replicate this centuries-old
+              typographic tradition. The browser dynamically determines which
+              characters form the first "letter" so it works regardless
+              of content.
+            </p>
+            <p class="pe-first-line-para">
+              The first line of this paragraph is styled differently via
+              <code>::first-line</code>. Notice how it automatically reflows
+              as you resize the window — it always targets the first
+              rendered line, not a fixed number of words.
+            </p>
+          </div>
+          <p class="demo-note">
+            <code>::first-letter</code> only works on block-level elements.
+            It accepts a limited set of properties: font, text, color,
+            background, margin, padding, border, float.
+            <br><br>
+            <code>::first-line</code> responds to the actual rendered line
+            break — resize the browser and it adjusts automatically.
+            Only font, text, color, and background properties work on it.
+          </p>
+        </div>
+
+        <!--
+          ::placeholder & ::selection
+          Purpose: Style placeholder text and text selection.
+          Related CSS: ::placeholder, ::selection
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>::placeholder</code> &amp; <code>::selection</code></h3>
+
+          <p class="sub-label">::placeholder — style input hint text</p>
+          <div class="pe-demo-row">
+            <input class="placeholder-input placeholder-demo-a"
+                   type="text" placeholder="Custom styled placeholder…" />
+            <input class="placeholder-input placeholder-demo-b"
+                   type="text" placeholder="Another placeholder style…" />
+          </div>
+
+          <p class="sub-label">::selection — select some text in this paragraph</p>
+          <p class="selection-demo">
+            Select some of this text with your mouse to see a custom selection
+            highlight colour applied via <code>::selection &#123; background: …; &#125;</code>.
+            Only background and color can be styled on ::selection.
+          </p>
+
+          <p class="demo-note">
+            <code>::placeholder</code> accepts most text and colour properties.
+            Keep placeholder text low-contrast and italic to visually distinguish
+            it from user-entered values — but not so low contrast it fails
+            WCAG AA (4.5:1 for normal text).<br><br>
+            <code>::selection</code> only accepts <code>color</code>,
+            <code>background-color</code>, and <code>text-shadow</code>.
+            Use a colour that maintains good contrast — selected text must
+            remain readable.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 5: REAL-WORLD DEMO — Interactive Form
+           Purpose: All Phase 6 selectors working together in a production form.
+      ============================================================ -->
+      <section class="ref-section" id="real-world">
+        <h2 class="section-title">5 — Real-World Example — Fully Styled Interactive Form</h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">
+            All Phase 6 Selectors — :focus-visible, :disabled, :checked,
+            :has(), ::before, ::after, ::placeholder
+          </h3>
+
+          <!--
+            INTERACTIVE FORM
+            Purpose: Production-quality form using every Phase 6 concept.
+            Related CSS: .rw-form-* classes
+          -->
+          <form class="rw-form" novalidate>
+
+            <div class="rw-form-header">
+              <h3>Create Account</h3>
+              <p>Fill in your details to get started.</p>
+            </div>
+
+            <div class="rw-field rw-field-required">
+              <label class="rw-label" for="rw-name">Full Name</label>
+              <input class="rw-input" type="text" id="rw-name"
+                     placeholder="Ada Lovelace" autocomplete="name" />
+              <span class="rw-helper">This will appear on your profile.</span>
+            </div>
+
+            <div class="rw-field rw-field-required">
+              <label class="rw-label" for="rw-email">Email Address</label>
+              <input class="rw-input" type="email" id="rw-email"
+                     placeholder="ada@example.com" autocomplete="email" />
+              <span class="rw-helper">We'll never share your email.</span>
+            </div>
+
+            <div class="rw-field">
+              <label class="rw-label" for="rw-bio">Short Bio</label>
+              <textarea class="rw-textarea" id="rw-bio"
+                        placeholder="Tell us about yourself…" rows="3"></textarea>
+            </div>
+
+            <fieldset class="rw-fieldset">
+              <legend class="rw-legend">Notification preferences</legend>
+              <label class="rw-checkbox">
+                <input type="checkbox" name="notif" value="email" checked />
+                <span class="rw-cb-box"></span>
+                Email notifications
+              </label>
+              <label class="rw-checkbox">
+                <input type="checkbox" name="notif" value="sms" />
+                <span class="rw-cb-box"></span>
+                SMS alerts
+              </label>
+              <label class="rw-checkbox">
+                <input type="checkbox" name="notif" value="push" checked />
+                <span class="rw-cb-box"></span>
+                Push notifications
+              </label>
+            </fieldset>
+
+            <div class="rw-field">
+              <label class="rw-label" for="rw-role">Account type</label>
+              <select class="rw-select" id="rw-role">
+                <option value="">Select a role…</option>
+                <option value="dev">Developer</option>
+                <option value="design">Designer</option>
+                <option value="pm">Product Manager</option>
+              </select>
+            </div>
+
+            <div class="rw-actions">
+              <button type="submit" class="rw-submit">Create Account</button>
+              <button type="reset" class="rw-reset">Reset</button>
+            </div>
+
+          </form>
+
+          <p class="demo-note">
+            This form uses: <code>::before</code> on required labels (the *
+            asterisk), <code>::placeholder</code> for custom hint styling,
+            <code>:focus-visible</code> for accessible keyboard focus rings,
+            <code>:checked + span</code> for custom checkbox styling,
+            <code>:disabled</code> for greyed out controls,
+            <code>:has(input:focus)</code> to highlight the active field row,
+            and <code>form:has(input:invalid:not(:placeholder-shown))</code>
+            to show validation state after interaction.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>
+        CSS Reference — Phase 6: Pseudo-Classes, Pseudo-Elements &amp; States
+        &nbsp;|&nbsp; Style state, structure, and injected content.
+      </p>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Phase 1 — CSS Foundations & Typography</title>
+
+<!-- 
+  EXTERNAL CSS LINK
+  Purpose: Demonstrates the standard production method of applying CSS.
+  Related CSS: External Stylesheet
+-->
+<link rel="stylesheet" href="phase1-css-foundations-typography.css">
+
+<!-- 
+  INTERNAL CSS
+  Purpose: Demonstrates CSS written directly in the HTML document.
+  When to use: Quick prototypes, small demos, testing.
+  When NOT to use: Large applications (hard to maintain).
+-->
+<style>
+
+  /* ============================================
+     INTERNAL CSS DEMO
+     What it is: Styles written inside the HTML file.
+     When to use it: Quick prototypes or testing styles.
+     Default value: none
+     Inherited: n/a
+  ============================================ */
+
+  .internal-style-demo{
+    background:#fff3cd;
+    padding:10px;
+    border:1px solid #ffecb5;
+  }
+
+</style>
+
+</head>
+
+<body>
+
+<header class="page-header">
+
+  <!-- 
+    ELEMENT: h1
+    Purpose: Demonstrates typography styling.
+    Related CSS: font-family, font-size, font-weight
+  -->
+  <h1>CSS Phase 1: Foundations & Typography</h1>
+
+  <p class="subtitle">
+    Understanding how CSS targets HTML and controls text styling.
+  </p>
+
+</header>
+
+
+<section>
+
+<!-- 
+  INLINE CSS DEMO
+  Purpose: Demonstrates CSS applied directly on an element.
+  Related CSS: Inline style attribute
+-->
+<h2>CSS Inclusion Methods</h2>
+
+<p style="color:red;">
+This paragraph uses INLINE CSS. It directly sets color:red on the element.
+</p>
+
+<p class="internal-style-demo">
+This paragraph uses INTERNAL CSS defined inside the &lt;style&gt; tag.
+</p>
+
+<p class="external-style-demo">
+This paragraph uses EXTERNAL CSS from the linked stylesheet.
+</p>
+
+</section>
+
+
+<section>
+
+<h2>Basic CSS Selectors</h2>
+
+<!-- 
+  CLASS SELECTOR DEMO
+  Purpose: Demonstrates reusable styling.
+  Related CSS: .btn selector
+-->
+<button class="btn primary">Primary Button</button>
+<button class="btn secondary">Secondary Button</button>
+
+<!-- 
+  ID SELECTOR DEMO
+  Purpose: Demonstrates targeting a single element.
+  Related CSS: #unique-box
+-->
+<div id="unique-box">
+  This box is styled using an ID selector.
+</div>
+
+</section>
+
+
+
+<section>
+
+<h2>Color Systems</h2>
+
+<!-- 
+  COLOR DEMONSTRATION
+  Purpose: Demonstrates different CSS color formats
+  Related CSS: HEX, RGB, RGBA, HSL
+-->
+<div class="color-demo color-named">Named Color</div>
+<div class="color-demo color-hex">HEX Color</div>
+<div class="color-demo color-rgb">RGB Color</div>
+<div class="color-demo color-rgba">RGBA Transparency</div>
+<div class="color-demo color-hsl">HSL Color</div>
+
+</section>
+
+
+
+<section>
+
+<h2>Typography Properties</h2>
+
+<!-- 
+  TYPOGRAPHY DEMO
+  Purpose: Demonstrates font styling and text alignment
+  Related CSS: font-family, font-size, line-height, text-align
+-->
+<article class="text-demo">
+
+<h3>Readable Text Example</h3>
+
+<p>
+Good typography dramatically improves readability. CSS allows control
+over font families, text spacing, alignment, and weight.
+</p>
+
+<p>
+Developers should prioritize readability and accessibility when choosing
+font sizes and line spacing.
+</p>
+
+</article>
+
+</section>
+
+
+
+<section>
+
+<h2>Universal Selector Demo</h2>
+
+<p>
+The universal selector applies styles to every element on the page.
+Developers commonly use it for resets like setting box-sizing.
+</p>
+
+</section>
+
+
+
+<footer class="footer">
+
+<p>End of Phase 1 CSS Reference</p>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+/* ======================================================
+   PHASE 3 CSS REFERENCE
+   Document Flow & Positioning
+====================================================== */
+
+
+/* ============================================
+   GLOBAL RESET
+============================================ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+
+
+/* ============================================
+   BASE BODY STYLE
+============================================ */
+
+body{
+
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f7fa;
+padding:40px;
+line-height:1.6;
+
+}
+
+
+
+/* ============================================
+   DISPLAY PROPERTY
+   What it is: Controls how an element behaves in layout
+   When to use it: Changing layout behavior
+   Default value: depends on element
+   Inherited: no
+============================================ */
+
+.display-demo{
+
+padding:15px;
+background:#ecf0f1;
+margin-bottom:10px;
+
+}
+
+
+
+/* Block elements */
+
+.block-demo{
+
+/* display:block */
+/* Takes entire row width */
+
+display:block;
+
+border:2px solid #3498db;
+
+}
+
+
+
+/* Inline elements */
+
+.inline-demo{
+
+/* display:inline */
+/* Only takes required width */
+/* Ignores width and height */
+
+display:inline;
+
+border:2px solid #e74c3c;
+padding:5px;
+width: 100px; 
+/* ignored */
+
+}
+
+
+
+/* Inline-block */
+
+.inline-block-demo{
+
+/* display:inline-block */
+/* Flows inline but accepts width/height */
+
+display:inline-block;
+
+width:150px;
+
+border:2px solid #2ecc71;
+
+}
+
+
+
+/* ============================================
+   DISPLAY NONE
+   What it is: Removes element from layout entirely
+   When to use it: Hiding elements dynamically
+   Default value: visible
+   Inherited: no
+============================================ */
+
+.hidden-box{
+
+display:none;
+
+}
+
+
+
+/* ⚠️ NOTE:
+display:none removes element completely.
+visibility:hidden hides it but keeps layout space.
+*/
+
+
+
+/* ============================================
+   POSITION PROPERTY
+   What it is: Controls element positioning
+   Values: static, relative, absolute, fixed, sticky
+   Default value: static
+============================================ */
+
+
+/* Relative container */
+
+.relative-container{
+
+position:static;
+
+/* Allows absolute children to anchor here */
+
+height:200px;
+background:#ddd;
+margin-top:20px;
+padding:20px;
+
+}
+
+
+
+/* Absolute child */
+
+.absolute-child{
+
+position:absolute;
+
+/* Positioned relative to nearest relative parent */
+
+top:20px;
+right:20px;
+
+background:#3498db;
+color:white;
+
+padding:10px;
+
+}
+
+
+
+/* ============================================
+   FIXED POSITION
+   What it is: Anchors element to viewport
+   When to use it: navbars, floating buttons
+============================================ */
+
+.fixed-banner{
+
+position:fixed;
+
+bottom:20px;
+right:20px;
+
+background:#2c3e50;
+color:white;
+
+padding:12px 18px;
+
+border-radius:6px;
+
+}
+
+
+
+/* ============================================
+   STICKY POSITION
+   What it is: Hybrid between relative and fixed
+   When to use it: sticky headers
+============================================ */
+
+.sticky-header{
+
+position:sticky;
+
+/* Activation threshold */
+
+top:0;
+
+background:#f39c12;
+color:white;
+
+padding:15px;
+
+margin-bottom:20px;
+
+}
+
+
+
+/* ============================================
+   Z-INDEX
+   What it is: Controls stacking order
+   Higher numbers appear above lower numbers
+   Default value: auto
+============================================ */
+
+.stack-container{
+
+position:relative;
+height:200px;
+
+}
+
+
+
+/* Base box style */
+
+.box{
+
+position:absolute;
+
+width:120px;
+height:120px;
+
+color:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+}
+
+
+
+/* Red box */
+
+.red-box{
+
+background:#e74c3c;
+
+left:20px;
+top:20px;
+
+z-index:1;
+
+}
+
+
+
+/* Blue box */
+
+.blue-box{
+
+background:#3498db;
+
+left:60px;
+top:60px;
+
+z-index:2;
+
+}
+
+
+
+/* Green box */
+
+.green-box{
+
+background:#2ecc71;
+
+left:100px;
+top:100px;
+
+z-index:3;
+
+}
+
+
+
+/* ⚠️ NOTE:
+z-index only works on positioned elements
+(relative, absolute, fixed, sticky)
+*/
+
+
+
+/* ============================================
+   LONG TEXT
+============================================ */
+
+.long-text{
+
+height:500px;
+
+}
+
+
+
+/* ============================================
+   PAGE STRUCTURE
+============================================ */
+
+.section{
+
+margin-top:60px;
+
+}
+
+.footer{
+
+margin-top:100px;
+text-align:center;
+color:#777;
+
+}

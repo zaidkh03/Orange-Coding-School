@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 3 – Document Flow & Positioning Reference</title>
+
+    <!--
+      EXTERNAL CSS LINK
+      Purpose: Links to the companion stylesheet.
+      Related CSS: All rules live in phase3-flow-positioning.css
+    -->
+    <link rel="stylesheet" href="phase3-flow-positioning.css" />
+  </head>
+
+  <body>
+
+    <!-- ============================================================
+         PAGE HEADER
+         Related CSS: .page-header, .page-title, .page-subtitle
+    ============================================================ -->
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 3</span>
+        <h1 class="page-title">Document Flow &amp; Positioning</h1>
+        <p class="page-subtitle">
+          How browsers decide where elements live — and how to move them
+          out of that default flow using <code>display</code>,
+          <code>position</code>, and <code>z-index</code>.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: THE DISPLAY PROPERTY — NORMAL FLOW
+           Purpose: Show how display values affect an element's role
+                    in the natural document flow.
+           Related CSS: Section "DISPLAY" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="display">
+        <h2 class="section-title">1 — The <code>display</code> Property &amp; Normal Flow</h2>
+
+        <!--
+          CONCEPT: NORMAL FLOW
+          Purpose: Explain what "normal flow" means before breaking out of it.
+          Related CSS: .flow-concept-card
+        -->
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">What is Normal Flow?</h3>
+          <p class="concept-text">
+            Before any CSS positioning or layout tricks, browsers place elements
+            according to <strong>Normal Flow</strong> — the default reading order.
+            Block elements stack vertically (top to bottom). Inline elements flow
+            horizontally (left to right) and wrap like words in a sentence.
+            Everything in Phase 3 is about understanding and escaping this flow.
+          </p>
+        </div>
+
+        <!--
+          DISPLAY: BLOCK
+          Purpose: Elements that take full width and stack vertically.
+          Related CSS: .display-block-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>display: block</code>
+          </h3>
+          <div class="display-flow-demo">
+            <!--
+              BLOCK ELEMENTS
+              Purpose: Show block stacking behaviour.
+              Related CSS: .flow-block
+            -->
+            <div class="flow-block">
+              Block 1 — <code>&lt;div&gt;</code>
+              <span class="flow-note">Takes full width → forces a new line</span>
+            </div>
+            <div class="flow-block flow-block-b">
+              Block 2 — <code>&lt;p&gt;</code>
+              <span class="flow-note">Stacks below regardless of content width</span>
+            </div>
+            <div class="flow-block flow-block-c">
+              Block 3 — <code>&lt;section&gt;</code>
+              <span class="flow-note">Respects width, height, and all margins</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            Native block elements: <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>,
+            <code>&lt;h1–h6&gt;</code>, <code>&lt;section&gt;</code>,
+            <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>,
+            <code>&lt;footer&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>.
+            You can force any element to block with <code>display: block</code>.
+          </p>
+        </div>
+
+        <!--
+          DISPLAY: INLINE
+          Purpose: Elements that flow like words — no width/height control.
+          Related CSS: .flow-inline-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>display: inline</code>
+          </h3>
+          <div class="flow-inline-demo">
+            <!--
+              INLINE ELEMENTS
+              Purpose: Show how inline elements flow within text.
+              Related CSS: .flow-inline-el
+            -->
+            <p class="inline-paragraph">
+              This is a paragraph. The word
+              <span class="flow-inline-el">span</span>
+              is inline — it sits inside the text flow. So is
+              <em class="flow-inline-el">em</em>, and
+              <strong class="flow-inline-el">strong</strong>,
+              and <a href="#" class="flow-inline-el">links</a>.
+              They wrap naturally when the line runs out of space,
+              just like these words do. Notice they cannot have
+              <code>width</code> or <code>height</code> applied.
+            </p>
+          </div>
+          <p class="demo-note">
+            ⚠️ Inline elements <strong>ignore</strong> <code>width</code>,
+            <code>height</code>, and <strong>vertical</strong>
+            <code>margin-top</code> / <code>margin-bottom</code>.
+            Only horizontal padding/margin applies. If you need sizing,
+            use <code>inline-block</code> instead.
+          </p>
+        </div>
+
+        <!--
+          DISPLAY: INLINE-BLOCK
+          Purpose: The middle ground — flows like inline, sizes like block.
+          Related CSS: .flow-inline-block-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>display: inline-block</code>
+          </h3>
+          <div class="flow-inline-block-demo">
+            <!--
+              INLINE-BLOCK ELEMENTS
+              Purpose: Show how inline-block respects width/height while flowing inline.
+              Related CSS: .flow-iblock
+            -->
+            <div class="flow-iblock flow-iblock-a">
+              Tag
+              <span class="iblock-note">w:80px h:40px</span>
+            </div>
+            <div class="flow-iblock flow-iblock-b">
+              Label
+              <span class="iblock-note">w:100px h:56px</span>
+            </div>
+            <div class="flow-iblock flow-iblock-c">
+              Badge
+              <span class="iblock-note">w:70px h:32px</span>
+            </div>
+            <div class="flow-iblock flow-iblock-a">
+              Chip
+              <span class="iblock-note">w:80px h:40px</span>
+            </div>
+            <p class="iblock-paragraph">
+              These boxes sit <em>inline</em> (side by side, wrapping)
+              but have explicit <code>width</code> and <code>height</code>.
+              That's <code>inline-block</code>.
+            </p>
+          </div>
+          <p class="demo-note">
+            Classic use cases for <code>inline-block</code>: navigation
+            links with padding, tag/badge chips, icon + text combos.
+            In modern CSS, <code>flex</code> and <code>grid</code> handle
+            most of what inline-block used to do — but knowing it matters
+            for maintaining older codebases and understanding flow.
+          </p>
+        </div>
+
+        <!--
+          DISPLAY: NONE
+          Purpose: Completely remove element from the document.
+          Related CSS: .display-none-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>display: none</code>
+          </h3>
+          <div class="display-none-demo">
+            <!--
+              VISIBLE ELEMENT
+              Purpose: Show what's before the hidden element.
+              Related CSS: .dnone-visible
+            -->
+            <div class="dnone-visible">Element A — visible</div>
+
+            <!--
+              HIDDEN ELEMENT
+              Purpose: This element is hidden — its space collapses.
+              Related CSS: .dnone-hidden
+            -->
+            <div class="dnone-hidden">
+              Element B — display: none (you can't see me, and I take up no space)
+            </div>
+
+            <div class="dnone-visible dnone-visible-c">
+              Element C — visible (notice how it sits right after A, as if B doesn't exist)
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>display: none</code> removes the element from the document
+            flow entirely — it takes up no space and is invisible.
+            This is different from <code>visibility: hidden</code>, which
+            hides the element but <em>preserves its space</em>.
+            <br><br>
+            ⚠️ <strong>Accessibility note:</strong> <code>display: none</code>
+            also hides content from screen readers. Use <code>aria-hidden="true"</code>
+            carefully, and consider visually-hidden CSS classes when content
+            should be accessible but not visible.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: POSITIONING
+           Purpose: Demonstrate all five position values with real examples.
+           Related CSS: Section "POSITION" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="positioning">
+        <h2 class="section-title">2 — The <code>position</code> Property</h2>
+
+        <!-- POSITION OVERVIEW CARD -->
+        <div class="demo-card concept-card">
+          <h3 class="demo-label">The offset properties: <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code></h3>
+          <p class="concept-text">
+            Once an element has any <code>position</code> value other than
+            <code>static</code>, you can nudge it using the four offset
+            properties. These tell the element <em>how far from each edge</em>
+            to move — but exactly what "edge" means differs by position value.
+            That's what this section explores.
+          </p>
+        </div>
+
+        <!--
+          POSITION: STATIC
+          Purpose: The default. Not positioned. Offsets have no effect.
+          Related CSS: .pos-static-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>position: static</code> — The Default
+          </h3>
+          <div class="pos-static-demo">
+            <!--
+              STATIC ELEMENTS
+              Purpose: Show that top/left do nothing on static elements.
+              Related CSS: .static-box
+            -->
+            <div class="static-box">
+              Static A
+              <span class="pos-note">position: static (default)</span>
+            </div>
+            <div class="static-box static-box-attempted">
+              Static B
+              <span class="pos-note">top: 30px; left: 30px; — ignored ❌</span>
+            </div>
+            <div class="static-box">
+              Static C
+              <span class="pos-note">No offset — stays in normal flow</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>position: static</code> is the default for every element.
+            A static element is "not positioned" — offset properties
+            (<code>top</code>, <code>right</code>, <code>bottom</code>,
+            <code>left</code>) are completely ignored.
+            <code>z-index</code> is also ignored on static elements.
+          </p>
+        </div>
+
+        <!--
+          POSITION: RELATIVE
+          Purpose: Moves element relative to its own normal-flow position.
+                   Also creates a containing block for absolute children.
+          Related CSS: .pos-relative-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>position: relative</code>
+          </h3>
+          <div class="pos-relative-demo">
+            <!--
+              RELATIVE: Normal flow ghost
+              Purpose: Show that the original space is preserved in flow.
+              Related CSS: .relative-ghost, .relative-moved
+            -->
+            <div class="rel-box">Box A — normal flow</div>
+            <div class="rel-box-ghost">
+              Box B ghost (original space kept)
+            </div>
+            <div class="rel-box rel-box-moved">
+              Box B — position: relative; top: -10px; left: 20px;
+              <span class="pos-note">Moved, but ghost space remains in flow</span>
+            </div>
+            <div class="rel-box">Box C — normal flow</div>
+          </div>
+          <p class="demo-note">
+            <code>position: relative</code> does two important things:<br>
+            <strong>1.</strong> Offsets the element visually, but its original
+            space is <em>preserved</em> in the document flow (unlike absolute).<br>
+            <strong>2.</strong> Creates a <strong>containing block</strong> —
+            any <code>position: absolute</code> child inside it will
+            position itself relative to THIS element, not the page.
+            This second use is far more common than the first.
+          </p>
+        </div>
+
+        <!--
+          POSITION: ABSOLUTE
+          Purpose: Removes element from flow. Positions relative to nearest
+                   positioned ancestor (or <html> if none).
+          Related CSS: .pos-absolute-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>position: absolute</code>
+          </h3>
+
+          <!--
+            ABSOLUTE: Basic demo — relative parent
+            Purpose: Show how absolute child positions inside relative parent.
+            Related CSS: .abs-container, .abs-child-*
+          -->
+          <p class="sub-label">Example 1 — Absolute inside a Relative parent</p>
+          <div class="abs-container">
+            <span class="abs-label">position: relative (parent)</span>
+
+            <div class="abs-child abs-tl">
+              top:0; left:0
+            </div>
+            <div class="abs-child abs-tr">
+              top:0; right:0
+            </div>
+            <div class="abs-child abs-bl">
+              bottom:0; left:0
+            </div>
+            <div class="abs-child abs-br">
+              bottom:0; right:0
+            </div>
+            <div class="abs-child abs-center">
+              Centred
+              <span class="pos-note">top:50%; left:50%; transform:translate(-50%,-50%)</span>
+            </div>
+          </div>
+
+          <!--
+            ABSOLUTE: Card badge pattern — real-world use
+            Purpose: Show the most common real-world pattern for absolute positioning.
+            Related CSS: .badge-card
+          -->
+          <p class="sub-label">Example 2 — Real Pattern: Badge on a Card</p>
+          <div class="badge-card-row">
+            <div class="badge-card">
+              <div class="badge-card-img"></div>
+              <!--
+                BADGE ELEMENT
+                Purpose: Positioned absolutely over the card image corner.
+                Related CSS: .badge-pill
+              -->
+              <div class="badge-pill">New</div>
+              <div class="badge-card-body">
+                <h4 class="badge-card-title">Product Name</h4>
+                <p class="badge-card-desc">
+                  The badge above is <code>position: absolute</code>
+                  inside this <code>position: relative</code> card.
+                </p>
+              </div>
+            </div>
+
+            <div class="badge-card">
+              <div class="badge-card-img badge-card-img-b"></div>
+              <div class="badge-pill badge-pill-sale">−40%</div>
+              <div class="badge-card-body">
+                <h4 class="badge-card-title">Another Product</h4>
+                <p class="badge-card-desc">
+                  Same technique — different content, same reliable
+                  positioning pattern.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            ⚠️ <strong>The #1 gotcha:</strong> An absolutely positioned element
+            crawls up the DOM looking for a parent with any
+            <code>position</code> value other than <code>static</code>.
+            If it finds none, it positions relative to the
+            <code>&lt;html&gt;</code> element (the initial containing block).
+            Always give the intended parent <code>position: relative</code>.
+          </p>
+        </div>
+
+        <!--
+          POSITION: FIXED
+          Purpose: Sticks to the viewport. Ignores all scrolling.
+          Related CSS: .pos-fixed-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>position: fixed</code>
+          </h3>
+
+          <!--
+            FIXED: Simulated navbar
+            Purpose: Show the classic fixed header pattern.
+            Related CSS: .fixed-navbar-demo
+          -->
+          <p class="sub-label">
+            The floating navbar at the top of this page uses
+            <code>position: fixed</code>
+          </p>
+          <div class="fixed-concept-grid">
+            <div class="fixed-concept-card">
+              <div class="fixed-icon">📌</div>
+              <p>Removed from document flow — other content fills the gap.</p>
+            </div>
+            <div class="fixed-concept-card">
+              <div class="fixed-icon">🖥️</div>
+              <p>Positioned relative to the <strong>viewport</strong>, not any parent.</p>
+            </div>
+            <div class="fixed-concept-card">
+              <div class="fixed-icon">🔒</div>
+              <p>Stays in place during scrolling — doesn't move with page content.</p>
+            </div>
+            <div class="fixed-concept-card">
+              <div class="fixed-icon">⚠️</div>
+              <p>Add padding-top to <code>&lt;body&gt;</code> to prevent content hiding behind it.</p>
+            </div>
+          </div>
+          <p class="demo-note">
+            Common uses for <code>position: fixed</code>:
+            navigation bars, floating action buttons (FABs),
+            cookie banners, "back to top" buttons, chat widgets.
+            <br><br>
+            ⚠️ <code>transform</code>, <code>filter</code>, or
+            <code>will-change</code> on an ancestor element breaks
+            <code>position: fixed</code> — it will position relative
+            to that ancestor instead of the viewport.
+          </p>
+        </div>
+
+        <!--
+          POSITION: STICKY
+          Purpose: Toggles between relative and fixed based on scroll position.
+          Related CSS: .pos-sticky-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>position: sticky</code>
+          </h3>
+          <p class="sub-label">
+            Scroll inside the box below to see sticky in action:
+          </p>
+
+          <!--
+            STICKY: Scrollable demo container
+            Purpose: Demonstrate sticky table headers or section labels.
+            Related CSS: .sticky-scroll-demo, .sticky-header
+          -->
+          <div class="sticky-scroll-demo">
+            <div class="sticky-header">
+              📌 Sticky Header — sticks to top of scroll container
+            </div>
+            <div class="sticky-body">
+              <div class="sticky-item">Item 1 — scroll to see the header stick</div>
+              <div class="sticky-item">Item 2</div>
+              <div class="sticky-item">Item 3</div>
+              <div class="sticky-item">Item 4</div>
+              <div class="sticky-item">Item 5</div>
+              <div class="sticky-item">Item 6</div>
+              <div class="sticky-item">Item 7</div>
+              <div class="sticky-item">Item 8</div>
+            </div>
+            <div class="sticky-header sticky-header-b">
+              📌 Second Sticky Header — replaces the first as you scroll
+            </div>
+            <div class="sticky-body">
+              <div class="sticky-item">Item 9</div>
+              <div class="sticky-item">Item 10</div>
+              <div class="sticky-item">Item 11</div>
+              <div class="sticky-item">Item 12</div>
+              <div class="sticky-item">Item 13</div>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>position: sticky</code> behaves like <code>relative</code>
+            until the element reaches its offset threshold (e.g.,
+            <code>top: 0</code>), then it behaves like <code>fixed</code>
+            within its scroll container.<br><br>
+            ⚠️ <strong>Two common gotchas:</strong><br>
+            1. You <em>must</em> set at least one offset (<code>top</code>,
+            <code>left</code>, etc.) or it won't stick.<br>
+            2. The parent must be scrollable AND must be taller than the
+            sticky child. If the parent is <code>overflow: hidden</code>,
+            sticky breaks.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: Z-INDEX & STACKING
+           Purpose: Explain stacking order for overlapping positioned elements.
+           Related CSS: Section "Z-INDEX" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="z-index">
+        <h2 class="section-title">3 — <code>z-index</code> &amp; Stacking Order</h2>
+
+        <!--
+          Z-INDEX BASICS
+          Purpose: Show how z-index controls front-to-back stacking.
+          Related CSS: .z-index-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>z-index</code> — Front-to-Back Stacking
+          </h3>
+          <div class="z-index-demo">
+            <!--
+              STACKING LAYERS
+              Purpose: Visually show z-index as literal layers.
+              Related CSS: .z-box-*
+            -->
+            <div class="z-box z-box-1">
+              <span>z-index: 1</span>
+            </div>
+            <div class="z-box z-box-2">
+              <span>z-index: 2</span>
+            </div>
+            <div class="z-box z-box-3">
+              <span>z-index: 3 (front)</span>
+            </div>
+            <div class="z-box z-box-neg">
+              <span>z-index: -1 (behind all)</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>z-index</code> only works on <strong>positioned elements</strong>
+            (anything with <code>position</code> other than <code>static</code>).
+            Higher values appear in front. Negative values go behind.
+            Without <code>z-index</code>, positioned elements stack in DOM
+            order — later elements in the HTML are in front.
+          </p>
+        </div>
+
+        <!--
+          STACKING CONTEXT
+          Purpose: Explain why z-index sometimes seems to "not work".
+          Related CSS: .stacking-context-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            ⚠️ Stacking Contexts — Why <code>z-index</code> Sometimes Breaks
+          </h3>
+          <div class="stacking-context-demo">
+
+            <!--
+              CONTEXT A
+              Purpose: Isolated stacking context. Internal z-indexes don't bleed out.
+              Related CSS: .ctx-a
+            -->
+            <div class="ctx-wrap ctx-a">
+              <span class="ctx-label">Context A (z-index: 1 on parent)</span>
+              <div class="ctx-child ctx-child-high">
+                child z-index: 999
+                <span class="ctx-note">Trapped inside Context A</span>
+              </div>
+            </div>
+
+            <!--
+              CONTEXT B
+              Purpose: Another context — Context A's child can't escape it.
+              Related CSS: .ctx-b
+            -->
+            <div class="ctx-wrap ctx-b">
+              <span class="ctx-label">Context B (z-index: 2 on parent)</span>
+              <div class="ctx-child ctx-child-low">
+                child z-index: 1
+                <span class="ctx-note">Wins over Context A despite lower z-index</span>
+              </div>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            A <strong>stacking context</strong> is a self-contained z-index
+            universe. Elements inside it are sorted among themselves, but the
+            entire context competes as a unit with other contexts.<br><br>
+            Things that <em>create</em> a new stacking context (the list is
+            long, but common ones):
+            <code>position</code> + <code>z-index</code> (not auto),
+            <code>opacity</code> less than 1,
+            <code>transform</code>,
+            <code>filter</code>,
+            <code>will-change</code>,
+            <code>isolation: isolate</code>.<br><br>
+            This is why a modal with <code>z-index: 9999</code> can still
+            appear <em>behind</em> a tooltip with <code>z-index: 10</code>
+            — if the modal lives in a lower stacking context.
+          </p>
+        </div>
+
+        <!--
+          Z-INDEX PRACTICAL: Modal overlay
+          Purpose: Real-world pattern where z-index matters — modal stack.
+          Related CSS: .modal-stack-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">🗂 Practical Z-Index Scale — UI Layer System</h3>
+          <div class="z-scale">
+            <div class="z-scale-row" style="--z-color: #4a5270;">
+              <span class="z-scale-val">z-index: -1</span>
+              <span class="z-scale-name">Background decorations</span>
+              <span class="z-scale-eg">SVG patterns, pseudo-element shapes</span>
+            </div>
+            <div class="z-scale-row" style="--z-color: #2e3d5c;">
+              <span class="z-scale-val">z-index: 0</span>
+              <span class="z-scale-name">Default stacked elements</span>
+              <span class="z-scale-eg">Cards, content, regular positioned elements</span>
+            </div>
+            <div class="z-scale-row" style="--z-color: #1f4080;">
+              <span class="z-scale-val">z-index: 10</span>
+              <span class="z-scale-name">Dropdowns / Tooltips</span>
+              <span class="z-scale-eg">Select menus, hover tooltips</span>
+            </div>
+            <div class="z-scale-row" style="--z-color: #1a4f8a;">
+              <span class="z-scale-val">z-index: 100</span>
+              <span class="z-scale-name">Sticky headers / Sidebars</span>
+              <span class="z-scale-eg">Nav bars, fixed sidebars</span>
+            </div>
+            <div class="z-scale-row" style="--z-color: #1a5c9e;">
+              <span class="z-scale-val">z-index: 1000</span>
+              <span class="z-scale-name">Modals / Dialogs</span>
+              <span class="z-scale-eg">Overlay panels, lightboxes</span>
+            </div>
+            <div class="z-scale-row" style="--z-color: #1565b0;">
+              <span class="z-scale-val">z-index: 2000</span>
+              <span class="z-scale-name">Modal overlays (backdrop)</span>
+              <span class="z-scale-eg">Dark scrim behind modals</span>
+            </div>
+            <div class="z-scale-row" style="--z-color: #1777cc;">
+              <span class="z-scale-val">z-index: 9999</span>
+              <span class="z-scale-name">Notifications / Toasts</span>
+              <span class="z-scale-eg">Alert banners, top-layer elements</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            Use a <strong>defined z-index scale</strong> — never random numbers
+            like <code>z-index: 47</code> or <code>z-index: 99999</code>.
+            Store your scale as CSS custom properties in
+            <code>:root</code> (e.g., <code>--z-modal: 1000</code>).
+            This prevents "z-index wars" where developers keep incrementing
+            values to try to win against each other's elements.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 4: REAL-WORLD EXAMPLE
+           Purpose: All positioning concepts in one realistic component.
+           Related CSS: .real-world-nav, .real-world-card
+      ============================================================ -->
+      <section class="ref-section" id="real-world">
+        <h2 class="section-title">4 — Real-World Example — Notification Panel</h2>
+
+        <!--
+          NOTIFICATION PANEL
+          Purpose: Uses absolute (badges), relative (parent), fixed (conceptually)
+                   and z-index all in a single realistic component.
+          Related CSS: .notif-panel-wrap and children
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            All Phase 3 Concepts — Notification Panel UI
+          </h3>
+          <div class="notif-panel-wrap">
+
+            <!-- Sidebar nav with badges (position: absolute on badge) -->
+            <nav class="notif-sidebar">
+              <div class="notif-logo">⬡</div>
+              <ul class="notif-nav-list">
+                <li class="notif-nav-item notif-nav-active">
+                  <span class="notif-nav-icon">🏠</span>
+                  <span class="notif-nav-badge notif-badge-dot"></span>
+                </li>
+                <li class="notif-nav-item">
+                  <span class="notif-nav-icon">💬</span>
+                  <!--
+                    BADGE
+                    Purpose: Absolute-positioned count badge on nav icon.
+                    Related CSS: .notif-nav-badge
+                  -->
+                  <span class="notif-nav-badge">4</span>
+                </li>
+                <li class="notif-nav-item">
+                  <span class="notif-nav-icon">🔔</span>
+                  <span class="notif-nav-badge">12</span>
+                </li>
+                <li class="notif-nav-item">
+                  <span class="notif-nav-icon">📁</span>
+                </li>
+                <li class="notif-nav-item">
+                  <span class="notif-nav-icon">⚙️</span>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- Main panel -->
+            <div class="notif-main">
+              <!--
+                STICKY PANEL HEADER
+                Purpose: sticky header within the scrollable panel.
+                Related CSS: .notif-panel-header
+              -->
+              <div class="notif-panel-header">
+                <h3 class="notif-title">Notifications</h3>
+                <span class="notif-count">16 unread</span>
+              </div>
+
+              <div class="notif-list">
+                <div class="notif-item notif-item-unread">
+                  <div class="notif-avatar notif-avatar-a">AK</div>
+                  <div class="notif-content">
+                    <p class="notif-text"><strong>Alice K.</strong> commented on your pull request.</p>
+                    <span class="notif-time">2 min ago</span>
+                  </div>
+                  <!--
+                    UNREAD DOT
+                    Purpose: Absolute-positioned indicator on list item.
+                    Related CSS: .notif-unread-dot
+                  -->
+                  <div class="notif-unread-dot"></div>
+                </div>
+
+                <div class="notif-item notif-item-unread">
+                  <div class="notif-avatar notif-avatar-b">MR</div>
+                  <div class="notif-content">
+                    <p class="notif-text"><strong>Marcus R.</strong> mentioned you in a thread.</p>
+                    <span class="notif-time">14 min ago</span>
+                  </div>
+                  <div class="notif-unread-dot"></div>
+                </div>
+
+                <div class="notif-item">
+                  <div class="notif-avatar notif-avatar-c">SL</div>
+                  <div class="notif-content">
+                    <p class="notif-text"><strong>Sara L.</strong> approved your design.</p>
+                    <span class="notif-time">1 hr ago</span>
+                  </div>
+                </div>
+
+                <div class="notif-item">
+                  <div class="notif-avatar notif-avatar-d">JW</div>
+                  <div class="notif-content">
+                    <p class="notif-text"><strong>James W.</strong> shared a file with you.</p>
+                    <span class="notif-time">3 hrs ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            This component uses: <code>position: relative</code> on each nav
+            item and notification row (containing block for badges/dots),
+            <code>position: absolute</code> on the count badges and unread
+            indicators, <code>position: sticky</code> on the panel header,
+            and a <code>z-index</code> layer to keep the sticky header above
+            scrolling content.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ============================================================
+         FIXED DEMO NAVBAR
+         Purpose: Demonstrate position: fixed — this bar stays at the
+                  top of the viewport as you scroll the page.
+         Related CSS: .fixed-demo-bar
+    ============================================================ -->
+    <div class="fixed-demo-bar">
+      <span class="fixed-bar-label">📌 This bar is <code>position: fixed</code> — scroll to confirm</span>
+      <span class="fixed-bar-right">top: 0; left: 0; right: 0; z-index: 100</span>
+    </div>
+
+    <!-- ============================================================
+         PAGE FOOTER
+         Related CSS: .page-footer
+    ============================================================ -->
+    <footer class="page-footer">
+      <p>
+        CSS Reference — Phase 3: Document Flow &amp; Positioning &nbsp;|&nbsp;
+        Every element has a position. Know where it lives.
+      </p>
+    </footer>
+
+  </body>
+</html>

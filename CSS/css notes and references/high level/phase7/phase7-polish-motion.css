@@ -1,0 +1,1386 @@
+/* ================================================================
+   PHASE 7 — UI POLISH, AESTHETICS & MOTION
+   File: phase7-polish-motion.css
+   Companion to: phase7-polish-motion.html
+
+   PURPOSE: A permanent, richly-commented reference covering:
+   - border-radius (uniform, per-corner, elliptical)
+   - box-shadow (offset, blur, spread, inset, layered)
+   - filter (blur, brightness, contrast, saturate, hue-rotate, etc.)
+   - backdrop-filter (frosted glass)
+   - transform (translate, scale, rotate, skew, transform-origin)
+   - Individual transform properties (translate, rotate, scale)
+   - transition (duration, timing-function, delay, multiple)
+   - @keyframes + animation (name, duration, fill-mode, direction,
+     iteration-count, play-state, stagger)
+
+   COMMENTING CONVENTION:
+   ┌─────────────────────────────────────────┐
+   │  PROPERTY-NAME                          │
+   │  What it is:   one-sentence description │
+   │  When to use:  practical scenario       │
+   │  Default:      browser default value    │
+   │  Inherited:    yes / no                 │
+   └─────────────────────────────────────────┘
+================================================================ */
+
+
+/* ================================================================
+   1. GLOBAL RESET & ROOT VARIABLES
+================================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg:          #060608;
+  --color-surface:     #0b0b12;
+  --color-surface-alt: #0f0f18;
+  --color-surface-hi:  #141420;
+  --color-border:      #1a1a2e;
+  --color-border-hi:   #252545;
+
+  --color-accent:      #e879f9;   /* fuchsia */
+  --color-accent-dim:  rgba(232, 121, 249, 0.12);
+  --color-accent-b:    #38bdf8;   /* sky */
+  --color-accent-b-dim:rgba(56, 189, 248, 0.12);
+  --color-warm:        #fb923c;   /* orange */
+  --color-warm-dim:    rgba(251, 146, 60, 0.12);
+  --color-green:       #4ade80;
+  --color-green-dim:   rgba(74, 222, 128, 0.12);
+  --color-rose:        #f43f5e;
+
+  --color-text-1:      #f0e8ff;
+  --color-text-2:      #7060a0;
+  --color-text-3:      #2c2050;
+  --color-code-bg:     #04040a;
+  --color-code-text:   #e879f9;
+
+  --sp-1: 0.25rem; --sp-2: 0.5rem;  --sp-3: 0.75rem;
+  --sp-4: 1rem;    --sp-5: 1.25rem; --sp-6: 1.5rem;
+  --sp-8: 2rem;    --sp-10: 2.5rem; --sp-12: 3rem; --sp-16: 4rem;
+
+  --r-sm: 4px; --r-md: 8px; --r-lg: 14px; --r-xl: 20px; --r-pill: 999px;
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+
+  /* Z-index scale */
+  --z-base: 1; --z-raised: 10; --z-modal: 100;
+}
+
+
+/* ================================================================
+   2. BORDER-RADIUS
+================================================================ */
+
+/* ============================================
+   BORDER-RADIUS
+   What it is: Rounds the corners of an element's border box.
+   When to use: Cards (8–16px), buttons (6–8px), pills (9999px),
+               avatars (50%), badges (4px).
+   Default value: 0 (sharp corners).
+   Inherited: No.
+
+   SHORTHAND ORDER (clockwise from top-left):
+   border-radius: TL TR BR BL
+   border-radius: TL-TR BL-BR         (diagonal pairs)
+   border-radius: TL TR-BL BR         (three values)
+   border-radius: ALL                 (one value — all corners equal)
+
+   ELLIPTICAL SYNTAX:
+   border-radius: H-radii / V-radii
+   border-radius: 40% 60% 60% 40% / 60% 40% 40% 60%
+   Each corner: horizontal-radius / vertical-radius
+
+   INDIVIDUAL CORNER PROPERTIES:
+   border-top-left-radius
+   border-top-right-radius
+   border-bottom-right-radius
+   border-bottom-left-radius
+
+   ⚠️ NOTE: border-radius: 50% on a non-square makes an ellipse, not a circle.
+            Use border-radius: 9999px (or 50vw) for a pill that works on any size.
+============================================ */
+
+.br-demo-row {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.br-box {
+  width: 80px;
+  height: 80px;
+  background: var(--color-accent-dim);
+  border: 2px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-accent);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.br-0      { border-radius: 0; }
+.br-4      { border-radius: 4px; }
+.br-8      { border-radius: 8px; }
+.br-16     { border-radius: 16px; }
+.br-50pct  { border-radius: 50%; }       /* circle (only on squares) */
+.br-pill   { border-radius: 9999px; width: 120px; height: 40px; }
+
+/* Per-corner */
+.br-tl     { border-radius: 24px 0 0 0; }
+.br-tr     { border-radius: 0 24px 0 0; }
+.br-bl     { border-radius: 0 0 0 24px; }
+.br-br     { border-radius: 0 0 24px 0; }
+.br-mixed  { border-radius: 24px 8px 24px 8px; }     /* alternating */
+.br-squircle { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+
+/* Elliptical */
+.br-ellipse  { border-radius: 50%; width: 120px; height: 60px; }
+.br-leaf     { border-radius: 80% 20% 80% 20% / 20% 80% 20% 80%; }
+.br-egg      { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+.br-blob     { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+
+
+/* ================================================================
+   3. BOX-SHADOW
+================================================================ */
+
+/* ============================================
+   BOX-SHADOW
+   What it is: Adds shadow effects around or inside an element's border box.
+   When to use: Depth/elevation, focus rings (spread with 0 blur), glows,
+               inner shadows for inset fields, borders without layout impact.
+   Default value: none.
+   Inherited: No.
+
+   SYNTAX:
+   box-shadow: [inset] offset-x offset-y [blur] [spread] color
+
+   offset-x  → horizontal position (positive = right, negative = left)
+   offset-y  → vertical position (positive = down, negative = up)
+   blur      → softness radius (0 = hard edge, higher = softer)
+   spread    → size change (positive grows, negative shrinks before blur)
+   inset     → keyword — moves shadow inside the element
+   color     → any CSS color; rgba for transparency
+
+   MULTIPLE SHADOWS: comma-separated, first listed = topmost.
+
+   ⚠️ NOTE: box-shadow follows the RECTANGULAR BOX, not the shape.
+            Use filter: drop-shadow() instead if you need the shadow
+            to follow a transparent PNG's actual shape.
+============================================ */
+
+.shadow-demo-row {
+  display: flex;
+  gap: var(--sp-8);
+  flex-wrap: wrap;
+  align-items: center;
+  padding: var(--sp-8) var(--sp-4);
+  background: var(--color-code-bg);
+  border-radius: var(--r-md);
+}
+
+.shadow-box {
+  width: 80px;
+  height: 80px;
+  background: var(--color-surface-hi);
+  border-radius: var(--r-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-2);
+  text-align: center;
+  gap: 4px;
+  flex-shrink: 0;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.shadow-box small { font-size: 0.6rem; color: var(--color-text-3); }
+
+/* Hard shadow — 0 blur = crisp edge */
+.sh-hard { box-shadow: 0 4px 0 0 rgba(232, 121, 249, 0.5); }
+
+/* Soft shadow — natural diffused shadow */
+.sh-soft { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); }
+
+/* Glow — 0 offset + coloured blur = halo */
+.sh-glow { box-shadow: 0 0 20px rgba(232, 121, 249, 0.5); }
+
+/* Inset — inner shadow (pressed state, inset fields) */
+.sh-inner { box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6); }
+
+/* Spread with 0 blur = outlined border without layout impact */
+.sh-spread {
+  box-shadow: 0 0 0 4px var(--color-accent);
+  /* Spread-only shadow = border substitute. Doesn't affect layout.
+     Perfect for focus rings — no layout shift. */
+}
+
+/* Layered shadows — comma list, applied bottom to top */
+.sh-layered {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 16px 40px rgba(0, 0, 0, 0.2);
+  /* Three layers with increasing blur = very realistic depth.
+     Real light creates multiple shadow "layers" as it diffracts. */
+}
+
+.sh-elevation {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 6px 12px rgba(0, 0, 0, 0.3),
+    0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.sh-neon {
+  box-shadow:
+    0 0 8px rgba(232, 121, 249, 0.8),
+    0 0 24px rgba(232, 121, 249, 0.4),
+    0 0 60px rgba(232, 121, 249, 0.2);
+  /* Double/triple glow on the same spot = neon light feel */
+}
+
+/* Elevation scale */
+.sh-e1 { box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+.sh-e2 { box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
+.sh-e3 { box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+.sh-e4 { box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+
+/* Hover to lift — box-shadow + transform together */
+.hover-lift {
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  /* translateY(-4px) + bigger shadow = convincing lift off the page */
+}
+
+
+/* ================================================================
+   4. FILTER
+================================================================ */
+
+/* ============================================
+   FILTER
+   What it is: Applies graphical effects (blur, colour, light, etc.)
+               to an element and ALL its descendants.
+   When to use: Image hover effects, disabled state dimming,
+               frosted glass (with backdrop-filter), loading skeletons.
+   Default value: none.
+   Inherited: No.
+
+   FUNCTIONS:
+   blur(px)             → Gaussian blur (0 = no blur)
+   brightness(n)        → 0 = black, 1 = normal, 1.5 = 50% brighter
+   contrast(n)          → 0 = grey, 1 = normal, 2 = double contrast
+   saturate(n)          → 0 = greyscale, 1 = normal, 3 = vivid
+   grayscale(0-1)       → 0 = colour, 1 = fully grey
+   sepia(0-1)           → 0 = none, 1 = fully sepia
+   hue-rotate(deg)      → rotates colours on the hue wheel
+   invert(0-1)          → 0 = normal, 1 = fully inverted
+   opacity(0-1)         → like the opacity property
+   drop-shadow(…)       → like box-shadow but follows alpha shape
+
+   CHAINING: filter: blur(2px) brightness(1.2) saturate(2)
+   ⚠️ NOTE: filter creates a new stacking context.
+            filter: blur() on a parent clips the blur at the element's
+            border — use backdrop-filter on a child instead for contained blur.
+============================================ */
+
+.filter-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--sp-4);
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.filter-box {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  background: linear-gradient(135deg, #e879f9, #38bdf8);
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  transition: filter 0.3s ease;
+}
+
+.filter-item code {
+  font-size: 0.65rem;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-2);
+  padding: 0;
+}
+
+.fi-none       { filter: none; }
+.fi-blur       { filter: blur(4px); }
+.fi-brightness { filter: brightness(1.8); }
+.fi-contrast   { filter: contrast(2.5); }
+.fi-saturate   { filter: saturate(4); }
+.fi-grayscale  { filter: grayscale(1); }
+.fi-sepia      { filter: sepia(0.9); }
+.fi-huerotate  { filter: hue-rotate(120deg); }
+.fi-invert     { filter: invert(1); }
+.fi-dropshadow { filter: drop-shadow(4px 4px 8px rgba(232, 121, 249, 0.8)); }
+.fi-combined   { filter: blur(1px) saturate(3) brightness(1.2); }
+
+/* ============================================
+   BACKDROP-FILTER
+   What it is: Applies filter effects to the area BEHIND the element
+               (its backdrop), rather than the element itself.
+   When to use: Frosted glass effects on modals, nav bars, sidebars,
+               card overlays.
+   Default value: none.
+   Inherited: No.
+   ⚠️ NOTE: The element must have a semi-transparent background for the
+            backdrop effect to show through. A fully opaque background
+            blocks the backdrop from being visible.
+   ⚠️ PERFORMANCE: Creates a new stacking context and compositing layer.
+            Use sparingly — limit to major UI surfaces, not many small elements.
+============================================ */
+
+.bdf-scene {
+  position: relative;
+  height: 220px;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: #04040a;
+}
+
+.bdf-bg-circles {
+  position: absolute;
+  inset: 0;
+}
+
+.bdf-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+}
+
+.bdf-c1 {
+  width: 200px; height: 200px;
+  background: rgba(232, 121, 249, 0.5);
+  top: -60px; left: -40px;
+}
+.bdf-c2 {
+  width: 180px; height: 180px;
+  background: rgba(56, 189, 248, 0.5);
+  bottom: -60px; right: -20px;
+}
+.bdf-c3 {
+  width: 150px; height: 150px;
+  background: rgba(251, 146, 60, 0.4);
+  top: 40px; left: 50%;
+}
+
+.bdf-panel {
+  position: absolute;
+  inset: 30px 40px;
+  backdrop-filter: blur(16px) saturate(1.8);
+  /* blur(16px) blurs everything BEHIND this panel.
+     saturate(1.8) boosts colours of the backdrop.
+     Neither affects the text/content inside the panel. */
+  -webkit-backdrop-filter: blur(16px) saturate(1.8); /* Safari prefix */
+  background: rgba(255, 255, 255, 0.06);
+  /* Semi-transparent bg lets the blurred backdrop show through */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  justify-content: center;
+}
+
+.bdf-panel h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.bdf-panel p {
+  font-size: 0.82rem;
+  color: rgba(240, 232, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+  font-family: var(--font-mono);
+}
+
+
+/* ================================================================
+   5. TRANSFORM
+================================================================ */
+
+/* ============================================
+   TRANSFORM
+   What it is: Applies a 2D or 3D geometric transformation to an element.
+               Does NOT affect document layout — neighbours don't reflow.
+   When to use: Hover animations, entrance effects, loading spinners,
+               precise positioning (the translate(-50%, -50%) centering trick).
+   Default value: none.
+   Inherited: No.
+
+   FUNCTIONS (2D):
+   translate(x, y)     → move (translateX, translateY individually)
+   scale(x, y)         → resize (scaleX, scaleY individually)
+   rotate(angle)       → spin (deg, turn, rad, grad)
+   skew(x, y)          → shear (skewX, skewY individually)
+   matrix(…)           → all transforms in one 6-value matrix
+
+   CHAINING ORDER:
+   transform: translateX(20px) rotate(45deg) scale(1.2)
+   Applied RIGHT TO LEFT: scale first, then rotate, then translate.
+   Order matters — the coordinate system rotates with each transform.
+
+   ⚠️ PERFORMANCE: transform (and opacity) are GPU-accelerated properties.
+            They don't trigger layout or paint recalculation — only composite.
+            Stick to transform + opacity for silky 60fps animations.
+            NEVER animate width, height, margin, padding, top, left — they
+            trigger full layout recalculation (expensive).
+============================================ */
+
+.tf-demo-row {
+  display: flex;
+  gap: var(--sp-6);
+  flex-wrap: wrap;
+  align-items: center;
+  padding: var(--sp-6) var(--sp-4);
+  background: var(--color-code-bg);
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border);
+}
+
+.tf-box {
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-accent-b-dim);
+  border: 1px solid var(--color-accent-b);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-accent-b);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: default;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* cubic-bezier with overshoot = spring-like feel */
+}
+
+/* Translate */
+.tf-tx:hover    { transform: translateX(20px); }
+.tf-ty:hover    { transform: translateY(-20px); }
+.tf-txy:hover   { transform: translate(20px, -10px); }
+.tf-t50:hover   { transform: translate(-25%, 0); }
+
+/* Scale */
+.tf-sx:hover    { transform: scaleX(1.5); }
+.tf-sy:hover    { transform: scaleY(0.6); }
+.tf-sxy:hover   { transform: scale(1.3); }
+.tf-s-neg:hover { transform: scale(-1, 1); }  /* horizontal mirror */
+
+/* Rotate */
+.tf-r45:hover     { transform: rotate(45deg); }
+.tf-r-45:hover    { transform: rotate(-45deg); }
+.tf-r180:hover    { transform: rotate(180deg); }
+.tf-rturn:hover   { transform: rotate(0.25turn); }  /* 1 turn = 360deg */
+
+/* Skew */
+.tf-skx:hover    { transform: skewX(20deg); }
+.tf-sky:hover    { transform: skewY(10deg); }
+.tf-skxy:hover   { transform: skew(15deg, 5deg); }
+
+/* ============================================
+   TRANSFORM-ORIGIN
+   What it is: Sets the pivot point for rotation and scale transforms.
+   When to use: Rotate from a corner (fold effect), scale from an edge.
+   Default value: 50% 50% (element center).
+   Syntax: keywords (top, bottom, left, right, center) or px/%
+============================================ */
+
+.tf-orig-tl:hover     { transform: rotate(30deg); transform-origin: top left; }
+.tf-orig-br:hover     { transform: rotate(30deg); transform-origin: bottom right; }
+.tf-orig-center:hover { transform: rotate(30deg); transform-origin: center; }
+.tf-orig-px:hover     { transform: rotate(30deg); transform-origin: 20px 80%; }
+
+/* Chained transform — note: applied RIGHT TO LEFT */
+.tf-chain:hover {
+  transform: translate(10px, -5px) rotate(10deg) scale(1.1);
+  /* Execution order: 1) scale(1.1), 2) rotate(10deg), 3) translate */
+}
+
+/* Individual transform PROPERTIES (not functions) */
+.tf-indiv-t { transition: translate 0.3s ease; }
+.tf-indiv-r { transition: rotate 0.3s ease; }
+.tf-indiv-s { transition: scale 0.3s ease; }
+.tf-indiv-t:hover { translate: 0 -10px; }    /* the PROPERTY, not function */
+.tf-indiv-r:hover { rotate: 45deg; }         /* the PROPERTY, not function */
+.tf-indiv-s:hover { scale: 1.2; }            /* the PROPERTY, not function */
+
+
+/* ================================================================
+   6. TRANSITION
+================================================================ */
+
+/* ============================================
+   TRANSITION
+   What it is: Smoothly animates changes to CSS property values over time.
+   When to use: Any state change (hover, focus, :checked, class toggle)
+               that should be perceived as smooth rather than instant.
+   Default value: none (all changes are instantaneous).
+   Inherited: No.
+
+   SHORTHAND:
+   transition: property duration timing-function delay
+
+   MULTIPLE:
+   transition: color 0.2s ease, transform 0.3s ease-out, opacity 0.2s;
+   Each property can have different settings.
+
+   TIMING FUNCTIONS:
+   ease            → starts fast, ends slow (default — feels natural)
+   linear          → constant speed (good for looping, bad for UI)
+   ease-in         → slow start, fast end (good for EXIT animations)
+   ease-out        → fast start, slow end (good for ENTRANCE animations)
+   ease-in-out     → slow start, slow end (good for toggles)
+   steps(n)        → jumps in n discrete steps (pixel art, typewriter)
+   cubic-bezier(x1,y1,x2,y2) → custom curve via control points
+
+   ⚠️ NOTE: Only ANIMATABLE properties can be transitioned.
+            background: #fff → transparent works. display: block → none does NOT.
+            Use opacity: 1 → 0 instead of display: block → none for fade effects.
+   ⚠️ PERFORMANCE: Only transition transform and opacity for 60fps guaranteed.
+            Transitioning width, height, top, left etc. causes layout recalc.
+============================================ */
+
+.tr-demo-row {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  align-items: center;
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+}
+
+.tr-box {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-2);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Duration demo — same hover effect, different durations */
+.tr-instant   { transition: background-color 0ms; }
+.tr-fast      { transition: background-color 100ms; }
+.tr-medium    { transition: background-color 300ms; }
+.tr-slow      { transition: background-color 800ms; }
+.tr-very-slow { transition: background-color 2000ms; }
+
+.tr-instant:hover,   .tr-fast:hover,
+.tr-medium:hover,    .tr-slow:hover,
+.tr-very-slow:hover {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Timing function comparisons — all same duration, different feel */
+.tr-linear      { transition: transform 600ms linear; }
+.tr-ease        { transition: transform 600ms ease; }
+.tr-ease-in     { transition: transform 600ms ease-in; }
+.tr-ease-out    { transition: transform 600ms ease-out; }
+.tr-ease-in-out { transition: transform 600ms ease-in-out; }
+.tr-steps       { transition: transform 600ms steps(4); }
+.tr-cubic       { transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+/* cubic-bezier(0.34, 1.56, 0.64, 1) — a spring/bounce curve. y > 1 = overshoot. */
+
+.tr-linear:hover, .tr-ease:hover, .tr-ease-in:hover,
+.tr-ease-out:hover, .tr-ease-in-out:hover, .tr-steps:hover,
+.tr-cubic:hover { transform: translateX(30px); }
+
+/* Delay demo — stagger via delay */
+.tr-delay-demo {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+}
+
+.tr-delay-0 { transition: transform 0.4s ease-out 0ms; }
+.tr-delay-1 { transition: transform 0.4s ease-out 100ms; }
+.tr-delay-2 { transition: transform 0.4s ease-out 200ms; }
+.tr-delay-3 { transition: transform 0.4s ease-out 300ms; }
+.tr-delay-4 { transition: transform 0.4s ease-out 400ms; }
+
+.tr-delay-demo:hover .tr-delay-0,
+.tr-delay-demo:hover .tr-delay-1,
+.tr-delay-demo:hover .tr-delay-2,
+.tr-delay-demo:hover .tr-delay-3,
+.tr-delay-demo:hover .tr-delay-4 { transform: translateY(-12px); }
+
+/* Multiple properties — comma list */
+.tr-multi {
+  transition:
+    background-color 0.3s ease,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.2s ease;
+  white-space: normal;
+  text-align: center;
+}
+
+.tr-multi:hover {
+  background: var(--color-warm-dim);
+  border-color: var(--color-warm);
+  color: var(--color-warm);
+  transform: scale(1.08) translateY(-4px);
+  /* Each property follows its own timing independently */
+}
+
+
+/* ================================================================
+   7. @KEYFRAMES & ANIMATION
+================================================================ */
+
+/* ============================================
+   @KEYFRAMES
+   What it is: Defines a named animation sequence with keyframe stops.
+   When to use: Looping animations, entrance/exit effects, attention-grabbers,
+               loading indicators.
+   Default value: N/A — defines a reusable sequence.
+   Inherited: N/A.
+
+   SYNTAX:
+   @keyframes name {
+     from { ... }   ← same as 0%
+     50%  { ... }   ← midpoint
+     to   { ... }   ← same as 100%
+   }
+   Then apply with the animation property.
+
+   ANIMATION SUB-PROPERTIES:
+   animation-name           → the @keyframes name
+   animation-duration       → how long one cycle takes
+   animation-timing-function → easing (same as transition)
+   animation-delay          → pause before first play
+   animation-iteration-count → number of cycles (or infinite)
+   animation-direction      → normal | reverse | alternate | alternate-reverse
+   animation-fill-mode      → none | forwards | backwards | both
+   animation-play-state     → running | paused
+
+   SHORTHAND:
+   animation: name duration timing delay iterations direction fill-mode play-state
+
+   ⚠️ PERFORMANCE: Same as transitions — stick to transform and opacity.
+   ⚠️ ACCESSIBILITY: Always wrap in @media (prefers-reduced-motion: reduce).
+============================================ */
+
+/* Define all keyframes here */
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.12); opacity: 0.8; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0);    animation-timing-function: ease-in; }
+  50%       { transform: translateY(-20px); animation-timing-function: ease-out; }
+  /* Different easing per keyframe = realistic physics */
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-8px); }
+  40%       { transform: translateX(8px); }
+  60%       { transform: translateX(-6px); }
+  80%       { transform: translateX(6px); }
+}
+
+@keyframes ping {
+  0%   { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+  /* Moving gradient position = skeleton loading effect */
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 4px 16px rgba(232, 121, 249, 0.3);
+  }
+  50% {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 40px rgba(232, 121, 249, 0.15);
+  }
+}
+
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.4); }
+  50%       { transform: scaleY(1); }
+}
+
+/* Entrance animations */
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fill-slide-in {
+  from { transform: translateX(-60px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+/* Fill-mode demo keyframe */
+@keyframes slide-across {
+  from { transform: translateX(0);    background: var(--color-surface-hi); }
+  to   { transform: translateX(40px); background: var(--color-accent-dim);
+         border-color: var(--color-accent); color: var(--color-accent); }
+}
+
+
+/* Demo grid and items */
+.kf-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--sp-5);
+}
+
+.kf-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.kf-item code {
+  font-size: 0.65rem;
+  color: var(--color-text-2);
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-align: center;
+}
+
+.kf-box {
+  width: 80px;
+  height: 80px;
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* Apply animations */
+.kf-pulse  { animation: pulse   2s ease-in-out infinite; }
+.kf-spin   { animation: spin    1.5s linear infinite; }
+.kf-bounce { animation: bounce  1s ease infinite; }
+.kf-shake  { animation: shake   0.8s ease infinite; }
+
+/* Ping uses position: relative + ::before for the expanding ring */
+.kf-ping {
+  position: relative;
+}
+.kf-ping::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--color-accent);
+  animation: ping 1.5s ease-out infinite;
+}
+
+/* Shimmer / skeleton effect */
+.kf-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-hi) 25%,
+    rgba(232, 121, 249, 0.2) 50%,
+    var(--color-surface-hi) 75%
+  );
+  background-size: 200% 100%;
+  border-color: transparent;
+  color: transparent;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.kf-float { animation: float 3s ease-in-out infinite; }
+
+/* Wave bars — 5 children with staggered delays */
+.kf-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  overflow: hidden;
+}
+.kf-wave::before,
+.kf-wave::after {
+  content: none;
+}
+/* Generate bars with :nth-child — but these are pseudo so we fake with box-shadow */
+.kf-wave {
+  background: none;
+  border: none;
+  gap: 3px;
+}
+/* Use the box itself as a column with a dotted pattern */
+.kf-wave {
+  flex-direction: row;
+  padding: var(--sp-3);
+}
+
+/* Fake wave bars via generated content trick */
+.kf-wave {
+  position: relative;
+}
+
+/* Actually implement as background animation */
+.kf-wave {
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+
+/* Animation sub-property demos */
+
+/* Fill-mode */
+.kf-fill-demo {
+  display: flex;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+  padding: var(--sp-5);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+}
+
+.fill-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  align-items: flex-start;
+}
+
+.fill-item code {
+  font-size: 0.68rem;
+  color: var(--color-text-2);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.fill-box {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-2);
+}
+
+/* fill-mode: none — returns to original state after animation */
+.fill-none {
+  animation: slide-across 1.5s ease 0.5s 1 normal none running;
+  /* After animation ends → snaps back to original position */
+}
+
+/* fill-mode: forwards — stays at the end state */
+.fill-forwards {
+  animation: slide-across 1.5s ease 0.5s 1 normal forwards running;
+  /* After animation ends → stays at translateX(40px) */
+}
+
+/* fill-mode: backwards — applies from-state during delay period */
+.fill-backwards {
+  animation: slide-across 1.5s ease 1s 1 normal backwards running;
+  /* During the 1s delay → already in the from state */
+}
+
+/* fill-mode: both — backwards + forwards combined */
+.fill-both {
+  animation: slide-across 1.5s ease 1s 1 normal both running;
+  /* During delay: from state. After end: to state. */
+}
+
+/* Direction demos */
+.kf-dir-normal    { animation: spin 2s linear infinite normal; }
+.kf-dir-reverse   { animation: spin 2s linear infinite reverse; }
+.kf-dir-alt       { animation: spin 2s linear infinite alternate; }
+.kf-dir-alt-rev   { animation: spin 2s linear infinite alternate-reverse; }
+
+/* Play-state: paused on hover */
+.kf-pause-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+}
+
+.kf-pausable {
+  animation: pulse 1s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* animation-play-state: paused when hovered */
+.kf-pausable:hover {
+  animation-play-state: paused;
+  /* Pausing on hover lets users inspect animated elements.
+     Also useful for play/pause buttons on carousels. */
+}
+
+
+/* ============================================
+   STAGGER — incrementing animation-delay
+============================================ */
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-demo {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding: var(--sp-5);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+}
+
+.stagger-item {
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--r-pill);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+
+  /* animation-fill-mode: both = starts in from state during delay */
+  animation: stagger-in 0.5s ease-out both;
+}
+
+.si-1 { animation-delay: 0ms;   background: var(--color-accent-dim); border: 1px solid var(--color-accent); color: var(--color-accent); }
+.si-2 { animation-delay: 80ms;  background: var(--color-accent-b-dim); border: 1px solid var(--color-accent-b); color: var(--color-accent-b); }
+.si-3 { animation-delay: 160ms; background: var(--color-warm-dim); border: 1px solid var(--color-warm); color: var(--color-warm); }
+.si-4 { animation-delay: 240ms; background: var(--color-green-dim); border: 1px solid var(--color-green); color: var(--color-green); }
+.si-5 { animation-delay: 320ms; background: var(--color-rose-dim) ; border: 1px solid var(--color-rose); color: var(--color-rose); }
+
+/* ⚠️ ALWAYS provide this — every animation file */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ================================================================
+   8. REAL-WORLD CARD DEMO
+================================================================ */
+
+/* @keyframes for the card badge pulse and the "best value" glow */
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(251, 146, 60, 0); }
+}
+
+@keyframes glow-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes shine-sweep {
+  0%   { left: -60%; opacity: 0; }
+  20%  { opacity: 0.6; }
+  100% { left: 140%; opacity: 0; }
+}
+
+.rw-cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-6);
+  padding: var(--sp-4) var(--sp-2);
+}
+
+.rw-card {
+  position: relative;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    border-color 0.2s ease;
+}
+
+.rw-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-color: var(--color-border-hi);
+}
+
+/* The featured card has extra treatment */
+.rw-card-featured {
+  border-color: var(--color-warm);
+  box-shadow:
+    0 0 0 1px var(--color-warm-dim),
+    0 8px 40px rgba(251, 146, 60, 0.15);
+}
+
+.rw-card-featured:hover {
+  border-color: var(--color-warm);
+  box-shadow:
+    0 0 0 1px var(--color-warm-dim),
+    0 24px 70px rgba(251, 146, 60, 0.25);
+}
+
+/* Rotating gradient glow behind featured card */
+.rw-card-glow {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(251, 146, 60, 0.08) 30%,
+    transparent 60%
+  );
+  animation: glow-rotate 6s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rw-card-badge {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  z-index: var(--z-raised);
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-pill);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  color: var(--color-text-2);
+}
+
+.rw-badge-featured {
+  background: var(--color-warm-dim);
+  border-color: var(--color-warm);
+  color: var(--color-warm);
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+.rw-card-img {
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  z-index: var(--z-base);
+}
+
+.rw-img-a {
+  background: linear-gradient(135deg, #1a0038 0%, #2d0050 50%, #150030 100%);
+}
+.rw-img-b {
+  background: linear-gradient(135deg, #2a1400 0%, #3d1f00 50%, #200f00 100%);
+}
+.rw-img-c {
+  background: linear-gradient(135deg, #001a2a 0%, #002840 50%, #001520 100%);
+}
+
+/* Shine sweep animation on hover */
+.rw-card-img-shine {
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 70%
+  );
+  transform: skewX(-15deg);
+  opacity: 0;
+  transition: none;
+}
+
+.rw-card:hover .rw-card-img-shine {
+  animation: shine-sweep 0.7s ease forwards;
+}
+
+.rw-card-body {
+  position: relative;
+  z-index: var(--z-base);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  flex: 1;
+}
+
+.rw-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.01em;
+}
+
+.rw-card-desc {
+  font-size: 0.82rem;
+  color: var(--color-text-2);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.rw-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--sp-2);
+}
+
+.rw-price {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-text-1);
+  letter-spacing: -0.02em;
+}
+
+.rw-price small {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-2);
+}
+
+.rw-cta {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: var(--color-text-1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rw-cta:hover {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.rw-cta-featured {
+  background: var(--color-warm-dim);
+  border-color: var(--color-warm);
+  color: var(--color-warm);
+}
+
+.rw-cta-featured:hover {
+  background: rgba(251, 146, 60, 0.25);
+}
+
+
+/* ================================================================
+   PAGE LAYOUT
+================================================================ */
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text-1);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+p { margin-bottom: var(--sp-4); color: var(--color-text-2); line-height: 1.7; }
+p:last-child { margin-bottom: 0; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--color-border);
+}
+
+strong { font-weight: 700; color: var(--color-text-1); }
+
+.page-header {
+  background: linear-gradient(to bottom, hsl(285, 50%, 5%), hsl(285, 50%, 3%));
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--sp-16) var(--sp-8) var(--sp-12);
+  text-align: center;
+}
+.header-inner { max-width: 700px; margin: 0 auto; }
+.phase-badge {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #1a0020;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-pill);
+  margin-bottom: var(--sp-4);
+}
+.page-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: var(--sp-4);
+}
+.page-subtitle { font-size: 1.05rem; color: var(--color-text-2); line-height: 1.7; max-width: 580px; margin: 0 auto; }
+
+.page-main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--sp-12) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.ref-section { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  padding-bottom: var(--sp-3);
+  border-bottom: 2px solid var(--color-border);
+}
+.section-title code { background: transparent; border: none; color: var(--color-accent); padding: 0; }
+
+.demo-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.demo-label { font-size: 0.95rem; font-weight: 600; color: var(--color-text-1); }
+.demo-label code { background: transparent; border: none; color: var(--color-accent); padding: 0; font-size: 1em; }
+
+.demo-note {
+  background: var(--color-code-bg);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 0.875rem;
+  color: var(--color-text-2);
+  line-height: 1.75;
+}
+.demo-note code { background: transparent; border: none; color: var(--color-warm); font-size: 0.85em; font-weight: 600; padding: 0; }
+.demo-note strong { color: var(--color-text-1); }
+
+.sub-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  margin-top: var(--sp-2);
+  margin-bottom: calc(-1 * var(--sp-2));
+}
+
+.page-footer {
+  text-align: center;
+  padding: var(--sp-8);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+}
+.page-footer p { margin: 0; color: var(--color-text-3); }
+
+/* ================================================================
+   END OF PHASE 7 REFERENCE
+   Next → Phase 8: Advanced Architecture & Modern Features
+   (CSS Custom Properties, native nesting, logical properties, @layer)
+================================================================ */

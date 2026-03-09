@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!--
+    viewport
+    Ensures responsive scaling on mobile devices.
+    Without this, layouts often appear zoomed-out on phones.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CSS Phase 8 - Advanced Architecture</title>
+
+    <!--
+    External Stylesheet Link
+    Connects this HTML file to the CSS reference file.
+    -->
+    <link rel="stylesheet" href="phase8-advanced-architecture.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <h1>CSS Phase 8: Advanced Architecture & Modern Features</h1>
+    <p>CSS Variables • Native Nesting • Logical Properties • Cascade Layers</p>
+</header>
+
+
+<!-- =============================
+     SECTION 1 — CSS VARIABLES
+============================== -->
+
+<section class="section">
+    <h2>1. CSS Custom Properties (Variables)</h2>
+
+    <p>
+        CSS variables are reusable values defined once and used everywhere.
+        They are declared using <code>--variable-name</code> and accessed with
+        <code>var()</code>.
+    </p>
+
+    <div class="card primary-card">
+        Primary Card using <strong>--primary-color</strong>
+    </div>
+
+    <div class="card secondary-card">
+        Secondary Card using <strong>--secondary-color</strong>
+    </div>
+
+    <button class="btn">Button using CSS variables</button>
+</section>
+
+
+<!-- =============================
+     SECTION 2 — NATIVE NESTING
+============================== -->
+
+<section class="section">
+    <h2>2. Native CSS Nesting</h2>
+
+    <p>
+        Native nesting allows writing CSS rules inside other rules.
+        This makes component relationships easier to read.
+    </p>
+
+    <div class="profile-card">
+        <h3>Jane Developer</h3>
+        <p>Frontend Engineer</p>
+        <button>Follow</button>
+    </div>
+
+</section>
+
+
+<!-- =============================
+     SECTION 3 — LOGICAL PROPERTIES
+============================== -->
+
+<section class="section">
+    <h2>3. Logical Properties</h2>
+
+    <p>
+        Logical properties replace left/right/top/bottom with
+        start/end/block/inline directions.
+        This automatically adapts layouts for RTL languages.
+    </p>
+
+    <div class="logical-box">
+        Logical margin and padding demonstration.
+    </div>
+
+</section>
+
+
+<!-- =============================
+     SECTION 4 — CASCADE LAYERS
+============================== -->
+
+<section class="section">
+    <h2>4. Cascade Layers (@layer)</h2>
+
+    <p>
+        Cascade layers control CSS priority intentionally.
+        Instead of relying on load order or selector specificity,
+        layers explicitly define rule hierarchy.
+    </p>
+
+    <button class="utility-btn">
+        Utility Layer Button (Overrides component styles)
+    </button>
+
+</section>
+
+
+<footer class="site-footer">
+    <p>CSS Roadmap — Phase 8 Complete</p>
+</footer>
+
+</body>
+</html>

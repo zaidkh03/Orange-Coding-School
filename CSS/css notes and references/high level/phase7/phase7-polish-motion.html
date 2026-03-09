@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 7 – UI Polish, Aesthetics &amp; Motion Reference</title>
+    <link rel="stylesheet" href="phase7-polish-motion.css" />
+  </head>
+  <body>
+
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 7</span>
+        <h1 class="page-title">UI Polish, Aesthetics &amp; Motion</h1>
+        <p class="page-subtitle">
+          Rounded corners, layered shadows, blur filters, transforms,
+          smooth transitions, and keyframe animations — the tools that
+          make interfaces feel crafted, not assembled.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: BORDER-RADIUS
+      ============================================================ -->
+      <section class="ref-section" id="border-radius">
+        <h2 class="section-title">1 — <code>border-radius</code></h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">All <code>border-radius</code> Values &amp; Shorthand Forms</h3>
+
+          <!-- Uniform radii -->
+          <p class="sub-label">Uniform radius — all four corners the same</p>
+          <div class="br-demo-row">
+            <div class="br-box br-0">0</div>
+            <div class="br-box br-4">4px</div>
+            <div class="br-box br-8">8px</div>
+            <div class="br-box br-16">16px</div>
+            <div class="br-box br-50pct">50%</div>
+            <div class="br-box br-pill">pill</div>
+          </div>
+
+          <!-- Per-corner control -->
+          <p class="sub-label">Per-corner — top-left / top-right / bottom-right / bottom-left</p>
+          <div class="br-demo-row">
+            <div class="br-box br-tl">TL only</div>
+            <div class="br-box br-tr">TR only</div>
+            <div class="br-box br-bl">BL only</div>
+            <div class="br-box br-br">BR only</div>
+            <div class="br-box br-mixed">Mixed</div>
+            <div class="br-box br-squircle">Squircle-ish</div>
+          </div>
+
+          <!-- Elliptical radii -->
+          <p class="sub-label">Elliptical radius — horizontal / vertical per corner</p>
+          <div class="br-demo-row">
+            <div class="br-box br-ellipse">Ellipse</div>
+            <div class="br-box br-leaf">Leaf</div>
+            <div class="br-box br-egg">Egg</div>
+            <div class="br-box br-blob">Blob</div>
+          </div>
+
+          <p class="demo-note">
+            Shorthand order: <code>border-radius: TL TR BR BL</code> (clockwise from top-left).
+            Elliptical syntax: <code>border-radius: 40% 60% / 60% 40%</code>
+            — horizontal radii <code>/</code> vertical radii.
+            <br><br>
+            <code>border-radius: 50%</code> on a square makes a circle.
+            On a non-square it makes an ellipse.
+            <code>border-radius: 9999px</code> makes a pill shape regardless of
+            element dimensions — safer than 50% for rectangles.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: BOX-SHADOW
+      ============================================================ -->
+      <section class="ref-section" id="box-shadow">
+        <h2 class="section-title">2 — <code>box-shadow</code></h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">Anatomy &amp; Variations</h3>
+
+          <p class="sub-label">Single shadow — offset-x / offset-y / blur / spread / color</p>
+          <div class="shadow-demo-row">
+            <div class="shadow-box sh-hard">Hard<br><small>0 4px 0 0</small></div>
+            <div class="shadow-box sh-soft">Soft<br><small>0 8px 24px</small></div>
+            <div class="shadow-box sh-glow">Glow<br><small>0 0 20px color</small></div>
+            <div class="shadow-box sh-inner">Inner<br><small>inset 0 2px 8px</small></div>
+            <div class="shadow-box sh-spread">Spread<br><small>0 0 0 4px outline</small></div>
+          </div>
+
+          <p class="sub-label">Layered shadows — comma-separated list</p>
+          <div class="shadow-demo-row">
+            <div class="shadow-box sh-layered">Layered<br><small>3 shadows</small></div>
+            <div class="shadow-box sh-elevation">Elevation<br><small>Material-style</small></div>
+            <div class="shadow-box sh-neon">Neon<br><small>Double glow</small></div>
+          </div>
+
+          <p class="sub-label">Elevation scale — hover to lift</p>
+          <div class="shadow-demo-row">
+            <div class="shadow-box sh-e1 hover-lift">Level 1</div>
+            <div class="shadow-box sh-e2 hover-lift">Level 2</div>
+            <div class="shadow-box sh-e3 hover-lift">Level 3</div>
+            <div class="shadow-box sh-e4 hover-lift">Level 4</div>
+          </div>
+
+          <p class="demo-note">
+            Syntax: <code>box-shadow: offset-x offset-y blur spread color</code><br>
+            — <code>offset-x/y</code>: position (negative = left/up)<br>
+            — <code>blur</code>: softness (0 = hard edge)<br>
+            — <code>spread</code>: size change before blurring (negative shrinks)<br>
+            — <code>inset</code>: keyword before values = inner shadow<br><br>
+            <strong>Design tip:</strong> Use spread 0 and a tinted shadow colour
+            (not just black) for realistic depth. Layer 2–3 shadows with
+            increasing blur for natural fall-off.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: FILTER
+      ============================================================ -->
+      <section class="ref-section" id="filter">
+        <h2 class="section-title">3 — <code>filter</code> &amp; <code>backdrop-filter</code></h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label"><code>filter</code> — Apply Visual Effects to an Element</h3>
+
+          <div class="filter-demo-grid">
+            <div class="filter-item">
+              <div class="filter-box fi-none">CSS</div>
+              <code>filter: none</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-blur">CSS</div>
+              <code>blur(4px)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-brightness">CSS</div>
+              <code>brightness(1.5)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-contrast">CSS</div>
+              <code>contrast(2)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-saturate">CSS</div>
+              <code>saturate(3)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-grayscale">CSS</div>
+              <code>grayscale(1)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-sepia">CSS</div>
+              <code>sepia(0.8)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-huerotate">CSS</div>
+              <code>hue-rotate(120deg)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-invert">CSS</div>
+              <code>invert(1)</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-dropshadow">CSS</div>
+              <code>drop-shadow()</code>
+            </div>
+            <div class="filter-item">
+              <div class="filter-box fi-combined">CSS</div>
+              <code>blur + saturate</code>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>filter</code> applies to the entire element including its children.
+            Multiple filters chain with spaces: <code>filter: blur(2px) brightness(1.2) saturate(1.5)</code>.
+            <br><br>
+            <code>filter: drop-shadow()</code> differs from <code>box-shadow</code> —
+            it follows the alpha shape of the element (works on PNGs with transparency).
+            <code>box-shadow</code> always follows the rectangular bounding box.
+          </p>
+        </div>
+
+        <div class="demo-card">
+          <h3 class="demo-label"><code>backdrop-filter</code> — Frosted Glass Effect</h3>
+
+          <!--
+            BACKDROP-FILTER
+            Purpose: Apply filter to the content BEHIND the element.
+            Related CSS: .bdf-demo
+          -->
+          <div class="bdf-scene">
+            <div class="bdf-bg-circles">
+              <div class="bdf-circle bdf-c1"></div>
+              <div class="bdf-circle bdf-c2"></div>
+              <div class="bdf-circle bdf-c3"></div>
+            </div>
+            <div class="bdf-panel">
+              <h4>Frosted Glass Panel</h4>
+              <p>backdrop-filter: blur(16px) saturate(1.8)</p>
+              <p>The coloured blobs behind this panel are blurred —
+                 only the background is affected, not this text.</p>
+            </div>
+          </div>
+
+          <p class="demo-note">
+            <code>backdrop-filter</code> blurs/filters what is BEHIND the element.
+            The element itself must have some transparency (<code>background: rgba(…, 0.x)</code>)
+            for the effect to show through.
+            <br><br>
+            ⚠️ <code>backdrop-filter</code> creates a new stacking context and
+            can be expensive on GPU. Limit to key UI surfaces like modals,
+            nav bars, and sidebars. All modern browsers support it.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 4: TRANSFORM
+      ============================================================ -->
+      <section class="ref-section" id="transform">
+        <h2 class="section-title">4 — <code>transform</code></h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">All Transform Functions — Hover to See Applied</h3>
+
+          <p class="sub-label">translate — move without affecting layout flow</p>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-tx">translateX(20px)</div>
+            <div class="tf-box tf-ty">translateY(-20px)</div>
+            <div class="tf-box tf-txy">translate(20px, -10px)</div>
+            <div class="tf-box tf-t50">translate(-50%, -50%)</div>
+          </div>
+
+          <p class="sub-label">scale — resize without affecting layout</p>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-sx">scaleX(1.5)</div>
+            <div class="tf-box tf-sy">scaleY(0.6)</div>
+            <div class="tf-box tf-sxy">scale(1.3)</div>
+            <div class="tf-box tf-s-neg">scale(-1) mirror</div>
+          </div>
+
+          <p class="sub-label">rotate — spin around transform-origin</p>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-r45">rotate(45deg)</div>
+            <div class="tf-box tf-r-45">rotate(-45deg)</div>
+            <div class="tf-box tf-r180">rotate(180deg)</div>
+            <div class="tf-box tf-rturn">rotate(0.25turn)</div>
+          </div>
+
+          <p class="sub-label">skew — shear along an axis</p>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-skx">skewX(20deg)</div>
+            <div class="tf-box tf-sky">skewY(10deg)</div>
+            <div class="tf-box tf-skxy">skew(15deg, 5deg)</div>
+          </div>
+
+          <p class="sub-label">transform-origin — pivot point for rotation and scale</p>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-orig-tl">origin: top left</div>
+            <div class="tf-box tf-orig-br">origin: bottom right</div>
+            <div class="tf-box tf-orig-center">origin: center (default)</div>
+            <div class="tf-box tf-orig-px">origin: 20px 80%</div>
+          </div>
+
+          <p class="sub-label">Chained transforms — applied right to left</p>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-chain">translate + rotate + scale</div>
+          </div>
+
+          <p class="demo-note">
+            <code>transform</code> does NOT affect document flow — the element's
+            original space is preserved. Nearby elements don't reflow.
+            This makes transforms the right tool for animations and hover effects.
+            <br><br>
+            Multiple transforms chain with spaces and apply <strong>right to left</strong>:
+            <code>transform: translate(20px) rotate(45deg)</code> rotates first,
+            then translates — not what you might expect.
+            <br><br>
+            <code>transform-origin</code> sets the anchor point for rotation and scaling.
+            Default is <code>50% 50%</code> (center). For a rotating gear icon,
+            set it to <code>center</code>. For a fold-out card, set to an edge.
+          </p>
+        </div>
+
+        <div class="demo-card">
+          <h3 class="demo-label"><code>translate</code>, <code>rotate</code>, <code>scale</code> — Individual Properties</h3>
+          <div class="tf-demo-row">
+            <div class="tf-box tf-indiv-t">translate: 0 -10px</div>
+            <div class="tf-box tf-indiv-r">rotate: 45deg</div>
+            <div class="tf-box tf-indiv-s">scale: 1.2</div>
+          </div>
+          <p class="demo-note">
+            CSS now has <strong>individual transform properties</strong>:
+            <code>translate</code>, <code>rotate</code>, <code>scale</code>
+            (not inside <code>transform:</code>). They apply in a fixed order
+            (translate → rotate → scale) and can be animated independently —
+            you can transition only <code>rotate</code> without specifying
+            <code>translate</code> and <code>scale</code> in the keyframe.
+            <br><br>
+            These are newer (Chrome 104+, Firefox 72+, Safari 14.1+) and ideal
+            for complex multi-property animations where you need independent control.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 5: TRANSITION
+      ============================================================ -->
+      <section class="ref-section" id="transition">
+        <h2 class="section-title">5 — <code>transition</code></h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">Transition Properties &amp; Easing Functions — Hover all boxes</h3>
+
+          <p class="sub-label">transition-duration — how long the change takes</p>
+          <div class="tr-demo-row">
+            <div class="tr-box tr-instant">0ms</div>
+            <div class="tr-box tr-fast">100ms</div>
+            <div class="tr-box tr-medium">300ms</div>
+            <div class="tr-box tr-slow">800ms</div>
+            <div class="tr-box tr-very-slow">2000ms</div>
+          </div>
+
+          <p class="sub-label">transition-timing-function — the easing curve (hover to compare)</p>
+          <div class="tr-demo-row">
+            <div class="tr-box tr-linear">linear</div>
+            <div class="tr-box tr-ease">ease (default)</div>
+            <div class="tr-box tr-ease-in">ease-in</div>
+            <div class="tr-box tr-ease-out">ease-out</div>
+            <div class="tr-box tr-ease-in-out">ease-in-out</div>
+            <div class="tr-box tr-steps">steps(4)</div>
+            <div class="tr-box tr-cubic">cubic-bezier</div>
+          </div>
+
+          <p class="sub-label">transition-delay — pause before the change starts</p>
+          <div class="tr-delay-demo">
+            <div class="tr-box tr-delay-0">delay: 0</div>
+            <div class="tr-box tr-delay-1">delay: 100ms</div>
+            <div class="tr-box tr-delay-2">delay: 200ms</div>
+            <div class="tr-box tr-delay-3">delay: 300ms</div>
+            <div class="tr-box tr-delay-4">delay: 400ms</div>
+          </div>
+
+          <p class="sub-label">transition: multiple properties — separate with comma</p>
+          <div class="tr-demo-row">
+            <div class="tr-box tr-multi">background + transform + opacity</div>
+          </div>
+
+          <p class="demo-note">
+            Shorthand: <code>transition: property duration timing-function delay</code><br>
+            <code>transition: all 0.3s ease</code> — transitions ALL animatable properties.<br>
+            <code>transition: color 0.2s ease, transform 0.3s ease-out</code> — different durations per property.<br><br>
+            <strong>Easing guide:</strong><br>
+            — <code>ease-out</code>: fast start, gentle stop — best for elements entering the screen.<br>
+            — <code>ease-in</code>: slow start, fast finish — best for elements leaving the screen.<br>
+            — <code>ease-in-out</code>: both — best for back-and-forth toggle animations.<br>
+            — <code>linear</code>: constant speed — good for looping animations, bad for UI interactions.<br><br>
+            ⚠️ <code>transition: all</code> is convenient but transitions EVERY changed property —
+            including ones like <code>width</code> that are expensive to animate. Be explicit.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 6: @KEYFRAMES & ANIMATION
+      ============================================================ -->
+      <section class="ref-section" id="animation">
+        <h2 class="section-title">6 — <code>@keyframes</code> &amp; <code>animation</code></h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label"><code>@keyframes</code> — Define the Motion Sequence</h3>
+
+          <!-- Looping animations -->
+          <p class="sub-label">Common @keyframes patterns — all running live</p>
+          <div class="kf-demo-grid">
+            <div class="kf-item">
+              <div class="kf-box kf-pulse">Pulse</div>
+              <code>scale + opacity loop</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-spin">Spin</div>
+              <code>rotate 360deg</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-bounce">Bounce</div>
+              <code>translateY + ease</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-shake">Shake</div>
+              <code>translateX left/right</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-ping">Ping</div>
+              <code>scale + opacity out</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-shimmer">Shimmer</div>
+              <code>gradient position</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-float">Float</div>
+              <code>translateY + shadow</code>
+            </div>
+            <div class="kf-item">
+              <div class="kf-box kf-wave">Wave</div>
+              <code>scaleY children</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3 class="demo-label"><code>animation</code> — All Sub-Properties</h3>
+
+          <p class="sub-label">animation-fill-mode — what happens before/after the animation</p>
+          <div class="kf-fill-demo">
+            <div class="fill-item">
+              <div class="fill-box fill-none">none</div>
+              <code>fill-mode: none</code>
+            </div>
+            <div class="fill-item">
+              <div class="fill-box fill-forwards">forwards</div>
+              <code>fill-mode: forwards</code>
+            </div>
+            <div class="fill-item">
+              <div class="fill-box fill-backwards">backwards</div>
+              <code>fill-mode: backwards</code>
+            </div>
+            <div class="fill-item">
+              <div class="fill-box fill-both">both</div>
+              <code>fill-mode: both</code>
+            </div>
+          </div>
+
+          <p class="sub-label">animation-direction — which direction keyframes play</p>
+          <div class="tr-demo-row">
+            <div class="kf-box kf-dir-normal">normal</div>
+            <div class="kf-box kf-dir-reverse">reverse</div>
+            <div class="kf-box kf-dir-alt">alternate</div>
+            <div class="kf-box kf-dir-alt-rev">alt-reverse</div>
+          </div>
+
+          <p class="sub-label">animation-play-state — pause/resume</p>
+          <div class="kf-pause-demo">
+            <div class="kf-box kf-pausable">Hover to pause</div>
+          </div>
+
+          <p class="demo-note">
+            Full shorthand: <code>animation: name duration timing-function delay iteration-count direction fill-mode play-state</code><br><br>
+            Example: <code>animation: slide-in 0.4s ease-out 0s 1 normal forwards running</code><br><br>
+            <strong>Comma-separate multiple animations:</strong><br>
+            <code>animation: spin 2s linear infinite, pulse 1s ease-in-out infinite alternate</code><br><br>
+            ⚠️ Always add <code>@media (prefers-reduced-motion: reduce)</code> to disable or
+            reduce animations for users with vestibular disorders. This is a WCAG requirement.
+          </p>
+        </div>
+
+        <div class="demo-card">
+          <h3 class="demo-label">Staggered Animation — Entrance with <code>animation-delay</code></h3>
+          <!--
+            STAGGER DEMO
+            Purpose: Items entering with incrementing delays for a cascade effect.
+            Related CSS: .stagger-* classes
+          -->
+          <div class="stagger-demo">
+            <div class="stagger-item si-1">Design</div>
+            <div class="stagger-item si-2">Engineer</div>
+            <div class="stagger-item si-3">Ship</div>
+            <div class="stagger-item si-4">Iterate</div>
+            <div class="stagger-item si-5">Repeat</div>
+          </div>
+          <p class="demo-note">
+            Stagger = same animation applied to multiple elements with incrementing
+            <code>animation-delay</code>. Refresh the page to see the entrance again.
+            Each item delays 80ms more than the previous.
+            Use <code>animation-fill-mode: both</code> so items start in their
+            pre-animation state (hidden) even during the delay period.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 7: REAL-WORLD — Polished UI Card
+      ============================================================ -->
+      <section class="ref-section" id="real-world">
+        <h2 class="section-title">7 — Real-World Example — Polished Product Card</h2>
+
+        <div class="demo-card">
+          <h3 class="demo-label">
+            border-radius + box-shadow + filter + transform + transition + animation — all together
+          </h3>
+          <div class="rw-cards-row">
+
+            <div class="rw-card">
+              <div class="rw-card-badge">Popular</div>
+              <div class="rw-card-img rw-img-a">
+                <div class="rw-card-img-shine"></div>
+              </div>
+              <div class="rw-card-body">
+                <h3 class="rw-card-title">Pro Workspace</h3>
+                <p class="rw-card-desc">Everything you need to build, ship, and scale. Trusted by 40k+ developers.</p>
+                <div class="rw-card-footer">
+                  <span class="rw-price">$29<small>/mo</small></span>
+                  <button class="rw-cta">Get Started →</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="rw-card rw-card-featured">
+              <div class="rw-card-glow"></div>
+              <div class="rw-card-badge rw-badge-featured">Best Value</div>
+              <div class="rw-card-img rw-img-b">
+                <div class="rw-card-img-shine"></div>
+              </div>
+              <div class="rw-card-body">
+                <h3 class="rw-card-title">Team Edition</h3>
+                <p class="rw-card-desc">Collaboration tools, shared workspaces, and priority support built in.</p>
+                <div class="rw-card-footer">
+                  <span class="rw-price">$79<small>/mo</small></span>
+                  <button class="rw-cta rw-cta-featured">Get Started →</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="rw-card">
+              <div class="rw-card-img rw-img-c">
+                <div class="rw-card-img-shine"></div>
+              </div>
+              <div class="rw-card-body">
+                <h3 class="rw-card-title">Enterprise</h3>
+                <p class="rw-card-desc">Custom deployments, SLA guarantees, and a dedicated success manager.</p>
+                <div class="rw-card-footer">
+                  <span class="rw-price">Custom</span>
+                  <button class="rw-cta">Contact Us →</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>CSS Reference — Phase 7: UI Polish, Aesthetics &amp; Motion &nbsp;|&nbsp; Craft, don't just code.</p>
+    </footer>
+
+  </body>
+</html>

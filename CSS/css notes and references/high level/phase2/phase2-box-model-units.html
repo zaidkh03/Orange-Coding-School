@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 2 – The Box Model & Sizing Units Reference</title>
+
+    <!--
+      EXTERNAL CSS LINK
+      Purpose: Links to the companion stylesheet (Phase 1 concept — external CSS).
+      Related CSS: All rules live in phase2-box-model-units.css
+    -->
+    <link rel="stylesheet" href="phase2-box-model-units.css" />
+  </head>
+
+  <body>
+
+    <!-- ============================================================
+         PAGE HEADER
+         Purpose: Title card for this reference document.
+         Related CSS: .page-header, .page-title, .page-subtitle
+    ============================================================ -->
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 2</span>
+        <h1 class="page-title">The Box Model &amp; Sizing Units</h1>
+        <p class="page-subtitle">
+          The most critical phase — every element is a box. Master how boxes
+          are sized, spaced, and measured before touching layout systems.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: THE BOX MODEL
+           Purpose: Visualise the four layers of every CSS box.
+           Related CSS: Section "THE BOX MODEL" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="box-model">
+        <h2 class="section-title">1 — The Box Model</h2>
+
+        <!--
+          BOX MODEL ANATOMY DIAGRAM
+          Purpose: Live visual showing all four box-model layers stacked.
+          Related CSS: .box-diagram-*, .margin-layer, .border-layer, etc.
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Box Model — Anatomy Diagram</h3>
+          <div class="box-diagram-wrap">
+
+            <!-- Margin layer (outermost) -->
+            <!--
+              MARGIN LAYER
+              Purpose: Represents the space OUTSIDE the border.
+              Related CSS: .margin-layer
+            -->
+            <div class="box-layer margin-layer">
+              <span class="layer-label margin-label">margin</span>
+
+              <!-- Border layer -->
+              <!--
+                BORDER LAYER
+                Purpose: Represents the visible border line.
+                Related CSS: .border-layer
+              -->
+              <div class="box-layer border-layer">
+                <span class="layer-label border-label">border</span>
+
+                <!-- Padding layer -->
+                <!--
+                  PADDING LAYER
+                  Purpose: Represents the space INSIDE the border, outside content.
+                  Related CSS: .padding-layer
+                -->
+                <div class="box-layer padding-layer">
+                  <span class="layer-label padding-label">padding</span>
+
+                  <!-- Content box -->
+                  <!--
+                    CONTENT BOX
+                    Purpose: The actual content area — text, images live here.
+                    Related CSS: .content-box
+                  -->
+                  <div class="content-box">
+                    <span class="content-label">content</span>
+                    <span class="content-sub">width × height</span>
+                  </div>
+
+                </div><!-- /padding -->
+              </div><!-- /border -->
+            </div><!-- /margin -->
+
+          </div><!-- /box-diagram-wrap -->
+          <p class="demo-note">
+            Every single HTML element — from a tiny <code>&lt;span&gt;</code> to a
+            full-page <code>&lt;section&gt;</code> — is rendered as one of these
+            boxes. The model has four layers from inside out:
+            <strong>content → padding → border → margin</strong>.
+          </p>
+        </div>
+
+        <!--
+          WIDTH & HEIGHT
+          Purpose: Show how content dimensions are set.
+          Related CSS: .width-height-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>width</code> &amp; <code>height</code> — Content Dimensions
+          </h3>
+          <div class="wh-demo-row">
+            <div class="wh-box wh-fixed">
+              <span>width: 160px<br>height: 80px</span>
+            </div>
+            <div class="wh-box wh-percent">
+              <span>width: 50%<br>height: 80px</span>
+            </div>
+            <div class="wh-box wh-auto">
+              <span>width: auto<br>height: auto (content-driven)</span>
+            </div>
+          </div>
+          <div class="wh-max-demo">
+            <div class="wh-max-width-box">
+              <span>max-width: 400px — This box will never grow beyond 400px even if the container is wider.</span>
+            </div>
+          </div>
+          <div class="wh-max-demo">
+            <div class="wh-min-width-box">w</div>
+          </div>
+          <p class="demo-note">
+            <code>width: auto</code> (default for block elements) means the element
+            fills available space. <code>height: auto</code> means the element grows
+            to fit its content. <code>max-width</code> is essential for readable
+            text columns — set it to <code>60–75ch</code> or <code>680px</code>
+            on article containers.
+          </p>
+        </div>
+
+        <!--
+          PADDING
+          Purpose: Show all shorthand syntaxes for padding.
+          Related CSS: .padding-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>padding</code> — Inside Spacing (pushes content inward)
+          </h3>
+          <div class="padding-demo-grid">
+
+            <!--
+              PADDING SHORTHAND: 1 value
+              Purpose: Apply equal padding on all four sides.
+              Related CSS: .pad-all
+            -->
+            <div class="pad-box pad-all">
+              <span class="pad-code">padding: 24px</span>
+              <span class="pad-sub">all 4 sides</span>
+            </div>
+
+            <!--
+              PADDING SHORTHAND: 2 values
+              Purpose: First = top/bottom, second = left/right.
+              Related CSS: .pad-tb-lr
+            -->
+            <div class="pad-box pad-tb-lr">
+              <span class="pad-code">padding: 32px 8px</span>
+              <span class="pad-sub">top+bottom / left+right</span>
+            </div>
+
+            <!--
+              PADDING SHORTHAND: 3 values
+              Purpose: top / left+right / bottom.
+              Related CSS: .pad-3val
+            -->
+            <div class="pad-box pad-3val">
+              <span class="pad-code">padding: 8px 32px 24px</span>
+              <span class="pad-sub">top / left+right / bottom</span>
+            </div>
+
+            <!--
+              PADDING SHORTHAND: 4 values (clockwise)
+              Purpose: top / right / bottom / left (TRBL — "TRoBLe").
+              Related CSS: .pad-4val
+            -->
+            <div class="pad-box pad-4val">
+              <span class="pad-code">padding: 8px 32px 24px 4px</span>
+              <span class="pad-sub">top / right / bottom / left</span>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            Memory trick for 4-value shorthand: <strong>TRBL</strong>
+            ("trouble") — Top, Right, Bottom, Left. Goes clockwise from the top.
+            Individual properties: <code>padding-top</code>,
+            <code>padding-right</code>, <code>padding-bottom</code>,
+            <code>padding-left</code>.
+          </p>
+        </div>
+
+        <!--
+          BORDER
+          Purpose: Demonstrate border shorthand and individual properties.
+          Related CSS: .border-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>border</code> — The Line Around Padding
+          </h3>
+          <div class="border-demo-grid">
+
+            <!--
+              BORDER SHORTHAND
+              Purpose: width + style + color in one declaration.
+              Related CSS: .border-solid
+            -->
+            <div class="border-sample border-solid">
+              <code>border: 2px solid #5b8dee</code>
+            </div>
+
+            <div class="border-sample border-dashed">
+              <code>border: 2px dashed #e07b54</code>
+            </div>
+
+            <div class="border-sample border-dotted">
+              <code>border: 3px dotted #79d4b5</code>
+            </div>
+
+            <div class="border-sample border-thick">
+              <code>border: 6px solid #9099b0</code>
+            </div>
+
+            <!--
+              SINGLE-SIDE BORDER
+              Purpose: Apply border to only one side.
+              Related CSS: .border-bottom-only
+            -->
+            <div class="border-sample border-bottom-only">
+              <code>border-bottom: 3px solid #5b8dee</code><br>
+              <span style="font-size:0.75rem;color:#9099b0;">Common for nav links, input underlines</span>
+            </div>
+
+            <!--
+              BORDER-RADIUS
+              Purpose: Demonstrate rounding with border-radius.
+              Related CSS: .border-radius-demo
+            -->
+            <div class="border-sample border-radius-sm">
+              <code>border-radius: 4px</code>
+            </div>
+            <div class="border-sample border-radius-md">
+              <code>border-radius: 12px</code>
+            </div>
+            <div class="border-sample border-radius-pill">
+              <code>border-radius: 999px (pill)</code>
+            </div>
+            <div class="border-sample border-radius-circle">
+              <code>border-radius: 50%</code>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            <code>border</code> shorthand order: <strong>width style color</strong>.
+            The <code>style</code> value is REQUIRED — without it no border renders
+            even if width and color are set. Common styles: <code>solid</code>,
+            <code>dashed</code>, <code>dotted</code>, <code>none</code>.
+            <code>border-radius: 50%</code> on a square element = perfect circle.
+          </p>
+        </div>
+
+        <!--
+          MARGIN
+          Purpose: Demonstrate outside spacing and auto-centering.
+          Related CSS: .margin-demo-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>margin</code> — Outside Spacing (pushes other elements away)
+          </h3>
+          <div class="margin-demo-area">
+
+            <!--
+              MARGIN: AUTO CENTERING
+              Purpose: margin: 0 auto is the classic horizontal centering technique
+                       for block elements with a defined width.
+              Related CSS: .margin-auto-box
+            -->
+            <div class="margin-ruler">
+              <div class="margin-auto-box">
+                <code>margin: 0 auto</code>
+                <span>Horizontally centered via auto left/right margins</span>
+              </div>
+            </div>
+
+            <!--
+              MARGIN COLLAPSE
+              Purpose: Demonstrate the critical margin-collapse gotcha.
+              Related CSS: .collapse-demo-*
+            -->
+            <div class="collapse-demo-wrap">
+              <p class="collapse-label">⚠️ Margin Collapse — The Most Common Gotcha</p>
+              <div class="collapse-box-a">
+                <code>margin-bottom: 40px</code>
+              </div>
+              <div class="collapse-box-b">
+                <code>margin-top: 24px</code>
+                <span>Gap between boxes = 40px (not 64px)</span>
+              </div>
+            </div>
+
+            <!--
+              NEGATIVE MARGIN
+              Purpose: Show that margins can be negative to pull elements.
+              Related CSS: .negative-margin-box
+            -->
+            <div class="negative-margin-wrap">
+              <p class="collapse-label">Negative Margin — Pull Elements Together</p>
+              <div class="neg-box-base">Base element</div>
+              <div class="neg-box-overlap">
+                <code>margin-top: -20px</code> — overlaps the element above
+              </div>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            <strong>Margin collapse</strong>: When two vertical margins meet,
+            only the LARGER one wins (they don't add). This only happens on
+            vertical (top/bottom) margins between block elements — never on
+            flex or grid children, and never on horizontal margins.
+            <br><br>
+            <code>margin: 0 auto</code> only works on block elements with an
+            explicit <code>width</code> set. It has no effect on inline elements.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: BOX-SIZING
+           Purpose: The most important CSS rule. Show content-box vs border-box.
+           Related CSS: Section "BOX-SIZING" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="box-sizing">
+        <h2 class="section-title">2 — Box Sizing: <code>content-box</code> vs <code>border-box</code></h2>
+
+        <!--
+          BOX-SIZING COMPARISON
+          Purpose: Side-by-side showing why border-box prevents layout breakage.
+          Related CSS: .bs-content-box, .bs-border-box
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>box-sizing</code> — The Most Important CSS Rule
+          </h3>
+          <div class="bs-comparison">
+
+            <!--
+              CONTENT-BOX (DEFAULT — problematic)
+              Purpose: Show that padding ADDS to declared width.
+              Related CSS: .bs-content-box
+            -->
+            <div class="bs-panel">
+              <p class="bs-label bs-bad">box-sizing: content-box (default ❌)</p>
+              <div class="bs-content-box">
+                <span>width: 300px<br>padding: 30px<br>
+                <strong>Actual rendered width: 360px</strong><br>
+                (300 + 30 + 30 padding)</span>
+              </div>
+              <p class="bs-explain">
+                You declared <code>width: 300px</code>. You added
+                <code>padding: 30px</code>. The browser renders it as
+                <strong>360px</strong>. Layout breaks.
+              </p>
+            </div>
+
+            <!--
+              BORDER-BOX (Recommended)
+              Purpose: Show that padding is INCLUDED within declared width.
+              Related CSS: .bs-border-box
+            -->
+            <div class="bs-panel">
+              <p class="bs-label bs-good">box-sizing: border-box ✅</p>
+              <div class="bs-border-box">
+                <span>width: 300px<br>padding: 30px<br>
+                <strong>Actual rendered width: 300px</strong><br>
+                (padding is absorbed inside)</span>
+              </div>
+              <p class="bs-explain">
+                You declared <code>width: 300px</code>. You added
+                <code>padding: 30px</code>. The browser renders it as
+                <strong>300px</strong>. Layout is predictable. ✅
+              </p>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            This is why every modern CSS reset begins with:<br>
+            <code>*, *::before, *::after &#123; box-sizing: border-box; &#125;</code><br>
+            Apply it globally and never think about it again.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: UNITS OF MEASUREMENT
+           Purpose: px, rem, em, vw/vh, svh/lvh/dvh — when to use each.
+           Related CSS: Section "UNITS" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="units">
+        <h2 class="section-title">3 — Units of Measurement</h2>
+
+        <!--
+          PX — Absolute pixels
+          Purpose: Show when px is appropriate vs when it causes issues.
+          Related CSS: .unit-px-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>px</code> — Absolute Pixels
+          </h3>
+          <div class="unit-demo-row">
+            <div class="unit-box unit-px-border">
+              <code>border: 1px</code>
+              <span>✅ px is great for borders</span>
+            </div>
+            <div class="unit-box unit-px-shadow">
+              <code>box-shadow: 0 4px 12px</code>
+              <span>✅ px for shadows / fine offsets</span>
+            </div>
+            <div class="unit-box unit-px-font">
+              <code>font-size: 14px</code>
+              <span>⚠️ Overrides user browser settings</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>px</code> is an absolute unit — it does not scale with
+            anything. Use for: borders, shadows, fixed-pixel constraints.
+            Avoid for: font sizes, padding, and spacing — these should scale
+            with user preferences.
+          </p>
+        </div>
+
+        <!--
+          REM — Root em
+          Purpose: The recommended unit for font sizes and spacing.
+          Related CSS: .unit-rem-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>rem</code> — Root <code>em</code> (Relative to <code>&lt;html&gt;</code>)
+          </h3>
+          <div class="rem-scale-demo">
+            <div class="rem-bar rem-025"><span>0.25rem = 4px</span></div>
+            <div class="rem-bar rem-050"><span>0.5rem = 8px</span></div>
+            <div class="rem-bar rem-075"><span>0.75rem = 12px</span></div>
+            <div class="rem-bar rem-100"><span>1rem = 16px (root default)</span></div>
+            <div class="rem-bar rem-125"><span>1.25rem = 20px</span></div>
+            <div class="rem-bar rem-150"><span>1.5rem = 24px</span></div>
+            <div class="rem-bar rem-200"><span>2rem = 32px</span></div>
+            <div class="rem-bar rem-300"><span>3rem = 48px</span></div>
+          </div>
+          <div class="rem-accessibility-demo">
+            <div class="rem-access-box">
+              <p class="rem-access-text">
+                This text uses <code>font-size: 1rem</code> and
+                <code>padding: 1rem 1.5rem</code>. If a user increases their
+                browser base font size from 16px to 20px, this entire component
+                — text AND padding — scales up proportionally. 🎉
+              </p>
+            </div>
+          </div>
+          <p class="demo-note">
+            <code>rem</code> always looks at the <code>&lt;html&gt;</code>
+            element's font-size. Since that's usually the browser/OS preference,
+            <code>rem</code> automatically respects accessibility settings.
+            Best practice: use <code>rem</code> for all font sizes, padding,
+            margin, and gap values.
+          </p>
+        </div>
+
+        <!--
+          EM — Parent-relative em
+          Purpose: Show how em scales relative to parent — and the compounding danger.
+          Related CSS: .unit-em-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>em</code> — Relative to Parent <code>font-size</code>
+          </h3>
+
+          <div class="em-demo-outer">
+            <span class="em-label">Parent: font-size: 16px (1em = 16px)</span>
+            <div class="em-demo-child">
+              <span class="em-label">Child: font-size: 1.25em → 20px</span>
+              <div class="em-demo-grandchild">
+                <span class="em-label">
+                  Grandchild: font-size: 1.25em → 25px<br>
+                  ⚠️ Compounding! Each level multiplies the parent's size.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="em-good-use">
+            <p class="em-use-label">✅ Good use of em — component-relative padding</p>
+            <button class="em-btn em-btn-sm">Small Button (0.85rem, padding in em)</button>
+            <button class="em-btn em-btn-lg">Large Button (1.2rem, same em padding scales)</button>
+          </div>
+
+          <p class="demo-note">
+            <code>em</code> is relative to the element's OWN font-size (for most
+            properties) or its PARENT's font-size (for the font-size property
+            itself). This causes "compounding" — nested ems multiply.
+            <br><br>
+            ✅ Use <code>em</code> for: padding/margin INSIDE a component that
+            should scale with the component's own font-size (e.g., button padding).
+            <br>
+            ⚠️ Avoid <code>em</code> for font-size in nested structures — use
+            <code>rem</code> instead for predictability.
+          </p>
+        </div>
+
+        <!--
+          VW / VH — Viewport units
+          Purpose: Size elements relative to the browser window.
+          Related CSS: .unit-viewport-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>vw</code> / <code>vh</code> — Viewport Width / Height
+          </h3>
+          <div class="viewport-demo-grid">
+            <div class="vw-box">
+              <code>width: 50vw</code>
+              <span>50% of browser window width — not parent container</span>
+            </div>
+            <div class="vh-box">
+              <code>height: 30vh</code>
+              <span>30% of browser window height</span>
+            </div>
+            <div class="vw-font-box">
+              <span class="vw-font-text">4vw font</span>
+              <code>font-size: 4vw</code>
+              <span>Scales with viewport — careful on mobile</span>
+            </div>
+          </div>
+          <div class="vh-hero-demo">
+            <code>height: 100vh — Full-screen hero section (classic usage)</code>
+          </div>
+          <p class="demo-note">
+            <code>100vw</code> includes scrollbar width, which can cause
+            horizontal overflow. Use <code>width: 100%</code> on block elements
+            instead. <code>100vh</code> is useful for full-screen hero sections
+            and modals — but see the mobile gotcha below.
+          </p>
+        </div>
+
+        <!--
+          SVH / LVH / DVH — Modern mobile viewport units
+          Purpose: Solve the mobile browser UI toolbar problem.
+          Related CSS: .unit-mobile-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>svh</code> / <code>lvh</code> / <code>dvh</code> — Modern Mobile Viewport Units
+          </h3>
+
+          <div class="mobile-units-grid">
+
+            <!--
+              SVH — Small Viewport Height
+              Purpose: Based on the SMALLEST viewport (browser UI fully visible).
+              When to use: Hero sections — content guaranteed visible without scrolling.
+            -->
+            <div class="mobile-unit-card svh-card">
+              <div class="mvu-bar svh-bar"></div>
+              <div class="mvu-info">
+                <code>svh</code>
+                <p><strong>Small Viewport Height</strong></p>
+                <p>Based on the smallest possible viewport — when browser navigation bars are fully visible. Content here is <em>always</em> visible. ✅</p>
+                <p class="mvu-use">Use for: hero sections, full-screen landing pages</p>
+              </div>
+            </div>
+
+            <!--
+              LVH — Large Viewport Height
+              Purpose: Based on the LARGEST viewport (browser UI hidden after scroll).
+            -->
+            <div class="mobile-unit-card lvh-card">
+              <div class="mvu-bar lvh-bar"></div>
+              <div class="mvu-info">
+                <code>lvh</code>
+                <p><strong>Large Viewport Height</strong></p>
+                <p>Based on the largest possible viewport — when browser UI has scrolled away. May initially clip content behind the browser toolbar.</p>
+                <p class="mvu-use">Use for: elements only shown after user scrolls</p>
+              </div>
+            </div>
+
+            <!--
+              DVH — Dynamic Viewport Height
+              Purpose: Continuously updates as browser UI appears/disappears.
+            -->
+            <div class="mobile-unit-card dvh-card">
+              <div class="mvu-bar dvh-bar"></div>
+              <div class="mvu-info">
+                <code>dvh</code>
+                <p><strong>Dynamic Viewport Height</strong></p>
+                <p>Continuously updates as the browser toolbar shows/hides. Can cause layout "jumps" and performance issues on scroll.</p>
+                <p class="mvu-use">⚠️ Use sparingly — causes reflow on scroll</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mobile-recommendation">
+            <p>
+              📱 <strong>Recommendation:</strong> Replace <code>height: 100vh</code>
+              on mobile hero sections with <code>height: 100svh</code>. This prevents
+              content from hiding behind the mobile browser's address bar / navigation bar.
+            </p>
+          </div>
+
+          <p class="demo-note">
+            The problem: on mobile, <code>100vh</code> is calculated when the
+            browser UI is <em>hidden</em> (large viewport). When the user first
+            lands, the browser toolbar is visible, so the section is taller than
+            the screen — the bottom of your hero is cut off. <code>svh</code>
+            solves this.
+          </p>
+        </div>
+
+        <!--
+          UNIT COMPARISON — Real-world decision matrix
+          Purpose: Show all units in a practical "when to use" reference.
+          Related CSS: .unit-matrix-*
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">📊 Unit Decision Matrix — Quick Reference</h3>
+          <div class="unit-matrix">
+
+            <div class="matrix-row matrix-header">
+              <span>Unit</span>
+              <span>Relative to</span>
+              <span>Best for</span>
+              <span>Avoid for</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">px</span>
+              <span>Nothing (absolute)</span>
+              <span>Borders, shadows, fine offsets</span>
+              <span>Font sizes, padding (accessibility)</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">rem</span>
+              <span>&lt;html&gt; font-size</span>
+              <span>Font sizes, spacing, padding ✅</span>
+              <span>Component-internal scaling (use em)</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">em</span>
+              <span>Parent font-size</span>
+              <span>Component padding that scales with its own font</span>
+              <span>Nested font-sizes (compounding risk)</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">vw</span>
+              <span>Viewport width</span>
+              <span>Full-width layouts, fluid type</span>
+              <span>General sizing (scrollbar issues)</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">vh</span>
+              <span>Viewport height</span>
+              <span>Desktop full-height sections</span>
+              <span>Mobile full-height (use svh instead)</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">svh</span>
+              <span>Small viewport height</span>
+              <span>Mobile hero sections ✅</span>
+              <span>Most other cases</span>
+            </div>
+
+            <div class="matrix-row">
+              <span class="unit-tag">%</span>
+              <span>Parent element</span>
+              <span>Fluid widths inside containers</span>
+              <span>Heights (parent needs explicit height)</span>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================
+           REAL-WORLD COMPONENT DEMO
+           Purpose: All Phase 2 concepts in one realistic card component.
+           Related CSS: .real-world-card and children
+      ============================================================ -->
+      <section class="ref-section" id="real-world">
+        <h2 class="section-title">4 — Real-World Example — Pricing Card</h2>
+
+        <!--
+          PRICING CARD
+          Purpose: Demonstrate box model, box-sizing, and units working
+                   together in a real production-style component.
+          Related CSS: .pricing-card and children
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">All Phase 2 Properties in One Component</h3>
+          <div class="pricing-row">
+
+            <div class="pricing-card pricing-starter">
+              <div class="pricing-header">
+                <span class="pricing-tier">Starter</span>
+                <div class="pricing-amount">
+                  <span class="pricing-currency">$</span>
+                  <span class="pricing-price">9</span>
+                  <span class="pricing-period">/mo</span>
+                </div>
+              </div>
+              <ul class="pricing-features">
+                <li>5 projects</li>
+                <li>10 GB storage</li>
+                <li>Email support</li>
+              </ul>
+              <button class="pricing-btn btn-outline">Get Started</button>
+            </div>
+
+            <div class="pricing-card pricing-pro">
+              <div class="pricing-badge">Most Popular</div>
+              <div class="pricing-header">
+                <span class="pricing-tier">Pro</span>
+                <div class="pricing-amount">
+                  <span class="pricing-currency">$</span>
+                  <span class="pricing-price">29</span>
+                  <span class="pricing-period">/mo</span>
+                </div>
+              </div>
+              <ul class="pricing-features">
+                <li>Unlimited projects</li>
+                <li>100 GB storage</li>
+                <li>Priority support</li>
+                <li>Analytics dashboard</li>
+              </ul>
+              <button class="pricing-btn btn-filled">Get Started</button>
+            </div>
+
+            <div class="pricing-card pricing-enterprise">
+              <div class="pricing-header">
+                <span class="pricing-tier">Enterprise</span>
+                <div class="pricing-amount">
+                  <span class="pricing-currency"></span>
+                  <span class="pricing-price" style="font-size:1.8rem;">Custom</span>
+                </div>
+              </div>
+              <ul class="pricing-features">
+                <li>Everything in Pro</li>
+                <li>Custom storage</li>
+                <li>Dedicated support</li>
+                <li>SLA guarantee</li>
+                <li>SSO / SAML</li>
+              </ul>
+              <button class="pricing-btn btn-outline">Contact Sales</button>
+            </div>
+
+          </div>
+          <p class="demo-note">
+            This component uses: <code>width</code>, <code>max-width</code>,
+            <code>padding</code> (rem units), <code>border</code>,
+            <code>border-radius</code>, <code>margin</code>,
+            <code>box-sizing: border-box</code> (all cards predictably
+            sized despite different padding), and <code>box-shadow</code>.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ============================================================
+         PAGE FOOTER
+         Related CSS: .page-footer
+    ============================================================ -->
+    <footer class="page-footer">
+      <p>
+        CSS Reference — Phase 2: The Box Model &amp; Sizing Units &nbsp;|&nbsp;
+        Every element is a box. Every box has four layers.
+      </p>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,292 @@
+/* =========================================================
+   PHASE 6 CSS REFERENCE
+   Pseudo-Classes, Pseudo-Elements & UI States
+========================================================= */
+
+
+/* ============================================
+   GLOBAL RESET
+============================================ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+
+
+/* ============================================
+   BODY BASE STYLE
+============================================ */
+
+body{
+
+font-family:Arial, Helvetica, sans-serif;
+background:#f4f6f9;
+padding:40px;
+line-height:1.6;
+
+}
+
+
+
+/* ============================================
+   :HOVER
+   What it is: Applies styles when mouse is over element
+   When to use it: buttons, links, cards
+   Default value: none
+   Inherited: no
+============================================ */
+
+.btn-hover{
+
+padding:12px 20px;
+background:#3498db;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:6px;
+
+transition:background 0.3s;
+
+}
+
+.btn-hover:hover{
+
+/* hover state */
+
+background:#217dbb;
+
+}
+
+
+
+/* ============================================
+   :FOCUS
+   What it is: Applied when element receives focus
+   When to use it: accessibility for keyboard users
+   Default value: browser outline
+============================================ */
+
+.input-focus{
+
+padding:10px;
+border:2px solid #ccc;
+border-radius:5px;
+
+}
+
+.input-focus:focus{
+
+border-color:#3498db;
+
+/* remove default outline carefully */
+
+outline:none;
+
+}
+
+
+
+/* ⚠️ NOTE:
+Removing focus outlines can hurt accessibility.
+Replace them with custom focus styles instead.
+*/
+
+
+
+/* ============================================
+   :DISABLED
+   What it is: Styles inactive form elements
+   When to use it: disabled buttons/inputs
+============================================ */
+
+.btn-disabled{
+
+padding:12px 20px;
+border:none;
+background:#ccc;
+color:#555;
+cursor:not-allowed;
+
+}
+
+.btn-disabled:disabled{
+
+opacity:0.7;
+
+}
+
+
+
+/* ============================================
+   STRUCTURAL SELECTORS
+============================================ */
+
+.demo-list{
+
+margin-top:20px;
+list-style:none;
+
+}
+
+.demo-list li{
+
+padding:10px;
+background:#ecf0f1;
+
+margin-bottom:5px;
+
+}
+
+
+
+/* ============================================
+   :FIRST-CHILD
+   What it is: Selects first element in parent
+============================================ */
+
+.demo-list li:first-child{
+
+background:#2ecc71;
+color:white;
+
+}
+
+
+
+/* ============================================
+   :LAST-CHILD
+============================================ */
+
+.demo-list li:last-child{
+
+background:#e74c3c;
+color:white;
+
+}
+
+
+
+/* ============================================
+   :NTH-CHILD
+   What it is: Select elements using math formulas
+============================================ */
+
+.demo-list li:nth-child(odd){
+
+background:#dfe6e9;
+
+}
+
+/*
+Possible values:
+
+nth-child(odd)
+nth-child(even)
+nth-child(2n)
+nth-child(3n+1)
+*/
+
+
+
+/* ============================================
+   :HAS() RELATIONAL SELECTOR
+   What it is: Selects parent if condition exists
+   Example: div:has(img)
+============================================ */
+
+.card{
+
+border:1px solid #ddd;
+padding:15px;
+margin-top:20px;
+border-radius:6px;
+
+}
+
+
+
+/* parent changes style if image exists */
+
+.card:has(img){
+
+border-color:#3498db;
+background:#eef6ff;
+
+}
+
+
+
+/* ⚠️ NOTE:
+:has() is extremely powerful but newer.
+Supported in modern Chrome, Safari, Edge.
+*/
+
+
+
+/* ============================================
+   PSEUDO-ELEMENTS
+   What it is: Virtual elements inserted via CSS
+   Examples: ::before, ::after
+============================================ */
+
+.quote{
+
+position:relative;
+padding:20px;
+background:#f1f2f6;
+margin-top:20px;
+
+}
+
+.quote::before{
+
+content:"“";
+
+/* Decorative quotation mark */
+
+font-size:40px;
+position:absolute;
+left:5px;
+top:-10px;
+color:#3498db;
+
+}
+
+.quote::after{
+
+content:"”";
+
+font-size:40px;
+position:absolute;
+right:5px;
+bottom:-20px;
+color:#3498db;
+
+}
+
+
+
+/* ============================================
+   PAGE STRUCTURE
+============================================ */
+
+.section{
+
+margin-top:60px;
+
+}
+
+.footer{
+
+margin-top:80px;
+text-align:center;
+color:#777;
+
+}
+
+/* 
+   topic: the order of CSS properties in a rule, 
+*/

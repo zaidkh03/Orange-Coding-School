@@ -1,0 +1,1450 @@
+/* ================================================================
+   PHASE 4 — MODERN LAYOUT SYSTEMS
+   File: phase4-layout-systems.css
+   Companion to: phase4-layout-systems.html
+
+   PURPOSE: A permanent, richly-commented reference covering:
+
+   PART A — FLEXBOX (One-Dimensional)
+   - display: flex
+   - flex-direction
+   - justify-content
+   - align-items
+   - flex-wrap
+   - gap
+   - flex-grow, flex-shrink, flex-basis (the flex shorthand)
+   - align-self, order
+
+   PART B — CSS GRID (Two-Dimensional)
+   - display: grid
+   - grid-template-columns (fr, repeat, minmax, auto-fill/fit)
+   - grid-template-rows
+   - grid-column, grid-row (line numbers, span, shorthand)
+   - grid-template-areas + grid-area
+   - gap on grid
+
+   PART C — SUBGRID
+   - grid-template-columns: subgrid
+   - grid-template-rows: subgrid
+   - Real-world card alignment pattern
+
+   COMMENTING CONVENTION:
+   ┌─────────────────────────────────────────┐
+   │  PROPERTY-NAME                          │
+   │  What it is:   one-sentence description │
+   │  When to use:  practical scenario       │
+   │  Default:      browser default value    │
+   │  Inherited:    yes / no                 │
+   └─────────────────────────────────────────┘
+================================================================ */
+
+
+/* ================================================================
+   TABLE OF CONTENTS
+   1.  GLOBAL RESET & ROOT VARIABLES
+   2.  FLEXBOX — display: flex, flex-direction
+   3.  FLEXBOX — justify-content
+   4.  FLEXBOX — align-items
+   5.  FLEXBOX — flex-wrap
+   6.  FLEXBOX — gap
+   7.  FLEXBOX — flex item properties (grow, shrink, basis, self, order)
+   8.  FLEXBOX — real-world patterns
+   9.  GRID — display: grid, grid-template-columns, grid-template-rows
+   10. GRID — placement: grid-column, grid-row, grid-area, template-areas
+   11. SUBGRID — subgrid alignment pattern
+   12. GRID — real-world dashboard
+   13. PAGE LAYOUT (supporting styles for the reference page itself)
+================================================================ */
+
+
+/* ================================================================
+   1. GLOBAL RESET & ROOT VARIABLES
+================================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Color Palette — warm slate with teal/amber accents */
+  --color-bg:           #090c12;
+  --color-surface:      #0e1520;
+  --color-surface-alt:  #131c2e;
+  --color-surface-hi:   #192338;
+  --color-border:       #1e2c44;
+  --color-border-hi:    #2a3f60;
+
+  --color-accent:       #38bdf8;     /* sky blue */
+  --color-accent-dim:   rgba(56, 189, 248, 0.12);
+  --color-accent-b:     #f59e0b;     /* amber */
+  --color-accent-b-dim: rgba(245, 158, 11, 0.12);
+  --color-green:        #34d399;     /* emerald */
+  --color-green-dim:    rgba(52, 211, 153, 0.12);
+  --color-rose:         #fb7185;     /* rose */
+  --color-rose-dim:     rgba(251, 113, 133, 0.12);
+  --color-purple:       #a78bfa;     /* violet */
+
+  --color-text-1:       #e2e8f4;
+  --color-text-2:       #7d90b0;
+  --color-text-3:       #374660;
+  --color-code-bg:      #060a12;
+  --color-code-text:    #34d399;
+
+  /* Spacing */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+
+  /* Radii */
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   14px;
+  --r-xl:   20px;
+  --r-pill: 999px;
+
+  /* Typography */
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+
+  /* Flex item color palette for demos */
+  --fi-a-bg:     rgba(56, 189, 248, 0.15);
+  --fi-a-border: rgba(56, 189, 248, 0.5);
+  --fi-a-text:   #38bdf8;
+
+  --fi-b-bg:     rgba(245, 158, 11, 0.15);
+  --fi-b-border: rgba(245, 158, 11, 0.5);
+  --fi-b-text:   #f59e0b;
+
+  --fi-c-bg:     rgba(52, 211, 153, 0.15);
+  --fi-c-border: rgba(52, 211, 153, 0.5);
+  --fi-c-text:   #34d399;
+
+  --fi-d-bg:     rgba(167, 139, 250, 0.15);
+  --fi-d-border: rgba(167, 139, 250, 0.5);
+  --fi-d-text:   #a78bfa;
+}
+
+
+/* ================================================================
+   2. FLEXBOX — display: flex, flex-direction
+================================================================ */
+
+/* ============================================
+   DISPLAY: FLEX
+   What it is: Creates a flex formatting context on the container.
+               Direct children become flex items automatically.
+   When to use: Any one-dimensional layout — rows of items, stacked
+                components, centering, nav bars, button groups.
+   Default value: The container's default is block. Children's default
+                  is to participate in normal flow (block/inline).
+   Inherited: No — only direct children become flex items.
+   ⚠️ NOTE: Flex applies to DIRECT CHILDREN only. Grandchildren are
+            not flex items — they need their own flex container.
+============================================ */
+
+/* Shared flex demo container */
+.flex-demo {
+  /* display: flex — the one property that turns everything on */
+  display: flex;
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+  min-height: 64px;
+}
+
+/* ============================================
+   FLEX-DIRECTION
+   What it is: Defines the main axis — the direction items flow.
+   When to use: Always set explicitly so intent is clear.
+               row for horizontal layouts, column for vertical stacks.
+   Default value: row.
+   Inherited: No.
+
+   VALUES:
+   row            → left to right (default)
+   row-reverse    → right to left
+   column         → top to bottom
+   column-reverse → bottom to top
+
+   ⚠️ NOTE: flex-direction changes how ALL other flex properties behave.
+            justify-content always works on the MAIN axis (the direction
+            of flex-direction). align-items always works on the CROSS axis
+            (perpendicular to flex-direction).
+============================================ */
+
+.fd-row          { flex-direction: row; }
+.fd-row-reverse  { flex-direction: row-reverse; }
+.fd-column       { flex-direction: column; height: 180px; }
+.fd-column-reverse { flex-direction: column-reverse; height: 180px; }
+
+
+/* ================================================================
+   3. FLEXBOX — justify-content
+================================================================ */
+
+/* ============================================
+   JUSTIFY-CONTENT
+   What it is: Distributes space and positions items along the MAIN axis.
+   When to use: Control spacing between items in a flex row or column.
+   Default value: flex-start.
+   Inherited: No.
+
+   VALUES:
+   flex-start    → items at start of main axis (default)
+   flex-end      → items at end of main axis
+   center        → items centered on main axis
+   space-between → first/last at edges; equal space BETWEEN items
+   space-around  → equal space on EACH SIDE of every item
+                   (edge gaps = half of inner gaps)
+   space-evenly  → equal space everywhere, INCLUDING edges
+
+   ⚠️ NOTE: When flex-direction is column, justify-content controls
+            vertical distribution, and the container needs a height.
+============================================ */
+
+.jc-flex-start   { justify-content: flex-start; }
+.jc-flex-end     { justify-content: flex-end; }
+.jc-center       { justify-content: center; }
+.jc-space-between { justify-content: space-between; }
+.jc-space-around  { justify-content: space-around; }
+.jc-space-evenly  { justify-content: space-evenly; }
+
+
+/* ================================================================
+   4. FLEXBOX — align-items
+================================================================ */
+
+/* ============================================
+   ALIGN-ITEMS
+   What it is: Aligns flex items along the CROSS axis (perpendicular
+               to flex-direction).
+   When to use: Vertical centering in rows, horizontal centering in columns.
+   Default value: stretch (items fill the cross-axis size of the container).
+   Inherited: No.
+
+   VALUES:
+   stretch    → items fill cross axis (default) — equal heights in row
+   flex-start → items align to start of cross axis (top in row)
+   center     → items centered on cross axis (vertically in row)
+   flex-end   → items align to end of cross axis (bottom in row)
+   baseline   → items align by their text baselines
+
+   ⚠️ NOTE: stretch is why flex children have equal heights by default —
+            they all stretch to match the tallest sibling. To prevent this,
+            use align-items: flex-start or align-self on individual items.
+============================================ */
+
+/* Container needs height to show cross-axis alignment */
+.ai-tall {
+  min-height: 120px;
+  align-items: flex-start; /* overridden by specific class */
+}
+
+.ai-stretch    { align-items: stretch; }
+.ai-flex-start { align-items: flex-start; }
+.ai-center     { align-items: center; }
+.ai-flex-end   { align-items: flex-end; }
+.ai-baseline   { align-items: baseline; }
+
+/* Baseline demo — different font sizes to show baseline alignment */
+.ai-baseline-sm { font-size: 0.75rem; }
+.ai-baseline-lg { font-size: 1.6rem;  }
+.ai-baseline-md { font-size: 1rem;    }
+
+
+/* ================================================================
+   5. FLEXBOX — flex-wrap
+================================================================ */
+
+/* ============================================
+   FLEX-WRAP
+   What it is: Controls whether items wrap to new lines when they
+               exceed the container's main axis size.
+   When to use: Tag clouds, responsive card rows, navigation that
+               should collapse to multiple lines on small screens.
+   Default value: nowrap.
+   Inherited: No.
+
+   VALUES:
+   nowrap        → all items on one line, shrink if needed (default)
+   wrap          → items wrap to new lines (top to bottom)
+   wrap-reverse  → items wrap to new lines (bottom to top)
+
+   ⚠️ NOTE: With nowrap (default), items SHRINK below their natural size
+            to fit. This can cause content clipping on small screens.
+            For responsive grids, prefer flex-wrap: wrap + min-width,
+            or use CSS Grid with auto-fill/minmax instead.
+============================================ */
+
+.fw-nowrap      { flex-wrap: nowrap; }
+.fw-wrap        { flex-wrap: wrap; }
+.fw-wrap-reverse { flex-wrap: wrap-reverse; }
+
+/* Give items a fixed width so we can observe wrapping */
+.fw-item {
+  min-width: 120px;
+}
+
+
+/* ================================================================
+   6. FLEXBOX — gap
+================================================================ */
+
+/* ============================================
+   GAP (row-gap + column-gap shorthand)
+   What it is: Adds space BETWEEN flex items — never before first
+               or after last item. Clean replacement for margin hacks.
+   When to use: Almost always. Replaces margin-right on all-but-last
+               or the negative-margin container trick.
+   Default value: 0.
+   Inherited: No.
+
+   SYNTAX:
+   gap: 16px          → equal row AND column gap
+   gap: 8px 16px      → row-gap: 8px, column-gap: 16px
+   row-gap: 8px       → only vertical gap (between wrapped rows)
+   column-gap: 16px   → only horizontal gap (between columns)
+
+   ⚠️ NOTE: gap was previously called grid-gap (only worked on grid).
+            Now it works on both flex and grid. The old grid-gap name
+            still works but is deprecated — use gap.
+============================================ */
+
+.gap-8    { gap: 8px; }
+.gap-1rem { gap: 1rem; }
+.gap-split {
+  gap: 2rem 0.5rem;
+  /* 2rem between ROWS (top/bottom), 0.5rem between COLUMNS (left/right) */
+  /* This is the two-value gap shorthand: row-gap / column-gap */
+}
+
+
+/* ================================================================
+   7. FLEXBOX — flex item properties
+================================================================ */
+
+/* ============================================
+   FLEX-GROW
+   What it is: A unitless ratio controlling how much of LEFTOVER space
+               an item claims relative to siblings.
+   When to use: Make one item fill available space (flex-grow: 1 on it,
+               0 on the rest). Equal columns (flex-grow: 1 on all).
+   Default value: 0 (items don't grow beyond their natural size).
+   Inherited: No.
+   ⚠️ NOTE: flex-grow distributes REMAINING space, not total width.
+            If all items fit naturally with no leftover, flex-grow
+            has zero effect regardless of its value.
+============================================ */
+
+.fg-demo { gap: var(--sp-2); }
+
+.fg-0 { flex-grow: 0; /* default — item stays at natural/basis size */ }
+.fg-1 { flex-grow: 1; /* claims 1 share of leftover space */ }
+.fg-2 { flex-grow: 2; /* claims 2 shares — gets twice as much as grow:1 */ }
+
+
+/* ============================================
+   FLEX-SHRINK
+   What it is: A unitless ratio controlling how much an item SHRINKS
+               relative to siblings when the container is too small.
+   When to use: flex-shrink: 0 on items that must never compress —
+               logos, avatars, icons, fixed-width sidebars.
+   Default value: 1 (all items shrink proportionally).
+   Inherited: No.
+   ⚠️ NOTE: flex-shrink works opposite to flex-grow — it acts when
+            there's a DEFICIT of space, not a surplus.
+            Value 0 = rigid (won't shrink). Higher values = shrinks more.
+============================================ */
+
+.fs-demo { gap: var(--sp-2); overflow: hidden; }
+
+.fs-item {
+  min-width: 100px;  /* natural size before shrinking */
+}
+
+.fs-0 {
+  flex-shrink: 0;    /* this item refuses to compress — stays at min-width */
+  /* All available shrinking falls onto the siblings with flex-shrink: 1 */
+}
+
+
+/* ============================================
+   FLEX-BASIS
+   What it is: The STARTING SIZE of an item before grow/shrink adjusts it.
+               Overrides width (in row) or height (in column).
+   When to use: When you want items to start at a specific size but
+               still participate in flex growth/shrinking.
+   Default value: auto (uses the item's width or content size).
+   Inherited: No.
+
+   THE FLEX SHORTHAND:
+   flex: <grow> <shrink> <basis>
+
+   Common presets:
+   flex: 1        → flex: 1 1 0   (grow equally from zero, ignoring content size)
+   flex: auto     → flex: 1 1 auto (grow from content size — proportional)
+   flex: none     → flex: 0 0 auto (rigid — no grow, no shrink)
+   flex: 0 0 200px → fixed 200px item that never grows or shrinks
+
+   ⚠️ NOTE: flex: 1 uses basis: 0 — all items start at zero and the
+            available space is divided equally.
+            flex: auto uses basis: auto — items start at content size,
+            then the EXTRA space is divided, so larger content stays larger.
+============================================ */
+
+.fb-demo { gap: var(--sp-2); }
+
+.fb-auto  { flex-basis: auto; }  /* starts at content size */
+.fb-200   { flex-basis: 200px; flex-grow: 1; } /* starts at 200px then can grow */
+
+/* flex shorthand demos */
+.flex-1-1-0 { flex: 1 1 0; }    /* equal columns regardless of content */
+.flex-2-1-0 { flex: 2 1 0; }    /* twice as wide as flex: 1 1 0 siblings */
+
+
+/* ============================================
+   ALIGN-SELF
+   What it is: Overrides align-items for a SINGLE flex item.
+   When to use: When one item needs different cross-axis alignment
+               than its siblings (e.g., a "sticky" button at bottom
+               of a card while other content aligns top).
+   Default value: auto (inherits align-items from container).
+   Inherited: No.
+============================================ */
+
+.as-demo {
+  align-items: stretch;  /* container default */
+  height: 120px;
+  gap: var(--sp-2);
+}
+
+.as-flex-start { align-self: flex-start; }
+.as-center     { align-self: center; }
+.as-flex-end   { align-self: flex-end; }
+.as-stretch    { align-self: stretch; }
+
+
+/* ============================================
+   ORDER
+   What it is: Changes the VISUAL order of a flex item relative to
+               siblings. Doesn't change DOM order.
+   When to use: Responsive reordering — show a hero image before text
+               on mobile, after text on desktop. Rare in general use.
+   Default value: 0 (all items share order 0 — DOM order wins).
+   Inherited: No.
+   ⚠️ ACCESSIBILITY WARNING: order changes visual order but NOT tab order
+            or screen reader order. This creates a disconnect between
+            what sighted users see and what keyboard/screen reader users
+            experience. Only use when you control the full accessibility
+            story, or when the reordering is purely decorative.
+============================================ */
+
+.order-demo { gap: var(--sp-2); }
+
+.order-1 { order: 1; }  /* appears first visually */
+.order-2 { order: 2; }  /* appears second */
+.order-3 { order: 3; }  /* appears third */
+.order-4 { order: 4; }  /* appears last */
+
+
+/* ================================================================
+   SHARED FLEX ITEM STYLES
+   The coloured boxes used in all flex demos above.
+================================================================ */
+
+.flex-item {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.4;
+  min-height: 40px;
+}
+
+.fi-a { background: var(--fi-a-bg); border: 1px solid var(--fi-a-border); color: var(--fi-a-text); }
+.fi-b { background: var(--fi-b-bg); border: 1px solid var(--fi-b-border); color: var(--fi-b-text); }
+.fi-c { background: var(--fi-c-bg); border: 1px solid var(--fi-c-border); color: var(--fi-c-text); }
+.fi-d { background: var(--fi-d-bg); border: 1px solid var(--fi-d-border); color: var(--fi-d-text); }
+
+.fi-tall { min-height: 80px; }
+
+
+/* ================================================================
+   8. FLEXBOX — real-world patterns
+================================================================ */
+
+/* ---- Navigation Bar ---- */
+.rw-navbar {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between pushes logo left, actions right */
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding: var(--sp-3) var(--sp-6);
+  background-color: var(--color-surface-hi);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+}
+
+.rw-logo {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;   /* logo never shrinks */
+}
+
+.rw-nav-links {
+  display: flex;    /* nested flex — links flow horizontally */
+  align-items: center;
+  gap: var(--sp-5);
+  list-style: none;
+  flex: 1;          /* takes available space between logo and actions */
+  justify-content: center;
+}
+
+.rw-nav-links a {
+  font-size: 0.88rem;
+  color: var(--color-text-2);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.rw-nav-links a:hover { color: var(--color-text-1); }
+
+.rw-nav-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-shrink: 0;   /* actions group never shrinks */
+}
+
+.rw-btn {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.rw-btn-ghost {
+  background: transparent;
+  border: 1px solid var(--color-border-hi);
+  color: var(--color-text-2);
+}
+.rw-btn-ghost:hover { color: var(--color-text-1); border-color: var(--color-text-2); }
+
+.rw-btn-solid {
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  color: #fff;
+}
+.rw-btn-solid:hover { opacity: 0.88; }
+
+
+/* ---- Media Object ---- */
+.rw-media-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.rw-media {
+  display: flex;
+  align-items: flex-start;   /* align to top — body may be tall */
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.15s;
+}
+.rw-media:last-child { border-bottom: none; }
+.rw-media:hover { background-color: var(--color-surface-alt); }
+
+.rw-media-icon {
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;   /* icon NEVER shrinks — critical for the media object pattern */
+}
+
+.rw-icon-a { background: var(--color-accent-dim); }
+.rw-icon-b { background: var(--color-green-dim); }
+.rw-icon-c { background: var(--color-accent-b-dim); }
+
+.rw-media-body {
+  flex: 1;          /* body grows to fill space between icon and time */
+  min-width: 0;     /* ⚠️ CRITICAL: prevents long text from overflowing flex container.
+                       Without this, flex items have implicit min-width: auto,
+                       which means they won't shrink below content size. */
+}
+
+.rw-media-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-1);
+  margin-bottom: var(--sp-1);
+}
+
+.rw-media-text {
+  font-size: 0.8rem;
+  color: var(--color-text-2);
+  line-height: 1.5;
+  margin: 0;
+  /* text-overflow needs both overflow:hidden and white-space:nowrap, OR just let it wrap */
+}
+
+.rw-media-time {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-3);
+  white-space: nowrap;
+  flex-shrink: 0;   /* timestamp never shrinks */
+  margin-top: 2px;
+}
+
+
+/* ---- Tag Cloud ---- */
+.rw-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;  /* tags wrap onto new lines when needed */
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+}
+
+.rw-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-pill);
+  font-size: 0.78rem;
+  color: var(--color-text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.rw-tag:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+.rw-tag-active {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+
+/* ================================================================
+   9. GRID — display: grid, template-columns, template-rows
+================================================================ */
+
+/* ============================================
+   DISPLAY: GRID
+   What it is: Creates a grid formatting context on the container.
+               Children become grid items placed into tracks.
+   When to use: Two-dimensional layouts — page structures, dashboards,
+               card galleries, magazine grids.
+   Default value: Container stays block. Children placed in auto rows.
+   Inherited: No — only direct children are grid items.
+
+   KEY DIFFERENCE FROM FLEXBOX:
+   Flexbox is content-first (items determine the layout).
+   Grid is layout-first (you define tracks, then place content).
+   Use flex for components. Use grid for page structure and 2D layouts.
+============================================ */
+
+/* ============================================
+   GRID-TEMPLATE-COLUMNS
+   What it is: Defines the number and size of columns in the grid.
+   When to use: Whenever you need columns — always explicit.
+   Default value: auto (one implicit column track).
+   Inherited: No.
+
+   VALUE TYPES:
+   px / rem     → fixed size tracks
+   %            → percentage of container width
+   fr           → fractional unit — share of REMAINING space
+   auto         → sized to fit content
+   minmax(a,b)  → track is at least a, at most b
+   repeat(n,x)  → shorthand for repeating track definitions
+   auto-fill    → fill with as many tracks as possible
+   auto-fit     → like auto-fill but collapses empty tracks
+
+   THE FR UNIT:
+   Distributes remaining space (after fixed tracks are satisfied).
+   1fr 2fr 1fr → total 4 parts; middle gets 2/4 = 50%, others 1/4 = 25% each.
+
+   MINMAX():
+   minmax(100px, 1fr) → at least 100px, but can grow up to 1fr.
+   Essential for responsive grids.
+============================================ */
+
+/* Shared grid demo container */
+.grid-demo {
+  display: grid;
+  gap: var(--sp-2);
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+}
+
+/* Column definitions */
+.gtc-fixed   { grid-template-columns: 200px 1fr 200px; }
+.gtc-fr      { grid-template-columns: 1fr 2fr 1fr; }
+.gtc-repeat  { grid-template-columns: repeat(4, 1fr); }
+.gtc-minmax  { grid-template-columns: repeat(3, minmax(100px, 1fr)); }
+
+/* ============================================
+   THE SELF-RESPONSIVE GRID — most powerful pattern:
+   repeat(auto-fill, minmax(160px, 1fr))
+
+   auto-fill: create as many column tracks as can fit at minimum size
+   minmax(160px, 1fr): each track is min 160px, max 1fr (fill if available)
+
+   Result: 6 columns on wide screens, 3 on medium, 2 on small —
+   with ZERO media queries. The grid figures it out automatically.
+
+   auto-fill vs auto-fit:
+   - auto-fill: creates empty tracks if there aren't enough items
+     (items don't stretch to fill the whole row)
+   - auto-fit: collapses empty tracks
+     (items stretch to fill available row space)
+   Use auto-fill for fixed-size items, auto-fit when items should expand.
+============================================ */
+.gtc-auto-fill { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+
+
+/* ============================================
+   GRID-TEMPLATE-ROWS
+   What it is: Defines explicit row heights.
+   When to use: Page-level layouts where row heights matter
+               (header/main/footer). Card content alignment.
+   Default value: auto (rows size to their content — implicit rows).
+   Inherited: No.
+   ⚠️ NOTE: fr units in rows require the container to have an explicit
+            height (height, min-height, or max-height).
+============================================ */
+
+.gtr-demo {
+  grid-template-columns: 1fr;   /* single column for row demo */
+  grid-template-rows: 80px 1fr 50px;
+  height: 260px;
+}
+
+.gtr-header { background: var(--fi-a-bg);  border: 1px solid var(--fi-a-border); }
+.gtr-main   { background: var(--fi-b-bg);  border: 1px solid var(--fi-b-border); }
+.gtr-footer { background: var(--fi-c-bg);  border: 1px solid var(--fi-c-border); }
+
+
+/* Shared grid item styles */
+.grid-item {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+  padding: var(--sp-3) var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.4;
+}
+
+.grid-item small {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.gi-a { background: var(--fi-a-bg); border-color: var(--fi-a-border); color: var(--fi-a-text); }
+.gi-b { background: var(--fi-b-bg); border-color: var(--fi-b-border); color: var(--fi-b-text); }
+.gi-c { background: var(--fi-c-bg); border-color: var(--fi-c-border); color: var(--fi-c-text); }
+.gi-d { background: var(--fi-d-bg); border-color: var(--fi-d-border); color: var(--fi-d-text); }
+
+
+/* ================================================================
+   10. GRID — placement: grid-column, grid-row, grid-area
+================================================================ */
+
+/* ============================================
+   GRID-COLUMN / GRID-ROW
+   What it is: Places a grid item by specifying which column/row lines
+               it starts and ends at.
+   When to use: Feature cards that span multiple columns, headers,
+               hero images, editorial layouts.
+   Default value: auto (browser auto-places in the next available cell).
+   Inherited: No.
+
+   SYNTAX:
+   grid-column: 1 / 3        → start at line 1, end at line 3 (spans 2)
+   grid-column: span 2       → span 2 tracks from current position
+   grid-column: 1 / -1       → start at line 1, end at LAST line (full width!)
+   grid-row: 1 / 3           → spans 2 rows
+
+   LINE NUMBERING:
+   Grid lines are numbered from 1 (left/top) to n+1 where n = track count.
+   Negative numbers count from the end: -1 = last line, -2 = second-to-last.
+============================================ */
+
+.gp-demo {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.gp-normal { /* takes one cell — auto-placed */ }
+.gp-span2  { grid-column: span 2; }           /* spans 2 columns */
+.gp-span3  { grid-column: span 3; }           /* spans 3 columns */
+.gp-span-row { grid-row: span 2; }            /* spans 2 rows */
+
+
+/* ============================================
+   GRID-TEMPLATE-AREAS + GRID-AREA
+   What it is: Name regions of the grid and assign items to them by name.
+   When to use: Page-level layouts where semantic region names add clarity.
+               Exceptionally readable — reads like an ASCII diagram.
+   Default value: none.
+   Inherited: No.
+
+   SYNTAX:
+   Container:
+   grid-template-areas:
+     "header header header"
+     "sidebar main aside"
+     "footer footer footer";
+
+   Item:
+   grid-area: header;  ← must match a name in template-areas exactly
+
+   RULES:
+   - Each row is a quoted string
+   - All rows must have the same number of cells
+   - Named areas must be rectangular (no L-shapes)
+   - Use . for empty cells
+============================================ */
+
+.gta-layout {
+  display: grid;
+  grid-template-columns: 160px 1fr 120px;
+  grid-template-rows: 56px 160px 44px;
+  grid-template-areas:
+    "header  header  header"
+    "sidebar main    aside"
+    "footer  footer  footer";
+  /* Visually identical to the rendered result — instantly readable */
+  gap: var(--sp-2);
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+}
+
+/* Each item assigned to its named area */
+.gta-header  { grid-area: header; }
+.gta-sidebar { grid-area: sidebar; }
+.gta-main    { grid-area: main; }
+.gta-aside   { grid-area: aside; }
+.gta-footer  { grid-area: footer; }
+
+/* Shared area item style */
+.gta-header,
+.gta-sidebar,
+.gta-main,
+.gta-aside,
+.gta-footer {
+  border-radius: var(--r-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.gta-header  span, .gta-footer  span { color: var(--fi-a-text); }
+.gta-sidebar span                    { color: var(--fi-b-text); }
+.gta-main    span                    { color: var(--fi-c-text); }
+.gta-aside   span                    { color: var(--fi-d-text); }
+
+.gta-header  { background: var(--fi-a-bg); border: 1px solid var(--fi-a-border); }
+.gta-sidebar { background: var(--fi-b-bg); border: 1px solid var(--fi-b-border); }
+.gta-main    { background: var(--fi-c-bg); border: 1px solid var(--fi-c-border); }
+.gta-aside   { background: var(--fi-d-bg); border: 1px solid var(--fi-d-border); }
+.gta-footer  { background: var(--fi-a-bg); border: 1px solid var(--fi-a-border); }
+
+.gta-header code, .gta-sidebar code,
+.gta-main code, .gta-aside code, .gta-footer code {
+  font-size: 0.65rem;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  color: var(--color-text-3);
+  padding: 0;
+}
+
+
+/* ================================================================
+   11. SUBGRID
+================================================================ */
+
+/* ============================================
+   SUBGRID
+   What it is: Allows a grid item that is itself a grid container to
+               inherit its parent's track definitions instead of
+               creating new independent tracks.
+   When to use: Card grids where internal card sections (image, title,
+               desc, CTA) should align horizontally across all cards —
+               even when content lengths differ.
+   Default value: N/A (subgrid is a value, not a property).
+   Inherited: No — must be explicitly set.
+   Browser support: All modern browsers (Chrome 117+, Firefox 71+,
+               Safari 16+). As of 2024, safe to use in production.
+
+   HOW IT WORKS:
+   1. Parent defines rows (e.g., 4 tracks per card).
+   2. Each card spans 4 rows and sets grid-template-rows: subgrid.
+   3. The card's children now live in the PARENT's row tracks —
+      they align with corresponding sections in sibling cards.
+============================================ */
+
+/* The outer grid — establishes 4 row tracks that cards will share */
+.sg-outer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+/* ---- WITHOUT subgrid ---- */
+.sg-no-subgrid {
+  /* Each card is independent — their internals don't share tracks */
+  align-items: start;  /* prevent stretch from masking misalignment */
+}
+
+.sg-card-no {
+  /* A regular grid item — its children lay out in their own context */
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+/* ---- WITH subgrid ---- */
+.sg-with-subgrid {
+  /* Parent establishes row tracks: img(120px) | title(auto) | desc(1fr) | btn(44px) */
+  grid-template-rows: 120px auto 1fr 44px;
+  /* ⚠️ The parent must define the row tracks that the subgrid inherits */
+}
+
+.sg-card-yes {
+  /* Each card spans ALL 4 row tracks of the parent */
+  grid-row: span 4;
+  /* And creates its own grid using SUBGRID for those rows */
+  display: grid;
+  grid-template-rows: subgrid;
+  /* grid-template-rows: subgrid → "use the parent's row tracks for my children"
+     Now each card's children (img/title/desc/btn) live in the SAME tracks
+     as the corresponding children in every other card. Perfect alignment. */
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+/* Shared card internals — same for both no-subgrid and subgrid demos */
+.sg-card-img {
+  height: 120px;
+  background: linear-gradient(135deg, #1a3560 0%, #0d1a38 100%);
+  flex-shrink: 0;
+}
+.sg-card-img-b { background: linear-gradient(135deg, #3a1a50 0%, #1a0d38 100%); }
+.sg-card-img-c { background: linear-gradient(135deg, #1a4530 0%, #0d2818 100%); }
+
+.sg-card-title {
+  padding: var(--sp-3) var(--sp-4) 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  line-height: 1.4;
+}
+
+.sg-card-desc {
+  padding: var(--sp-2) var(--sp-4) 0;
+  font-size: 0.78rem;
+  color: var(--color-text-2);
+  line-height: 1.5;
+}
+
+.sg-card-btn {
+  margin: var(--sp-3) var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-md);
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  text-align: center;
+  align-self: stretch;
+}
+
+
+/* ================================================================
+   12. GRID — real-world dashboard
+================================================================ */
+
+/* ============================================
+   DASHBOARD LAYOUT
+   Grid strategy:
+   - 4 stat cards across the top (repeat(4, 1fr))
+   - Chart takes 3 columns (grid-column: span 3)
+   - Activity takes 1 column (auto-placed)
+   All in a single grid container with grid-template-columns: repeat(4, 1fr)
+============================================ */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-5);
+}
+
+/* Stat cards — each takes 1 column, auto-placed in first row */
+.dash-stat {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.dash-stat-inner {
+  display: flex;          /* nested flex inside a grid item */
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.dash-stat-icon {
+  font-size: 1.4rem;
+  padding: var(--sp-2);
+  background: var(--color-surface-hi);
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+}
+
+.dash-stat-label {
+  font-size: 0.72rem;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  margin-bottom: var(--sp-1);
+}
+
+.dash-stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: var(--sp-1);
+}
+
+.dash-stat-change {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.dash-up   { color: var(--color-green); }
+.dash-down { color: var(--color-rose);  }
+
+/* Chart — spans 3 of the 4 columns */
+.dash-chart {
+  grid-column: span 3;   /* takes up 3/4 of the row */
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Activity — spans 1 column (auto-fills the remaining space) */
+.dash-activity {
+  grid-column: span 1;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.dash-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+/* Simple bar chart using CSS custom properties + height */
+.dash-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  height: 120px;
+  padding-top: var(--sp-2);
+}
+
+.dash-bar {
+  flex: 1;
+  /* --bar-h set inline — the bar's height as a percentage of container */
+  height: var(--bar-h);
+  background: linear-gradient(to top, var(--color-accent), rgba(56, 189, 248, 0.3));
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0;
+  position: relative;
+}
+
+.dash-bar span {
+  position: absolute;
+  bottom: -18px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-text-3);
+}
+
+/* Activity list */
+.dash-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.dash-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.dash-activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.dot-green { background: var(--color-green); }
+.dot-blue  { background: var(--color-accent); }
+.dot-warm  { background: var(--color-accent-b); }
+
+.dash-activity-text p {
+  font-size: 0.78rem;
+  color: var(--color-text-2);
+  line-height: 1.4;
+  margin: 0 0 var(--sp-1);
+}
+.dash-activity-text p strong { color: var(--color-text-1); font-weight: 600; }
+
+.dash-activity-text span {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-3);
+}
+
+
+/* ================================================================
+   13. PAGE LAYOUT (supporting styles for the reference page itself)
+================================================================ */
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: var(--color-bg);
+  color: var(--color-text-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+p { margin-bottom: var(--sp-4); color: var(--color-text-2); line-height: 1.7; }
+p:last-child { margin-bottom: 0; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--color-border);
+}
+
+strong { font-weight: 700; color: var(--color-text-1); }
+
+/* Page header */
+.page-header {
+  background: linear-gradient(to bottom, hsl(218, 55%, 7%), hsl(218, 55%, 5%));
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--sp-16) var(--sp-8) var(--sp-12);
+  text-align: center;
+}
+
+.header-inner { max-width: 700px; margin: 0 auto; }
+
+.phase-badge {
+  display: inline-block;
+  background-color: var(--color-accent);
+  color: #082030;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-pill);
+  margin-bottom: var(--sp-4);
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: var(--sp-4);
+}
+
+.page-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.page-main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--sp-12) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+/* Part headers */
+.part-header {
+  border-left: 4px solid var(--color-accent);
+  padding: var(--sp-4) var(--sp-6);
+  background: linear-gradient(to right, rgba(56, 189, 248, 0.06), transparent);
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+}
+
+.part-header-b {
+  border-left-color: var(--color-accent-b);
+  background: linear-gradient(to right, rgba(245, 158, 11, 0.06), transparent);
+}
+
+.part-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: var(--sp-2);
+}
+
+.part-header-b .part-label { color: var(--color-accent-b); }
+
+.part-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-2);
+}
+
+.part-desc {
+  font-size: 0.92rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  max-width: 640px;
+  margin: 0;
+}
+
+/* Sections */
+.ref-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.01em;
+  padding-bottom: var(--sp-3);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.section-title code {
+  background: transparent;
+  border: none;
+  color: var(--color-accent);
+  font-size: 0.95em;
+  padding: 0;
+}
+
+/* Demo cards */
+.demo-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.demo-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+
+.demo-label code {
+  background: transparent;
+  border: none;
+  color: var(--color-accent);
+  font-size: 1em;
+  padding: 0;
+}
+
+.demo-note {
+  background-color: var(--color-code-bg);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 0.875rem;
+  color: var(--color-text-2);
+  line-height: 1.75;
+}
+
+.demo-note code {
+  background: transparent;
+  border: none;
+  color: var(--color-accent-b);
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 0;
+}
+
+.demo-note strong { color: var(--color-text-1); }
+
+.concept-box {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.concept-text {
+  font-size: 0.92rem;
+  color: var(--color-text-2);
+  line-height: 1.75;
+  margin: 0;
+}
+
+.concept-text strong { color: var(--color-text-1); }
+.concept-text code {
+  background: transparent;
+  border: none;
+  color: var(--color-code-text);
+  font-size: 0.88em;
+  padding: 0;
+}
+
+.sub-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  margin-top: var(--sp-2);
+  margin-bottom: calc(-1 * var(--sp-2));
+}
+
+/* Footer */
+.page-footer {
+  text-align: center;
+  padding: var(--sp-8);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.page-footer p { margin: 0; color: var(--color-text-3); }
+
+
+/* ================================================================
+   END OF PHASE 4 REFERENCE
+   Next up → Phase 5: Responsiveness & Adaptability
+   (Media queries, container queries, object-fit, clamp())
+================================================================ */

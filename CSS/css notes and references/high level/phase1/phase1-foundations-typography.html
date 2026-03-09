@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 1 – CSS Foundations & Typography Reference</title>
+
+    <!--
+      EXTERNAL CSS LINK
+      Purpose: Demonstrates the preferred way to include CSS — a separate .css file.
+      Related CSS: All rules live in phase1-foundations-typography.css
+      Why external? Keeps HTML (structure) and CSS (style) cleanly separated.
+               A single .css file can style many .html pages at once (reusability).
+               Browser caches the file — faster page loads on repeat visits.
+    -->
+    <link rel="stylesheet" href="phase1-foundations-typography.css" />
+
+    <!--
+      INTERNAL CSS (via <style> tag)
+      Purpose: Demonstrates the second CSS inclusion method — internal styles.
+      Related CSS: See phase1-foundations-typography.css, section "CSS Inclusion Methods"
+      When to use: Quick prototyping, email templates, or truly page-specific overrides.
+      When NOT to use: Production sites — it doesn't cache and mixes concerns.
+    -->
+    <style>
+      /* This rule is intentionally written as INTERNAL CSS to demonstrate the method. */
+      .internal-css-demo {
+        background-color: #fffbea;
+        border-left: 4px solid #f0c040;
+        padding: 0.75rem 1rem;
+        font-style: italic;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ============================================================
+         PAGE HEADER
+         Purpose: Title card for this reference document.
+         Related CSS: .page-header, .page-title, .page-subtitle
+    ============================================================ -->
+    <header class="page-header">
+      <div class="header-inner">
+        <span class="phase-badge">Phase 1</span>
+        <h1 class="page-title">CSS Foundations &amp; Typography</h1>
+        <p class="page-subtitle">
+          A permanent reference covering CSS inclusion methods, selectors,
+          color systems, and all core typography properties — richly commented
+          for use directly in VS Code.
+        </p>
+      </div>
+    </header>
+
+    <main class="page-main">
+
+      <!-- ============================================================
+           SECTION 1: CSS INCLUSION METHODS
+           Purpose: Shows all three ways to add CSS to a document.
+           Related CSS: (demonstrated here in HTML, not in .css)
+      ============================================================ -->
+      <section class="ref-section" id="inclusion-methods">
+        <h2 class="section-title">1 — CSS Inclusion Methods</h2>
+
+        <!-- Method 1: Inline -->
+        <!--
+          INLINE CSS (style attribute)
+          Purpose: Demonstrate highest-specificity, lowest-reusability CSS method.
+          Related CSS: No class needed — style applied directly on element.
+          When to use: Only when dynamically set by JavaScript, or in HTML emails.
+          When NOT to use: Almost everywhere else. Hard to maintain, impossible to override.
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Method 1 — Inline CSS</h3>
+          <p
+            style="
+              color: #c0392b;
+              font-weight: 700;
+              background: #fdf0ed;
+              padding: 0.5rem 1rem;
+              border-radius: 6px;
+              font-family: 'Courier New', monospace;
+            "
+          >
+            This paragraph uses the <code>style=""</code> attribute directly.
+            Works, but avoid in production.
+          </p>
+          <p class="demo-note">
+            ⚠️ Inline styles have the highest specificity of all (short of
+            <code>!important</code>), making them very hard to override later.
+          </p>
+        </div>
+
+        <!-- Method 2: Internal -->
+        <!--
+          INTERNAL CSS (<style> tag in <head>)
+          Purpose: Demonstrate per-page embedded styles.
+          Related CSS: .internal-css-demo defined in the <style> tag above.
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Method 2 — Internal CSS</h3>
+          <p class="internal-css-demo">
+            This paragraph is styled by an internal <code>&lt;style&gt;</code>
+            tag in the <code>&lt;head&gt;</code> of this HTML file.
+          </p>
+          <p class="demo-note">
+            ⚠️ Internal styles apply to only <em>this</em> page and are not
+            cached by the browser separately.
+          </p>
+        </div>
+
+        <!-- Method 3: External -->
+        <!--
+          EXTERNAL CSS (<link rel="stylesheet">)
+          Purpose: The gold standard — CSS lives in a dedicated .css file.
+          Related CSS: Everything in phase1-foundations-typography.css
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Method 3 — External CSS ✅ Recommended</h3>
+          <p class="highlight-box">
+            This entire page is styled via an external
+            <code>phase1-foundations-typography.css</code> file, linked in the
+            <code>&lt;head&gt;</code>. This is the standard for all real
+            projects.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 2: BASIC SELECTORS
+           Purpose: Demonstrate element, class, ID, and universal selectors.
+           Related CSS: Section "BASIC SELECTORS" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="selectors">
+        <h2 class="section-title">2 — Basic Selectors</h2>
+
+        <!--
+          ELEMENT SELECTOR
+          Purpose: Shows a rule targeting every <p> element.
+          Related CSS: p {} in stylesheet (scoped via .selectors-demo here)
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Element Selector — <code>p {}</code></h3>
+          <div class="selectors-demo">
+            <p>
+              This paragraph is targeted by the element selector
+              <code>p</code>. Every paragraph on the page shares this base
+              style.
+            </p>
+            <p>
+              So does this one — element selectors are broad and low-specificity.
+            </p>
+          </div>
+          <p class="demo-note">
+            Use element selectors for site-wide defaults (like resetting margins
+            or setting base font size). Avoid for component-level styling.
+          </p>
+        </div>
+
+        <!--
+          CLASS SELECTOR
+          Purpose: The everyday workhorse. Reusable, composable.
+          Related CSS: .btn-primary, .btn-secondary in .css file
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            Class Selector — <code>.class-name {}</code>
+          </h3>
+          <div class="button-row">
+            <button class="btn btn-primary">Primary Button</button>
+            <button class="btn btn-secondary">Secondary Button</button>
+            <button class="btn btn-ghost">Ghost Button</button>
+          </div>
+          <p class="demo-note">
+            Classes are the recommended way to style almost everything. They
+            are reusable (<code>.btn</code> appears on all three), composable
+            (combine <code>.btn</code> + <code>.btn-primary</code>), and have
+            mid-level specificity.
+          </p>
+        </div>
+
+        <!--
+          ID SELECTOR
+          Purpose: Targets a single unique element. Use sparingly.
+          Related CSS: #unique-hero in .css file
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            ID Selector — <code>#id-name {}</code>
+          </h3>
+          <div id="unique-hero">
+            <strong>#unique-hero</strong> — This element has an ID selector
+            applied. There should only ever be one element with this ID on the
+            page.
+          </div>
+          <p class="demo-note">
+            ⚠️ ID selectors have very high specificity, making them hard to
+            override. Prefer classes for styling. Reserve IDs for JavaScript
+            hooks or anchor links (<code>href="#section"</code>).
+          </p>
+        </div>
+
+        <!--
+          UNIVERSAL SELECTOR
+          Purpose: Targets every single element. Mainly used for resets.
+          Related CSS: * {} shown in .css comment section
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            Universal Selector — <code>* {}</code>
+          </h3>
+          <div class="universal-demo">
+            <span>span</span>
+            <em>em</em>
+            <strong>strong</strong>
+            <code>code</code>
+          </div>
+          <p class="demo-note">
+            The universal selector <code>*</code> targets everything. Most
+            commonly used in the global reset:
+            <code>*, *::before, *::after &#123; box-sizing: border-box; &#125;</code>.
+            Avoid for general styling — it's too broad.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 3: COLOR SYSTEMS
+           Purpose: Demonstrate all four color syntaxes.
+           Related CSS: Section "COLOR SYSTEMS" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="color-systems">
+        <h2 class="section-title">3 — Color Systems</h2>
+
+        <!--
+          NAMED COLORS
+          Purpose: Show browser-defined keyword colors.
+          Related CSS: .color-swatch-named
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">Named Colors</h3>
+          <div class="swatch-row">
+            <div class="color-swatch" style="background: tomato;">
+              <span>tomato</span>
+            </div>
+            <div class="color-swatch" style="background: steelblue;">
+              <span>steelblue</span>
+            </div>
+            <div class="color-swatch" style="background: mediumseagreen;">
+              <span>mediumseagreen</span>
+            </div>
+            <div class="color-swatch" style="background: goldenrod;">
+              <span>goldenrod</span>
+            </div>
+            <div class="color-swatch" style="background: mediumpurple;">
+              <span>mediumpurple</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            147 named colors exist in CSS. Great for quick prototyping or
+            teaching. Avoid in production — hard to manage precise branding
+            through names alone.
+          </p>
+        </div>
+
+        <!--
+          HEX COLORS
+          Purpose: Show the most common production color format.
+          Related CSS: .color-swatch-hex
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">HEX Colors — <code>#RRGGBB</code></h3>
+          <div class="swatch-row">
+            <div class="color-swatch hex-1"><span>#1a1a2e</span></div>
+            <div class="color-swatch hex-2"><span>#e94560</span></div>
+            <div class="color-swatch hex-3"><span>#0f3460</span></div>
+            <div class="color-swatch hex-4"><span>#f5f5f5</span></div>
+            <div class="color-swatch hex-5"><span>#16213e</span></div>
+          </div>
+          <p class="demo-note">
+            HEX is the most common format in design tools (Figma, etc.). Use
+            <code>#RRGGBBAA</code> for transparency (last 2 digits = alpha).
+            Example: <code>#e9456080</code> = 50% transparent red.
+          </p>
+        </div>
+
+        <!--
+          RGB / RGBA
+          Purpose: Show functional color notation, especially alpha transparency.
+          Related CSS: .overlay-demo
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            RGB / RGBA — <code>rgba(r, g, b, alpha)</code>
+          </h3>
+          <div class="rgba-demo-grid">
+            <!--
+              RGBA OVERLAY DEMO
+              Purpose: Show alpha transparency stacking over an image.
+              Related CSS: .rgba-overlay
+            -->
+            <div class="rgba-swatch" style="background: rgb(231, 76, 60);">
+              <span>rgb(231, 76, 60)</span>
+            </div>
+            <div class="rgba-swatch" style="background: rgba(231, 76, 60, 0.7);">
+              <span>rgba(231, 76, 60, 0.7)</span>
+            </div>
+            <div class="rgba-swatch" style="background: rgba(231, 76, 60, 0.4);">
+              <span>rgba(231, 76, 60, 0.4)</span>
+            </div>
+            <div class="rgba-swatch" style="background: rgba(231, 76, 60, 0.1);">
+              <span>rgba(231, 76, 60, 0.1)</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            Use <code>rgba()</code> when you need transparency — overlays,
+            semi-transparent backgrounds, shadow tints. Alpha is
+            <code>0</code> (invisible) to <code>1</code> (fully opaque).
+          </p>
+        </div>
+
+        <!--
+          HSL / HSLA
+          Purpose: The most human-readable color system. Best for palettes.
+          Related CSS: .hsl-palette
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            HSL / HSLA — <code>hsl(hue, saturation%, lightness%)</code>
+          </h3>
+          <div class="swatch-row">
+            <div class="color-swatch" style="background: hsl(210, 70%, 25%);">
+              <span>hsl(210,70%,25%)</span>
+            </div>
+            <div class="color-swatch" style="background: hsl(210, 70%, 40%);">
+              <span>hsl(210,70%,40%)</span>
+            </div>
+            <div class="color-swatch" style="background: hsl(210, 70%, 55%);">
+              <span>hsl(210,70%,55%)</span>
+            </div>
+            <div class="color-swatch" style="background: hsl(210, 70%, 70%);">
+              <span>hsl(210,70%,70%)</span>
+            </div>
+            <div class="color-swatch" style="background: hsl(210, 70%, 85%);">
+              <span>hsl(210,70%,85%)</span>
+            </div>
+          </div>
+          <p class="demo-note">
+            HSL shines for building palettes: keep hue and saturation constant,
+            only vary lightness to get shades. Hue is 0–360° (color wheel),
+            saturation 0%=gray→100%=vivid, lightness 0%=black→100%=white.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECTION 4: TYPOGRAPHY
+           Purpose: Demonstrate all core font and text properties.
+           Related CSS: Section "TYPOGRAPHY" in .css file
+      ============================================================ -->
+      <section class="ref-section" id="typography">
+        <h2 class="section-title">4 — Typography Properties</h2>
+
+        <!--
+          FONT-FAMILY
+          Purpose: Demonstrate font stacks with fallbacks.
+          Related CSS: .font-serif, .font-sans, .font-mono
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>font-family</code> — Font Stacks
+          </h3>
+          <p class="font-serif">
+            Serif stack: <code>Georgia, 'Times New Roman', Times, serif</code>
+            — used for editorial, editorial, or long-form reading.
+          </p>
+          <p class="font-sans">
+            Sans-serif stack:
+            <code>'Helvetica Neue', Arial, sans-serif</code> — clean, modern
+            UI default.
+          </p>
+          <p class="font-mono">
+            Monospace stack:
+            <code>'Courier New', Courier, monospace</code> — for code, data,
+            terminals.
+          </p>
+          <p class="demo-note">
+            Always end your stack with a generic family:
+            <code>serif</code>, <code>sans-serif</code>, <code>monospace</code>,
+            <code>cursive</code>, or <code>fantasy</code>. The browser uses it
+            as a last resort if all named fonts fail to load.
+          </p>
+        </div>
+
+        <!--
+          FONT-SIZE
+          Purpose: Show px, rem, em, and % sizing side by side.
+          Related CSS: .font-size-demo span classes
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label"><code>font-size</code> — Sizing Units</h3>
+          <div class="font-size-demo">
+            <p class="fs-12px">12px — Absolute pixel size. Captions, fine print.</p>
+            <p class="fs-16px">16px — Browser default body text size.</p>
+            <p class="fs-1rem">1rem — Same as 16px if root is default. Scales with user prefs.</p>
+            <p class="fs-1-25rem">1.25rem — Slightly larger. Subheadings.</p>
+            <p class="fs-2rem">2rem — Section titles.</p>
+            <p class="fs-3rem">3rem — Hero headings.</p>
+          </div>
+          <p class="demo-note">
+            ⚠️ Prefer <code>rem</code> over <code>px</code> for font sizes.
+            <code>rem</code> respects the user's browser font-size preferences
+            (accessibility), while <code>px</code> overrides them. Reserve
+            <code>px</code> for borders and fixed-pixel layouts.
+          </p>
+        </div>
+
+        <!--
+          FONT-WEIGHT
+          Purpose: Show all common weight values.
+          Related CSS: .fw-* classes
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>font-weight</code> — Light to Black
+          </h3>
+          <div class="weight-demo">
+            <p class="fw-300">300 — Light. Elegant, airy headings.</p>
+            <p class="fw-400">400 — Normal (default). Body text.</p>
+            <p class="fw-500">500 — Medium. Slightly emphasized UI labels.</p>
+            <p class="fw-600">600 — Semibold. Navigation, subheadings.</p>
+            <p class="fw-700">700 — Bold. Strong emphasis, CTAs.</p>
+            <p class="fw-900">900 — Black/Extra Bold. Impactful display text.</p>
+          </div>
+          <p class="demo-note">
+            Numeric weights (100–900 in steps of 100) require the loaded font
+            to actually support those weights. If a weight isn't available, the
+            browser picks the nearest one. Google Fonts lets you select
+            specific weights on import.
+          </p>
+        </div>
+
+        <!--
+          TEXT-ALIGN
+          Purpose: Show alignment options with real article-style content.
+          Related CSS: .align-left, .align-center, .align-right, .align-justify
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>text-align</code> — Text Alignment
+          </h3>
+          <div class="align-demo-grid">
+            <div class="align-box">
+              <p class="align-label">left (default)</p>
+              <p class="align-left">
+                Text aligned to the left edge of its container. The standard
+                for body copy in left-to-right languages.
+              </p>
+            </div>
+            <div class="align-box">
+              <p class="align-label">center</p>
+              <p class="align-center">
+                Centered text. Use for headings, hero text, card titles,
+                and short labels — not long paragraphs.
+              </p>
+            </div>
+            <div class="align-box">
+              <p class="align-label">right</p>
+              <p class="align-right">
+                Right-aligned. Useful for numeric table columns,
+                timestamps, or RTL language support.
+              </p>
+            </div>
+            <div class="align-box">
+              <p class="align-label">justify</p>
+              <p class="align-justify">
+                Justified text stretches each line to fill the container.
+                Used in print-style layouts and newspapers. Can create
+                awkward spacing gaps in narrow columns.
+              </p>
+            </div>
+          </div>
+          <p class="demo-note">
+            ⚠️ Avoid <code>justify</code> on narrow containers or responsive
+            layouts — it creates uneven word spacing ("rivers of white space")
+            that harms readability.
+          </p>
+        </div>
+
+        <!--
+          LINE-HEIGHT
+          Purpose: Show the impact of line-height on readability.
+          Related CSS: .lh-tight, .lh-normal, .lh-relaxed, .lh-loose
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">
+            <code>line-height</code> — Leading / Vertical Rhythm
+          </h3>
+          <div class="line-height-grid">
+            <div class="lh-box">
+              <p class="lh-label">line-height: 1 (tight)</p>
+              <p class="lh-1">
+                This text has a line-height of 1, meaning lines are packed
+                tightly. Good only for large display headings where you want
+                dramatic closeness.
+              </p>
+            </div>
+            <div class="lh-box">
+              <p class="lh-label">line-height: 1.5 ✅ Body text sweet spot</p>
+              <p class="lh-1-5">
+                A unitless value of 1.5 means each line is 1.5× the
+                font-size. This is the WCAG accessibility recommendation for
+                body text. Comfortable to read.
+              </p>
+            </div>
+            <div class="lh-box">
+              <p class="lh-label">line-height: 2 (loose)</p>
+              <p class="lh-2">
+                A value of 2 creates very open spacing between lines.
+                Sometimes used in educational content, legal text, or UI
+                components that need breathing room.
+              </p>
+            </div>
+          </div>
+          <p class="demo-note">
+            ⚠️ Always use <strong>unitless values</strong> (e.g., <code>1.5</code>
+            not <code>24px</code> or <code>150%</code>) for
+            <code>line-height</code>. Unitless values scale proportionally with
+            the font-size of each element. Fixed units can break when nested
+            elements have different font sizes.
+          </p>
+        </div>
+
+        <!-- TYPOGRAPHY: Real-world article demo -->
+        <!--
+          ARTICLE TYPOGRAPHY DEMO
+          Purpose: Show all typography properties working together in a realistic
+                   article card layout — not isolated boxes.
+          Related CSS: .article-demo and its children
+        -->
+        <div class="demo-card">
+          <h3 class="demo-label">🗞 Real-World Example — Article Card</h3>
+          <article class="article-demo">
+            <span class="article-tag">Technology</span>
+            <h2 class="article-title">
+              Why Good Typography Is the Foundation of Every Great Design
+            </h2>
+            <p class="article-meta">
+              By <strong>Ada Lovelace</strong> &middot; March 8, 2026
+            </p>
+            <p class="article-body">
+              Typography is far more than choosing a pretty font. It's the
+              invisible architecture that guides readers through content,
+              signals hierarchy, sets emotional tone, and — most critically —
+              determines whether your text is actually readable at all.
+            </p>
+            <p class="article-body">
+              Properties like <code>font-size</code>, <code>line-height</code>,
+              and <code>letter-spacing</code> interact with each other in ways
+              that a single property alone cannot reveal. The goal is always
+              harmonic rhythm: text that feels natural to read, not text that
+              is <em>technically</em> styled.
+            </p>
+            <a class="article-link" href="#">Continue reading →</a>
+          </article>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- ============================================================
+         PAGE FOOTER
+         Purpose: Wraps the page. Shows font-family in a footer context.
+         Related CSS: .page-footer
+    ============================================================ -->
+    <footer class="page-footer">
+      <p>
+        CSS Reference — Phase 1: Foundations &amp; Typography &nbsp;|&nbsp;
+        All examples are self-contained and browser-renderable.
+      </p>
+    </footer>
+  </body>
+</html>

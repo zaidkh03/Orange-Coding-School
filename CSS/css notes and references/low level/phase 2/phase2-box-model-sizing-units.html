@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Phase 2 — CSS Box Model & Sizing Units</title>
+
+<!-- 
+  EXTERNAL STYLESHEET
+  Purpose: Demonstrates best practice CSS inclusion
+-->
+<link rel="stylesheet" href="phase2-box-model-sizing-units.css">
+
+</head>
+
+<body>
+
+<header class="page-header">
+
+<!-- 
+  ELEMENT: h1
+  Purpose: Section title
+  Related CSS: typography, spacing
+-->
+<h1>CSS Phase 2: Box Model & Sizing Units</h1>
+
+<p class="subtitle">
+Understanding how every HTML element becomes a measurable box.
+</p>
+
+</header>
+
+
+
+<section class="section">
+
+<h2>The CSS Box Model</h2>
+
+<!-- 
+  BOX MODEL DEMONSTRATION
+  Purpose: Shows the relationship between content, padding, border, and margin
+  Related CSS: width, padding, border, margin
+-->
+<div class="box-model-demo">
+  <p>This box demonstrates content → padding → border → margin.</p>
+</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Width & Height</h2>
+
+<!-- 
+  FIXED SIZE BOX
+  Purpose: Demonstrates fixed dimensions
+  Related CSS: width, height
+-->
+<div class="fixed-box">
+  Fixed Size Box
+</div>
+
+<!-- 
+  FLUID WIDTH BOX
+  Purpose: Demonstrates percentage-based sizing
+  Related CSS: width: %
+-->
+<div class="fluid-box">
+  Fluid width box (50% of parent)
+</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Padding vs Margin</h2>
+
+<!-- 
+  PADDING DEMO
+  Purpose: Shows inner spacing
+  Related CSS: padding
+-->
+<div class="padding-demo">
+  Padding creates space inside the element.
+</div>
+
+<!-- 
+  MARGIN DEMO
+  Purpose: Shows outer spacing between elements
+  Related CSS: margin
+-->
+<div class="margin-demo">
+  Margin pushes elements away from each other.
+</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Border Styles</h2>
+
+<!-- 
+  BORDER DEMO
+  Purpose: Demonstrates border styles
+  Related CSS: border
+-->
+<div class="border-demo solid">Solid Border</div>
+<div class="border-demo dashed">Dashed Border</div>
+<div class="border-demo dotted">Dotted Border</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Box Sizing Comparison</h2>
+
+<!-- 
+  CONTENT-BOX
+  Purpose: Demonstrates default browser sizing behavior
+  Related CSS: box-sizing
+-->
+<div class="content-box">
+Content-box sizing
+</div>
+
+<!-- 
+  BORDER-BOX
+  Purpose: Demonstrates modern recommended sizing
+  Related CSS: box-sizing: border-box
+-->
+<div class="border-box">
+Border-box sizing
+</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Units of Measurement</h2>
+
+<!-- 
+  PX UNIT
+  Purpose: Demonstrates fixed pixel units
+-->
+<div class="unit-box px-unit">
+  px unit
+</div>
+
+<!-- 
+  REM UNIT
+  Purpose: Demonstrates scalable root-based sizing
+-->
+<div class="unit-box rem-unit">
+  rem unit
+</div>
+
+<!-- 
+  EM UNIT
+  Purpose: Demonstrates parent-relative sizing
+-->
+<div class="unit-box em-parent">
+
+  Parent (font-size:20px)
+
+  <div class="em-child">
+  em unit child
+  </div>
+
+</div>
+
+</section>
+
+
+
+<section class="section">
+
+<h2>Viewport Units</h2>
+
+<!-- 
+  VIEWPORT HEIGHT DEMO
+  Purpose: Demonstrates vh/vw behavior
+-->
+<div class="viewport-demo">
+Viewport Height Example (50vh)
+</div>
+
+</section>
+
+
+
+<footer class="footer">
+
+<p>End of Phase 2 Reference</p>
+
+</footer>
+
+</body>
+</html>

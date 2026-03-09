@@ -1,0 +1,1733 @@
+/* ================================================================
+   PHASE 5 — RESPONSIVENESS & ADAPTABILITY
+   File: phase5-responsiveness.css
+   Companion to: phase5-responsiveness.html
+
+   PURPOSE: A permanent, richly-commented reference covering:
+   - @media queries (min-width, max-width, range syntax)
+   - Non-width media features (prefers-color-scheme, prefers-reduced-motion,
+     hover, orientation)
+   - @container queries (container-type, container-name, @container)
+   - Container query units (cqi, cqb, cqw, cqh)
+   - clamp(), min(), max() — fluid sizing functions
+   - object-fit (fill, contain, cover, none, scale-down)
+   - object-position
+
+   COMMENTING CONVENTION:
+   ┌─────────────────────────────────────────┐
+   │  PROPERTY / AT-RULE NAME                │
+   │  What it is:   one-sentence description │
+   │  When to use:  practical scenario       │
+   │  Default:      browser default value    │
+   │  Inherited:    yes / no                 │
+   └─────────────────────────────────────────┘
+================================================================ */
+
+
+/* ================================================================
+   TABLE OF CONTENTS
+   1.  GLOBAL RESET & ROOT VARIABLES
+   2.  MEDIA QUERIES — min-width (mobile-first)
+   3.  MEDIA QUERIES — max-width (desktop-first)
+   4.  MEDIA QUERIES — range syntax
+   5.  MEDIA QUERIES — non-width features
+   6.  CONTAINER QUERIES — container-type, @container
+   7.  CONTAINER QUERY UNITS — cqi, cqb, cqw
+   8.  CLAMP() — fluid sizing function
+   9.  MIN() AND MAX()
+   10. OBJECT-FIT
+   11. OBJECT-POSITION
+   12. PAGE LAYOUT (supporting styles)
+   13. REAL-WORLD BLOG LAYOUT DEMO
+================================================================ */
+
+
+/* ================================================================
+   1. GLOBAL RESET & ROOT VARIABLES
+================================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Colors */
+  --color-bg:          #07090f;
+  --color-surface:     #0c1020;
+  --color-surface-alt: #101828;
+  --color-surface-hi:  #162035;
+  --color-border:      #1c2840;
+  --color-border-hi:   #263855;
+
+  --color-accent:      #6ee7b7;   /* mint green */
+  --color-accent-dim:  rgba(110, 231, 183, 0.12);
+  --color-accent-b:    #818cf8;   /* indigo */
+  --color-accent-b-dim:rgba(129, 140, 248, 0.12);
+  --color-warm:        #fbbf24;   /* amber */
+  --color-warm-dim:    rgba(251, 191, 36, 0.12);
+  --color-rose:        #f87171;   /* red */
+  --color-rose-dim:    rgba(248, 113, 113, 0.12);
+  --color-sky:         #38bdf8;   /* sky */
+
+  --color-text-1:      #e2eaf8;
+  --color-text-2:      #748aac;
+  --color-text-3:      #304060;
+  --color-code-bg:     #050810;
+  --color-code-text:   #6ee7b7;
+
+  /* Spacing */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+
+  /* Radii */
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   14px;
+  --r-xl:   20px;
+  --r-pill: 999px;
+
+  /* Typography */
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+}
+
+
+/* ================================================================
+   2. MEDIA QUERIES — min-width (mobile-first)
+================================================================ */
+
+/* ============================================
+   @MEDIA (MIN-WIDTH)
+   What it is: A conditional CSS block applied when the viewport is
+               AT LEAST the specified width.
+   When to use: Mobile-first development — write base styles for mobile,
+               then progressively enhance for larger screens.
+   Default value: N/A — media queries are boolean (applies or not).
+   Inherited: N/A — a rule wrapper, not a property.
+
+   SYNTAX:
+   @media (min-width: 768px) { ... }
+   — OR with the & nesting operator (Phase 8) —
+   .selector { @media (min-width: 768px) { ... } }
+
+   MOBILE-FIRST PHILOSOPHY:
+   Base CSS (outside all queries) = mobile styles.
+   Add @media (min-width) layers for each larger breakpoint.
+   You ADD complexity as screens grow — you never strip it away.
+   This means the browser on a small device parses less CSS.
+
+   ⚠️ NOTE: "Mobile-first" is a CSS cascade strategy, not just a
+            design philosophy. The cascade means later rules win.
+            Since min-width queries layer up, larger screens always
+            have access to all the mobile styles too — they just have
+            extra rules applied on top.
+============================================ */
+
+/* THE RESPONSIVE MEDIA QUERY GRID
+   Base: 1 column (mobile)
+   ≥ 600px: 2 columns (tablet)
+   ≥ 900px: 4 columns (laptop+)
+*/
+
+.mq-grid {
+  display: grid;
+  /* BASE (mobile): single column — no media query needed */
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+}
+
+/* ── First breakpoint: ≥ 600px ─────────────────────────────── */
+@media (min-width: 600px) {
+  .mq-grid {
+    /* At ≥ 600px, switch to 2 columns */
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Second breakpoint: ≥ 900px ────────────────────────────── */
+@media (min-width: 900px) {
+  .mq-grid {
+    /* At ≥ 900px, switch to 4 columns */
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Third breakpoint: ≥ 1200px ────────────────────────────── */
+@media (min-width: 1200px) {
+  /* Wider max-width on the page at large screens */
+  .page-main {
+    max-width: 1100px;
+  }
+}
+
+/* Responsive indicator dots — show which breakpoint is active */
+.mq-live-bar {
+  display: flex;
+  gap: var(--sp-6);
+  padding: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  flex-wrap: wrap;
+}
+
+.mq-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-3);
+  text-align: center;
+}
+
+.mq-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-border-hi);
+  border: 2px solid var(--color-border-hi);
+  transition: all 0.3s ease;
+}
+
+/* Default: xs dot is active */
+.mq-dot-xs { background: var(--color-accent); border-color: var(--color-accent); }
+
+/* At ≥ 600px: sm dot lights up */
+@media (min-width: 600px) {
+  .mq-dot-sm { background: var(--color-accent); border-color: var(--color-accent); }
+  .mq-label-sm { color: var(--color-accent); }
+}
+
+/* At ≥ 900px: md dot lights up */
+@media (min-width: 900px) {
+  .mq-dot-md { background: var(--color-accent); border-color: var(--color-accent); }
+  .mq-label-md { color: var(--color-accent); }
+}
+
+/* At ≥ 1200px: lg dot lights up */
+@media (min-width: 1200px) {
+  .mq-dot-lg { background: var(--color-accent); border-color: var(--color-accent); }
+  .mq-label-lg { color: var(--color-accent); }
+}
+
+/* mq-card — the responsive card used in the grid demo */
+.mq-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.mq-card-icon { font-size: 1.4rem; }
+
+.mq-card h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.mq-card p {
+  font-size: 0.8rem;
+  color: var(--color-text-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
+
+/* ================================================================
+   3. MEDIA QUERIES — max-width (desktop-first)
+================================================================ */
+
+/* ============================================
+   @MEDIA (MAX-WIDTH)
+   What it is: A conditional block applied when the viewport is
+               AT MOST the specified width.
+   When to use: Desktop-first codebases, targeted small-screen fixes,
+               or when adding a specific mobile exception.
+   Default value: N/A.
+   Inherited: N/A.
+   ⚠️ NOTE: One of the most common specificity traps — if your
+            min-width and max-width queries overlap, you can get
+            unexpected conflicts. Use one strategy consistently.
+            For new projects: min-width. For legacy: max-width.
+============================================ */
+
+.mq-max-demo {
+  position: relative;
+  height: 80px;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.mq-max-box {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  opacity: 0;       /* hidden by default */
+  transition: opacity 0.3s ease;
+}
+
+/* The default (desktop) layer — visible at all sizes */
+.mq-max-lg {
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  opacity: 1;
+}
+
+/* Override at ≤ 900px */
+@media (max-width: 900px) {
+  .mq-max-lg { opacity: 0; }
+  .mq-max-md {
+    opacity: 1;
+    background: var(--color-accent-b-dim);
+    border: 1px solid var(--color-accent-b);
+    color: var(--color-accent-b);
+  }
+}
+
+/* Override at ≤ 600px */
+@media (max-width: 600px) {
+  .mq-max-md { opacity: 0; }
+  .mq-max-sm {
+    opacity: 1;
+    background: var(--color-warm-dim);
+    border: 1px solid var(--color-warm);
+    color: var(--color-warm);
+  }
+}
+
+
+/* ================================================================
+   4. MEDIA QUERIES — range syntax (Level 4)
+================================================================ */
+
+/* ============================================
+   RANGE SYNTAX
+   What it is: A newer, cleaner syntax for expressing media query ranges.
+   When to use: When targeting a specific range of viewport widths
+               without writing @media (min-width) and (max-width).
+   Browser support: All modern browsers (Chrome 113+, Firefox 63+,
+               Safari 16.4+). Safe for production.
+   Inherited: N/A.
+
+   OLD syntax:
+   @media (min-width: 600px) and (max-width: 899px) { ... }
+
+   NEW range syntax:
+   @media (600px <= width < 900px) { ... }
+   — Much more readable, behaves identically.
+
+   Also valid:
+   @media (width >= 600px) { ... }   ← same as min-width: 600px
+   @media (width < 900px)  { ... }   ← same as max-width: 899px
+============================================ */
+
+.mq-range-demo {
+  position: relative;
+  height: 80px;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.mq-range-box {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* xs: width < 600px */
+@media (width < 600px) {
+  .mq-range-xs {
+    opacity: 1;
+    background: var(--color-warm-dim);
+    border: 1px solid var(--color-warm);
+    color: var(--color-warm);
+  }
+}
+
+/* sm: 600px ≤ width < 900px */
+@media (600px <= width < 900px) {
+  .mq-range-sm {
+    opacity: 1;
+    background: var(--color-accent-dim);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
+/* md: 900px ≤ width < 1200px */
+@media (900px <= width < 1200px) {
+  .mq-range-md {
+    opacity: 1;
+    background: var(--color-accent-b-dim);
+    border: 1px solid var(--color-accent-b);
+    color: var(--color-accent-b);
+  }
+}
+
+/* lg: width ≥ 1200px */
+@media (width >= 1200px) {
+  .mq-range-lg {
+    opacity: 1;
+    background: var(--color-rose-dim);
+    border: 1px solid var(--color-rose);
+    color: var(--color-rose);
+  }
+}
+
+
+/* ================================================================
+   5. MEDIA QUERIES — non-width features
+================================================================ */
+
+/* ============================================
+   PREFERS-COLOR-SCHEME
+   What it is: Detects the user's OS/browser color mode preference.
+   When to use: Always provide a dark mode via this media feature —
+               it's a strong accessibility and UX expectation.
+   Values: light | dark
+   Inherited: N/A.
+   ⚠️ NOTE: You can also implement dark mode with a CSS class
+            (.dark on <html>) for JS-controlled toggling. Using the
+            media query alone respects OS preference automatically.
+============================================ */
+
+/* prefers-color-scheme demo boxes */
+.mq-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+.mq-feature-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.mq-feat-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  margin: 0;
+}
+
+.mq-scheme-demo {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.scheme-box {
+  flex: 1;
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.scheme-light {
+  background: #f8fafc;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  opacity: 0.5;  /* dimmed — we're in dark mode */
+}
+
+.scheme-dark {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #1e293b;
+  /* Active in dark mode — this is what we're demonstrating */
+}
+
+/* ============================================
+   PREFERS-REDUCED-MOTION
+   What it is: Detects if the user has requested reduced animation.
+   When to use: ALWAYS. Wrap all non-essential animations in a
+               check for this preference.
+   Values: no-preference | reduce
+   Inherited: N/A.
+   ⚠️ ACCESSIBILITY: Vestibular disorders, epilepsy, and motion
+            sensitivity make certain animations harmful. This is not
+            optional — it's an accessibility requirement (WCAG 2.1).
+   PATTERN: Write animations first. Remove them under reduce:
+            @media (prefers-reduced-motion: reduce) {
+              .animated { animation: none; transition: none; }
+            }
+============================================ */
+
+.mq-motion-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+}
+
+.motion-box {
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-pill);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* The animation — runs normally by default */
+.motion-animated {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(110, 231, 183, 0); }
+  50%       { box-shadow: 0 0 0 8px rgba(110, 231, 183, 0.2); }
+}
+
+/* ⚠️ CRITICAL: Respect user's motion preference — ALWAYS add this */
+@media (prefers-reduced-motion: reduce) {
+  .motion-animated {
+    animation: none;   /* kill the animation entirely */
+    /* OR: animation-duration: 0.01ms; — preserves JS events but invisible */
+  }
+
+  /* Global rule for your whole codebase — put this in your base reset */
+  *, *::before, *::after {
+    /* This broad rule is safe — it doesn't remove transitions needed
+       for non-motion state changes (like color/opacity on focus). */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    /* ⚠️ The !important is intentional here — override any specificity */
+  }
+}
+
+/* ============================================
+   HOVER MEDIA FEATURE
+   What it is: Detects if the primary pointing device can hover.
+   When to use: Guard touch-only interactions — don't rely on :hover
+               for critical functionality if hover: none is possible.
+   Values: hover | none
+   Inherited: N/A.
+   ⚠️ NOTE: Touch devices report hover: none. Hybrid devices (iPad with
+            mouse) report hover: hover. Don't assume hover: none = mobile.
+============================================ */
+
+.mq-hover-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+}
+
+.hover-box {
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--color-surface-hi);
+  border: 1px solid var(--color-border-hi);
+  border-radius: var(--r-md);
+  font-size: 0.82rem;
+  color: var(--color-text-2);
+  font-family: var(--font-mono);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Only apply hover styles when the device CAN hover */
+@media (hover: hover) {
+  .hover-box:hover {
+    background: var(--color-accent-dim);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
+/* ============================================
+   ORIENTATION MEDIA FEATURE
+   What it is: Detects if the viewport is portrait or landscape.
+   When to use: Tablet layouts that need to reflow on rotation.
+               Rarely needed — usually viewport-width queries are better.
+   Values: portrait | landscape
+   Inherited: N/A.
+============================================ */
+
+.mq-orient-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+}
+
+.orient-box {
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.orient-portrait {
+  display: none;
+  color: var(--color-warm);
+}
+
+.orient-landscape {
+  display: inline;
+  color: var(--color-accent-b);
+}
+
+@media (orientation: portrait) {
+  .orient-portrait  { display: inline; }
+  .orient-landscape { display: none; }
+}
+
+.mq-feature-card code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-code-text);
+  background: var(--color-code-bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--color-border);
+  display: block;
+}
+
+
+/* ================================================================
+   6. CONTAINER QUERIES
+================================================================ */
+
+/* ============================================
+   CONTAINER QUERIES
+   What it is: Component-level media queries — conditions based on
+               the size of a PARENT CONTAINER, not the viewport.
+   When to use: When the same component appears in multiple contexts
+               at different sizes (sidebar, main content, drawer).
+               When your component should be self-contained and
+               not aware of the viewport.
+   Default value: N/A — opt-in via container-type.
+   Inherited: No.
+
+   TWO REQUIRED STEPS:
+   Step 1 — On the parent: declare it a container
+     container-type: inline-size;
+     container-name: my-container;  (optional — for named @container)
+
+   Step 2 — On the component: query the container
+     @container (min-width: 400px) { .component { ... } }
+     @container my-container (min-width: 400px) { .component { ... } }
+
+   CONTAINER-TYPE VALUES:
+   inline-size  → enables width-based containment (most common)
+   size         → enables both width AND height containment
+   normal       → default — no containment (not a container)
+
+   ⚠️ NOTE: The container cannot query ITSELF — it must be the parent.
+            You cannot put container-type on the card and then query
+            the card's own width. The PARENT must declare containment.
+============================================ */
+
+/* The wrapper IS the container */
+.cq-wrapper {
+  container-type: inline-size;
+  /* This is the key declaration — this element is now a container.
+     Any @container query inside it responds to THIS element's width. */
+  container-name: card-slot;
+  /* Optional name — allows @container card-slot (min-width: …)
+     to target only this specific container, not any ancestor. */
+
+  background: var(--color-code-bg);
+  border: 1px dashed var(--color-border-hi);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.cq-demo-row {
+  display: grid;
+  grid-template-columns: 240px 380px 1fr;
+  gap: var(--sp-5);
+  overflow-x: auto;
+}
+
+/* Different container widths to demo at */
+.cq-wrapper-narrow { width: 240px; flex-shrink: 0; }
+.cq-wrapper-mid    { width: 380px; flex-shrink: 0; }
+.cq-wrapper-wide   { /* fills remaining space */ }
+
+.cq-width-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-3);
+  text-align: center;
+  margin-bottom: var(--sp-3);
+}
+
+/* ---- THE CARD COMPONENT ---- */
+/* Base style: vertical (mobile/narrow) layout */
+.cq-card {
+  display: flex;
+  flex-direction: column;  /* stacked by default */
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.cq-card-img {
+  height: 120px;
+  background: linear-gradient(135deg, #0d2a40 0%, #1a3a50 100%);
+  flex-shrink: 0;
+}
+
+.cq-card-body {
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.cq-card-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.cq-card-text {
+  font-size: 0.78rem;
+  color: var(--color-text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cq-card-btn {
+  margin-top: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-sm);
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+/* ---- THE CONTAINER QUERY RULE ---- */
+/* When the container (cq-wrapper) is at least 400px wide,
+   switch the card to a horizontal layout */
+@container card-slot (min-width: 400px) {
+  .cq-card {
+    flex-direction: row;    /* switch to horizontal */
+  }
+
+  .cq-card-img {
+    width: 140px;           /* fixed-width image on the left */
+    height: auto;           /* height grows with content */
+  }
+
+  .cq-card-body {
+    padding: var(--sp-5);
+  }
+
+  .cq-card-title {
+    font-size: 1rem;
+  }
+}
+/* This is the magic — the card decides its own layout based on its
+   container, not the viewport. You can reuse .cq-card anywhere and
+   it will always do the right thing based on available space. */
+
+
+/* ================================================================
+   7. CONTAINER QUERY UNITS
+================================================================ */
+
+/* ============================================
+   CONTAINER QUERY UNITS: cqi, cqb, cqw, cqh
+   What it is: Lengths relative to the nearest named container,
+               rather than the viewport.
+   When to use: Type inside cards/components that should scale with
+               the component's own size.
+   cqi → 1% of container's inline size (usually width)
+   cqb → 1% of container's block size (usually height)
+   cqw → 1% of container's width (explicit)
+   cqh → 1% of container's height (explicit)
+   cqmin → smaller of cqi/cqb
+   cqmax → larger of cqi/cqb
+   Browser support: Chrome 105+, Firefox 110+, Safari 16+.
+============================================ */
+
+.cq-units-container {
+  container-type: inline-size;  /* makes this a container */
+  container-name: text-container;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.cq-units-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.cq-units-text {
+  /* font-size relative to the container, not the viewport */
+  font-size: 5cqi;
+  /* 5cqi = 5% of the container's inline width.
+     If container is 600px wide, font-size = 30px.
+     If container is 400px wide, font-size = 20px. */
+  color: var(--color-accent);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.cq-units-text-sm {
+  font-size: 3cqi;
+  color: var(--color-text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cq-units-text code,
+.cq-units-text-sm code {
+  font-size: 0.75em;
+  background: transparent;
+  border: none;
+  color: var(--color-warm);
+  padding: 0;
+}
+
+
+/* ================================================================
+   8. CLAMP() — FLUID SIZING
+================================================================ */
+
+/* ============================================
+   CLAMP(minimum, preferred, maximum)
+   What it is: A CSS math function that constrains a value between
+               a floor and a ceiling, with a fluid preferred value.
+   When to use: Fluid typography (font-size), fluid spacing (padding,
+               gap, margin), fluid widths. Any value that should scale
+               smoothly between breakpoints.
+   Default value: N/A — it's a function, not a property.
+   Inherited: Follows the property it's used on.
+
+   HOW IT WORKS:
+   clamp(2rem, 5vw, 4rem)
+   ┌─────────────────────────────────────────────────┐
+   │  MINIMUM   │  PREFERRED  │  MAXIMUM             │
+   │  2rem      │  5vw        │  4rem                │
+   │  floor     │  fluid      │  ceiling             │
+   └─────────────────────────────────────────────────┘
+   - If preferred < minimum → minimum is used
+   - If preferred > maximum → maximum is used
+   - Otherwise → preferred is used
+   
+   EQUIVALENT TO: max(minimum, min(preferred, maximum))
+
+   THE MATH:
+   font-size: clamp(2rem, 5vw, 4rem)
+   At 640px viewport:  5vw = 32px = 2rem   → min kicks in → 2rem
+   At 800px viewport:  5vw = 40px = 2.5rem → preferred used
+   At 1280px viewport: 5vw = 64px = 4rem   → max kicks in → 4rem
+
+   ⚠️ NOTE: When using vw in the preferred value, the scaling is linear.
+            For accessibility, use rem-based preferred values combined
+            with vw: clamp(1rem, 0.5rem + 2vw, 2rem)
+            This keeps the floor/ceiling in rem (respects user font prefs)
+            while the middle scales with the viewport.
+============================================ */
+
+.clamp-type-demo {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.clamp-h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  /* NEVER smaller than 2rem, NEVER larger than 4rem,
+     scales fluidly via 5vw in between */
+  font-weight: 800;
+  color: var(--color-text-1);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.clamp-h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.clamp-h3 {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: var(--color-text-2);
+  line-height: 1.3;
+}
+
+.clamp-body {
+  /* Body text: accessible range, gentle scaling */
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  color: var(--color-text-2);
+  line-height: 1.75;
+  max-width: 65ch;  /* Never too wide — character count limit */
+  margin: 0;
+}
+
+.clamp-body code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-warm);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.clamp-code-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-3);
+  margin-bottom: var(--sp-2);
+}
+
+.clamp-code-label code {
+  font-size: 1em;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* Fluid spacing demo */
+.clamp-spacing-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.5rem, 2vw, 2rem);
+  /* gap itself uses clamp — tight on mobile, generous on desktop */
+}
+
+.clamp-spacing-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  /* padding scales with viewport — no breakpoints needed */
+  padding: clamp(1rem, 3vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.clamp-spacing-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.clamp-spacing-card p {
+  font-size: 0.82rem;
+  color: var(--color-text-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.clamp-spacing-card p code {
+  font-size: 0.9em;
+  color: var(--color-warm);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+
+/* ================================================================
+   9. MIN() AND MAX()
+================================================================ */
+
+/* ============================================
+   MIN(a, b) — Returns the SMALLER of two values
+   What it is: A CSS math function that evaluates to whichever
+               argument is smaller.
+   When to use: "Be this size, but never larger than X" — like
+               max-width in one step. width: min(100%, 600px) is
+               cleaner than width: 100%; max-width: 600px.
+   Inherited: Follows the property.
+
+   MAX(a, b) — Returns the LARGER of two values
+   What it is: Evaluates to whichever argument is larger.
+   When to use: "Be this size, but never smaller than X" — like
+               min-width in one step. width: max(300px, 50%) is
+               cleaner than width: 50%; min-width: 300px.
+   Inherited: Follows the property.
+============================================ */
+
+.minmax-fn-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+}
+
+.minmax-box {
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.minmax-box span {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.minmax-box p {
+  font-size: 0.82rem;
+  color: var(--color-text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.min-demo {
+  /* min(100%, 600px) — like max-width: 600px but in a single value */
+  width: min(100%, 600px);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent);
+}
+
+.min-demo span { color: var(--color-accent); }
+
+.max-demo {
+  /* max(300px, 50%) — like min-width: 300px but in a single value */
+  width: max(300px, 50%);
+  background: var(--color-accent-b-dim);
+  border: 1px solid var(--color-accent-b);
+}
+
+.max-demo span { color: var(--color-accent-b); }
+
+
+/* ================================================================
+   10. OBJECT-FIT
+================================================================ */
+
+/* ============================================
+   OBJECT-FIT
+   What it is: Controls how a REPLACED element (<img>, <video>) fits
+               within its established box (set by width/height).
+   When to use: Any time an image or video is placed inside a
+               fixed-size container — card thumbnails, hero images,
+               avatars, gallery items.
+   Default value: fill.
+   Inherited: No.
+
+   VALUES:
+   fill        → stretches to fill the box — DISTORTS the aspect ratio.
+                 Only use when you know the content matches the box ratio.
+   contain     → scales to fit the box while preserving aspect ratio.
+                 May leave empty space ("letterboxing").
+                 Use for logos, diagrams, technical illustrations.
+   cover       → fills the box and preserves aspect ratio by CROPPING.
+                 The most useful value. Use for card images, heroes, avatars.
+   none        → displays at the content's natural size — may overflow.
+                 Rarely used for images, sometimes for video debug.
+   scale-down  → takes the smaller result of contain or none.
+                 Useful for logos that shouldn't upscale.
+
+   ⚠️ NOTE: object-fit only works on REPLACED elements.
+            It does NOT work on div or span — use background-size instead.
+============================================ */
+
+.of-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-5);
+}
+
+.of-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* The fixed box — both dimensions set */
+.of-box {
+  width: 100%;
+  height: 140px;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;  /* clips overflowing content for none/fill demos */
+  position: relative;
+}
+
+/* A div simulating an image with a clear focal point */
+.of-fake-img {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 40% 40%, #38bdf8 0%, transparent 35%),
+    linear-gradient(135deg, #0d1a30 0%, #1a2a40 50%, #0a1520 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.of-fake-small {
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+}
+
+/* object-fit values applied directly to the "image" element */
+
+/* fill — distorts the content to fill exactly */
+.of-fill .of-fake-img {
+  /* object-fit: fill is the default — no CSS needed.
+     Shown here for completeness. This DISTORTS the image. */
+  object-fit: fill;
+  transform: none;  /* exaggerate the fill distortion for demo clarity */
+}
+
+/* contain — scales to fit, preserves ratio, may letterbox */
+.of-contain {
+  background: var(--color-surface-hi);  /* shows letterbox areas */
+}
+.of-contain .of-fake-img {
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  /* Simulates contain — leaves space around the image */
+}
+
+/* cover — fills, preserves ratio, crops edges (the best one) */
+.of-cover .of-fake-img {
+  /* Simulates cover — image fills completely, focal point centered */
+}
+
+/* none — natural size, may overflow */
+.of-none .of-fake-img {
+  width: 150%;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  /* Simulates none — image at natural size, overflows container */
+}
+
+/* scale-down */
+.of-scaledown .of-fake-img {
+  /* Simulates scale-down with a smaller image */
+}
+
+.of-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.of-desc {
+  font-size: 0.72rem;
+  color: var(--color-text-2);
+  line-height: 1.4;
+  margin: 0;
+}
+
+
+/* ================================================================
+   11. OBJECT-POSITION
+================================================================ */
+
+/* ============================================
+   OBJECT-POSITION
+   What it is: Specifies the alignment of the content within its box
+               when object-fit leaves space or requires cropping.
+   When to use: With object-fit: cover to keep important subjects
+               in view. With object-fit: contain to position within
+               the letterbox area.
+   Default value: 50% 50% (center center).
+   Inherited: No.
+
+   SYNTAX:
+   object-position: top left
+   object-position: center
+   object-position: bottom right
+   object-position: 30% 20%     (horizontal% vertical%)
+   object-position: 100px 50px  (px offset from top-left)
+
+   ⚠️ NOTE: Works identically to background-position in syntax.
+            Think of it as "where is the anchor point of the image
+            inside its container?"
+============================================ */
+
+.op-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--sp-4);
+}
+
+.op-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  align-items: center;
+}
+
+/* Fixed aspect-ratio box */
+.op-box {
+  width: 100%;
+  height: 100px;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Larger-than-box "image" to demonstrate cropping with different positions */
+.op-img {
+  position: absolute;
+  width: 160%;
+  height: 160%;
+  background:
+    /* A bright dot = the "subject" — watch where it appears */
+    radial-gradient(circle at 25% 25%, #fbbf24 0%, transparent 20%),
+    radial-gradient(circle at 75% 75%, #f87171 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, #6ee7b7 0%, transparent 15%),
+    linear-gradient(135deg, #0a1830 0%, #1a2840 100%);
+}
+
+.op-top-left {
+  top: 0;
+  left: 0;
+  /* object-position: top left → top-left corner of content is shown */
+}
+
+.op-center {
+  top: -30%;
+  left: -30%;
+  /* object-position: center (default) → center of content is shown */
+}
+
+.op-bottom-right {
+  bottom: 0;
+  right: 0;
+  top: auto;
+  left: auto;
+  /* object-position: bottom right → bottom-right of content is shown */
+}
+
+.op-custom {
+  top: -15%;
+  left: -20%;
+  /* object-position: 30% 20% → 30% from left, 20% from top */
+}
+
+.op-item code {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-code-text);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--r-sm);
+  text-align: center;
+  line-height: 1.5;
+}
+
+
+/* ================================================================
+   12. PAGE LAYOUT (Supporting styles)
+================================================================ */
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: var(--color-bg);
+  color: var(--color-text-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+p { margin-bottom: var(--sp-4); color: var(--color-text-2); line-height: 1.7; }
+p:last-child { margin-bottom: 0; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--color-border);
+}
+
+strong { font-weight: 700; color: var(--color-text-1); }
+em     { font-style: italic; color: var(--color-text-2); }
+
+.page-header {
+  background: linear-gradient(to bottom, hsl(224, 60%, 6%), hsl(224, 60%, 4%));
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--sp-16) var(--sp-8) var(--sp-12);
+  text-align: center;
+}
+
+.header-inner { max-width: 700px; margin: 0 auto; }
+
+.phase-badge {
+  display: inline-block;
+  background-color: var(--color-accent);
+  color: #042015;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-pill);
+  margin-bottom: var(--sp-4);
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: var(--sp-4);
+}
+
+.page-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.page-subtitle code { font-size: 0.9em; }
+
+.page-main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--sp-12) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+/* Responsive padding on the page itself */
+@media (max-width: 600px) {
+  .page-main  { padding: var(--sp-8) var(--sp-4); }
+  .page-header { padding: var(--sp-10) var(--sp-4) var(--sp-8); }
+  .mq-features-grid { grid-template-columns: 1fr; }
+  .clamp-spacing-demo { grid-template-columns: 1fr; }
+  .cq-demo-row { grid-template-columns: 1fr; }
+  .cq-wrapper-narrow,
+  .cq-wrapper-mid { width: 100%; }
+}
+
+.ref-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+  letter-spacing: -0.01em;
+  padding-bottom: var(--sp-3);
+  border-bottom: 2px solid var(--color-border);
+}
+.section-title code {
+  background: transparent;
+  border: none;
+  color: var(--color-accent);
+  font-size: 0.95em;
+  padding: 0;
+}
+
+.demo-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.concept-card {
+  border-color: var(--color-border-hi);
+  background: var(--color-surface-alt);
+}
+
+.demo-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-1);
+}
+.demo-label code {
+  background: transparent;
+  border: none;
+  color: var(--color-accent);
+  font-size: 1em;
+  padding: 0;
+}
+
+.demo-note {
+  background-color: var(--color-code-bg);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 0.875rem;
+  color: var(--color-text-2);
+  line-height: 1.75;
+}
+.demo-note code {
+  background: transparent;
+  border: none;
+  color: var(--color-warm);
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 0;
+}
+.demo-note strong { color: var(--color-text-1); }
+
+.concept-text {
+  font-size: 0.92rem;
+  color: var(--color-text-2);
+  line-height: 1.75;
+  margin: 0;
+}
+.concept-text strong { color: var(--color-text-1); }
+.concept-text em { color: var(--color-accent); font-style: normal; font-weight: 600; }
+
+.sub-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  margin-top: var(--sp-2);
+  margin-bottom: calc(-1 * var(--sp-2));
+}
+
+/* Breakpoint table */
+.bp-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.bp-row {
+  display: grid;
+  grid-template-columns: 60px 160px 1fr 1.5fr;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  color: var(--color-text-2);
+  align-items: center;
+}
+
+.bp-row:last-child { border-bottom: none; }
+
+.bp-header {
+  background: var(--color-surface-hi);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  font-weight: 700;
+}
+
+.bp-row:not(.bp-header):nth-child(even) {
+  background: var(--color-surface-alt);
+}
+
+.bp-name {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--r-sm);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.bp-val {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-warm);
+}
+
+.page-footer {
+  text-align: center;
+  padding: var(--sp-8);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.page-footer p { margin: 0; color: var(--color-text-3); }
+
+
+/* ================================================================
+   13. REAL-WORLD BLOG LAYOUT DEMO
+================================================================ */
+
+/* ============================================
+   BLOG LAYOUT
+   Responsive techniques used:
+   - @media (min-width) for the featured article flip
+   - @container on the card grid for card-level breakpoints
+   - clamp() on all typography
+   - object-fit: cover simulation on all images
+============================================ */
+
+.blog-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+}
+
+/* Featured article — stacked on mobile */
+.blog-featured {
+  display: flex;
+  flex-direction: column;  /* mobile: stacked */
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* Switch to side-by-side at ≥ 680px */
+@media (min-width: 680px) {
+  .blog-featured {
+    flex-direction: row;
+  }
+
+  .blog-featured-img {
+    width: 280px !important;
+    height: auto !important;
+    flex-shrink: 0;
+  }
+}
+
+.blog-featured-img {
+  height: 200px;
+  /* object-fit: cover simulation */
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(110, 231, 183, 0.3) 0%, transparent 60%),
+    linear-gradient(135deg, #071428 0%, #0d2040 50%, #071428 100%);
+  flex-shrink: 0;
+}
+
+.blog-featured-body {
+  padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  justify-content: center;
+}
+
+.blog-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-pill);
+  width: fit-content;
+}
+
+.blog-tag-b { color: var(--color-accent-b); background: var(--color-accent-b-dim); border-color: rgba(129, 140, 248, 0.25); }
+.blog-tag-c { color: var(--color-warm);     background: var(--color-warm-dim);     border-color: rgba(251, 191, 36, 0.25); }
+.blog-tag-d { color: var(--color-rose);     background: var(--color-rose-dim);     border-color: rgba(248, 113, 113, 0.25); }
+
+.blog-featured-title {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  color: var(--color-text-1);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.blog-featured-excerpt {
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  color: var(--color-text-2);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.blog-featured-meta {
+  display: flex;
+  gap: var(--sp-2);
+  font-size: 0.75rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  margin-top: var(--sp-1);
+}
+
+/* Blog card grid — container query enabled */
+.blog-grid {
+  container-type: inline-size;
+  container-name: blog-grid;
+  display: grid;
+  grid-template-columns: 1fr;  /* mobile: 1 column */
+  gap: var(--sp-4);
+}
+
+/* When the grid container is wide enough: 3 columns */
+@container blog-grid (min-width: 560px) {
+  .blog-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.blog-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease;
+}
+
+.blog-card:hover { border-color: var(--color-border-hi); }
+
+.blog-card-img {
+  height: 120px;
+  /* object-fit: cover simulation */
+}
+
+.blog-img-b {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(129, 140, 248, 0.4) 0%, transparent 60%),
+    linear-gradient(135deg, #0d0e28 0%, #141635 100%);
+}
+.blog-img-c {
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(251, 191, 36, 0.3) 0%, transparent 60%),
+    linear-gradient(135deg, #180d00 0%, #281a00 100%);
+}
+.blog-img-d {
+  background:
+    radial-gradient(ellipse at 60% 40%, rgba(248, 113, 113, 0.3) 0%, transparent 60%),
+    linear-gradient(135deg, #200808 0%, #2a1010 100%);
+}
+
+.blog-card-body {
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  flex: 1;
+}
+
+.blog-card-title {
+  font-size: clamp(0.88rem, 1.5cqi, 1.05rem);
+  /* cqi here! font scales with the card's container width */
+  font-weight: 700;
+  color: var(--color-text-1);
+  line-height: 1.35;
+}
+
+.blog-card-excerpt {
+  font-size: 0.8rem;
+  color: var(--color-text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+
+/* ================================================================
+   END OF PHASE 5 REFERENCE
+   Next up → Phase 6: Pseudo-Classes, Pseudo-Elements & States
+   (:hover, :focus, :nth-child, :has(), ::before, ::after)
+================================================================ */

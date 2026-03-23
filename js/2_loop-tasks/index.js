@@ -352,3 +352,203 @@
 
 // 28
 
+// let output28 = "";
+// for (let num = 10; num <= 500; num++) {
+//     const str = num.toString();
+//     let isConsecutiveAsc = true;
+
+//     if (str.includes('0')) continue;
+
+//     for (let i = 0; i < str.length - 1; i++) {
+//         if (Number(str[i + 1]) - Number(str[i]) !== 1) {
+//             isConsecutiveAsc = false;
+//             break;
+//         }
+//     }
+//     if (isConsecutiveAsc) {
+//         output28 += num + "\n";
+//     }
+// }
+// console.log(output28);
+
+// 29
+
+// let output29 = "";
+// for (let num = 10; num <= 500; num++) {
+//     const str = num.toString();
+//     let isConsecutiveDesc = true;
+
+//     if (str.includes('0')) continue;
+
+//     for (let i = 0; i < str.length - 1; i++) {
+//         if (Number(str[i]) - Number(str[i + 1]) !== 1) {
+//             isConsecutiveDesc = false;
+//             break;
+//         }
+//     }
+//     if (isConsecutiveDesc) {
+//         output29 += num + "\n";
+//     }
+// }
+// console.log(output29);
+
+// 30
+
+// let output = "";
+// for (let num = 100; num <= 300; num++) {
+//     const str = num.toString();
+//     const lastDigit = Number(str[str.length - 1]);
+//     let sumOfOthers = 0;
+//     for (let i = 0; i < str.length - 1; i++) {
+//         sumOfOthers += Number(str[i]);
+//     }
+//     if (sumOfOthers === lastDigit) {
+//         output += num + "\n";
+//     }
+// }
+// console.log(output.trim());
+
+// 31
+// for (let i = 1; i <= 200; i++) {
+//     let sum = 0, temp = i
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     if (sum > 10) console.log(i)
+// }
+
+// 32
+// for (let i = 1; i <= 500; i++) {
+//     let sum = 0, temp = i
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     let isPrime = sum > 1
+//     for (let j = 2; j <= Math.sqrt(sum); j++) if (sum % j === 0) { isPrime = false; break }
+//     if (isPrime) console.log(i)
+// }
+
+// 33
+// for (let i = 1; i <= 300; i++) {
+//     let digits = String(i).split('')
+//     let counts = {}
+//     digits.forEach(d => counts[d] = (counts[d] || 0) + 1)
+//     if (Object.values(counts).filter(v => v === 2).length === 1 && Object.values(counts).every(v => v <= 2)) console.log(i)
+// }
+
+// 34
+// for (let i = 1; i <= 200; i++) {
+//     let rev = parseInt(String(i).split('').reverse().join(''))
+//     if (rev > i) console.log(i)
+// }
+
+// 35
+// for (let i = 1; i <= 500; i++) {
+//     let product = 1, temp = i, hasZero = false
+//     while (temp > 0) {
+//         let d = temp % 10
+//         if (d === 0) { hasZero = true; break }
+//         product *= d; temp = Math.floor(temp / 10)
+//     }
+//     if (!hasZero && product % 5 === 0) console.log(i)
+// }
+
+// 36
+// for (let i = 1; i <= 300; i++) {
+//     let sum = 0, temp = i, len = String(i).length
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     if (sum === len * 5) console.log(i)
+// }
+
+// 37
+// for (let i = 1; i <= 500; i++) {
+//     let rev = parseInt(String(i).split('').reverse().join(''))
+//     if (rev % 2 === 0) console.log(i)
+// }
+
+// 38
+// for (let i = 1; i <= 300; i++) {
+//     let s = String(i)
+//     let last = parseInt(s[s.length - 1])
+//     let first = parseInt(s[0])
+//     if (last * last === first) console.log(i)
+// }
+
+// 39
+// for (let i = 1; i <= 500; i++) {
+//     let sum = 0, temp = i, len = String(i).length
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     if (sum % len === 0) console.log(i)
+// }
+
+// 40
+// for (let i = 1; i <= 1000; i++) {
+//     let sum = 0, temp = i
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     if (sum === 15) console.log(i)
+// }
+
+// 41
+// for (let i = 1; i <= 1000; i++) {
+//     let sum = 0, product = 1, temp = i
+//     while (temp > 0) { let d = temp % 10; sum += d; product *= d; temp = Math.floor(temp / 10) }
+//     if (sum === product) console.log(i)
+// }
+
+// 42
+// for (let i = 1; i <= 1000; i++) {
+//     let rev = parseInt(String(i).split('').reverse().join(''))
+//     if (rev === i + 9) console.log(i)
+// }
+
+// 43
+// for (let i = 1; i <= 1000; i++) {
+//     let sq = i * i, len = String(i).length
+//     if (sq % Math.pow(10, len) === i) console.log(i)
+// }
+
+// 44
+// for (let i = 1; i <= 1000; i++) {
+//     let rev = parseInt(String(i).split('').reverse().join(''))
+//     if (Math.abs(i - rev) % 9 === 0) console.log(i)
+// }
+
+// 45
+// for (let i = 1; i <= 1000; i++) {
+//     let sum = 0, temp = i
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     let numDigits = String(i).length
+//     let revDigits = parseInt(String(numDigits).split('').reverse().join(''))
+//     if (sum === revDigits) console.log(i)
+// }
+
+// 46
+// for (let i = 1; i <= 1000; i++) {
+//     let sum = 0, temp = i
+//     while (temp > 0) { sum += temp % 10; temp = Math.floor(temp / 10) }
+//     if (sum * sum === i) console.log(i)
+// }
+
+// 47
+// for (let i = 1; i <= 1000; i++) {
+//     let sumCubes = 0, temp = i
+//     while (temp > 0) { let d = temp % 10; sumCubes += d ** 3; temp = Math.floor(temp / 10) }
+//     if (sumCubes === i) console.log(i)
+// }
+
+// 48
+// for (let i = 1; i <= 1000; i++) {
+//     let rev = parseInt(String(i).split('').reverse().join(''))
+//     let isPrime = rev > 1
+//     for (let j = 2; j <= Math.sqrt(rev); j++) if (rev % j === 0) { isPrime = false; break }
+//     if (isPrime) console.log(i)
+// }
+
+// 49
+// for (let i = 1; i <= 1000; i++) {
+//     let sum = 0, product = 1, temp = i
+//     while (temp > 0) { let d = temp % 10; sum += d; product *= d; temp = Math.floor(temp / 10) }
+//     if (product === sum * sum) console.log(i)
+// }
+
+// 50
+// for (let i = 1; i <= 1000; i++) {
+//     let rev = parseInt(String(i).split('').reverse().join(''))
+//     if ((i * rev) % 10 === 1) console.log(i)
+// }

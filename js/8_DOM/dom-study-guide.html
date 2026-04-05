@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOM Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e28;
+    --bg4: #20253200;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8eaf0;
+    --muted: #7a7f94;
+    --purple: #a78bfa;
+    --purple-bg: rgba(167,139,250,0.1);
+    --purple-border: rgba(167,139,250,0.25);
+    --teal: #34d399;
+    --teal-bg: rgba(52,211,153,0.08);
+    --teal-border: rgba(52,211,153,0.2);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251,191,36,0.08);
+    --amber-border: rgba(251,191,36,0.2);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --red-border: rgba(248,113,113,0.2);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96,165,250,0.08);
+    --blue-border: rgba(96,165,250,0.2);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(167,139,250,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    background: var(--purple-bg);
+    border: 1px solid var(--purple-border);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  .hero h1 span { color: var(--purple); }
+  .hero p {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 28px;
+  }
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .pill {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: var(--bg3);
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 50px 30px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    margin-top: 56px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-num {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--purple-bg);
+    border: 1px solid var(--purple-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    color: var(--purple);
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    flex: 1;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── ANALOGY BOX ── */
+  .analogy {
+    background: var(--purple-bg);
+    border: 1px solid var(--purple-border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #c4b5fd;
+    line-height: 1.7;
+  }
+  .analogy strong { color: var(--purple); font-weight: 600; }
+  .analogy-icon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+
+  /* ── CODE BLOCK ── */
+  pre {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  .inline-code {
+    background: rgba(167,139,250,0.12);
+    color: #c4b5fd;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* syntax colors */
+  .c-cmt  { color: #4a5270; }
+  .c-key  { color: #a78bfa; }
+  .c-fn   { color: #34d399; }
+  .c-str  { color: #fbbf24; }
+  .c-bad  { color: #f87171; }
+  .c-good { color: #34d399; }
+  .c-num  { color: #fb923c; }
+
+  /* ── TREE DIAGRAM ── */
+  .tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    line-height: 2;
+    color: var(--muted);
+    margin: 14px 0;
+  }
+  .tree .el  { color: var(--purple); }
+  .tree .txt { color: var(--teal); }
+  .tree .com { color: #4a5270; }
+  .tree .doc { color: var(--blue); }
+
+  /* ── COMPARISON TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 14px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--bg3);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .check { color: var(--teal); }
+  .cross { color: var(--red); }
+
+  /* ── GRID CARDS ── */
+  .grid { display: grid; gap: 12px; margin: 14px 0; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media(max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+  .mini-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+  .mini-card .label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .mini-card .method {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .mini-card .desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .label-purple { color: var(--purple); }
+  .label-teal   { color: var(--teal); }
+  .label-amber  { color: var(--amber); }
+  .label-red    { color: var(--red); }
+  .label-blue   { color: var(--blue); }
+
+  /* ── HIGHLIGHT BOXES ── */
+  .note {
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin: 14px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .note.tip   { background: var(--teal-bg);   border: 1px solid var(--teal-border);   color: #a7f3d0; }
+  .note.warn  { background: var(--amber-bg);  border: 1px solid var(--amber-border);  color: #fde68a; }
+  .note.danger{ background: var(--red-bg);    border: 1px solid var(--red-border);    color: #fca5a5; }
+  .note.info  { background: var(--blue-bg);   border: 1px solid var(--blue-border);   color: #93c5fd; }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .badge-teal   { background: var(--teal-bg);   color: var(--teal);   border: 1px solid var(--teal-border); }
+  .badge-amber  { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .badge-red    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+  .badge-blue   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+
+  /* ── RULE BOX ── */
+  .rule-box {
+    background: var(--bg3);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    color: #c4b5fd;
+    line-height: 1.65;
+  }
+  .rule-box strong { color: #fff; }
+
+  /* ── SUMMARY BOX ── */
+  .summary {
+    background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(52,211,153,0.05));
+    border: 1px solid var(--purple-border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-top: 20px;
+  }
+  .summary-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 12px;
+  }
+  .summary pre {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    color: var(--teal);
+  }
+
+  /* ── STEP LIST ── */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--purple-bg);
+    border: 1px solid var(--purple-border);
+    color: var(--purple);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-text { font-size: 14px; line-height: 1.6; padding-top: 3px; }
+  .step-text strong { color: #fff; }
+  .step-text span { color: var(--muted); font-size: 13px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    margin-top: 70px;
+    padding: 30px 40px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 50px;
+  }
+  .toc-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+  }
+  .toc-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .toc-list a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .toc-list a:hover { color: var(--purple); }
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 22px;
+  }
+
+  p { margin-bottom: 10px; color: #b8bdd0; font-size: 14.5px; }
+  p:last-child { margin-bottom: 0; }
+  h3 { font-size: 15px; font-weight: 600; color: #fff; margin: 20px 0 10px; }
+  h4 { font-size: 13.5px; font-weight: 600; color: var(--muted); margin: 16px 0 8px; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Complete Study Reference</div>
+  <h1>DOM <span>Manipulation</span><br>Study Guide</h1>
+  <p>Everything you need to understand the DOM — from nodes to performance — explained simply with examples.</p>
+  <div class="hero-pills">
+    <span class="pill">What is the DOM</span>
+    <span class="pill">Tree &amp; Nodes</span>
+    <span class="pill">Navigation</span>
+    <span class="pill">Selectors</span>
+    <span class="pill">Manipulation</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li><span class="toc-num">01</span><a href="#s1">What is the DOM? + Nodes + DOM vs HTML</a></li>
+      <li><span class="toc-num">02</span><a href="#s2">How the browser builds the DOM</a></li>
+      <li><span class="toc-num">03</span><a href="#s3">Tree structure &amp; navigation properties</a></li>
+      <li><span class="toc-num">04</span><a href="#s4">Selecting elements (all 5 methods)</a></li>
+      <li><span class="toc-num">05</span><a href="#s5">Manipulating elements (text, attributes, classes, styles)</a></li>
+    </ul>
+  </div>
+
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- SECTION 1 — WHAT IS THE DOM                -->
+  <!-- ─────────────────────────────────────────── -->
+  <div id="s1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">What is the DOM?</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="analogy">
+      <span class="analogy-icon">💡</span>
+      <strong>Simple analogy:</strong> Your HTML file is like a <strong>recipe written on paper</strong> — just text, can't do anything. The browser is the chef who reads it and sets up all the ingredients on the counter in an organized way. That organized setup on the counter is the DOM — live, interactive, and ready to use.
+    </div>
+
+    <p>DOM stands for <strong style="color:#fff">Document Object Model</strong>. When the browser reads your HTML file, it doesn't just display it — it converts it into a collection of objects in memory that JavaScript can read and change.</p>
+
+    <pre><span class="c-cmt">// Your HTML file — just text</span>
+&lt;body&gt;
+  &lt;h1&gt;Hello&lt;/h1&gt;
+  &lt;p&gt;World&lt;/p&gt;
+&lt;/body&gt;
+
+<span class="c-cmt">// After the browser reads it, the DOM looks like this in memory:</span>
+document
+└── body
+    ├── h1  → contains text "Hello"
+    └── p   → contains text "World"
+
+<span class="c-cmt">// Now JavaScript can interact with it:</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'h1'</span>).textContent = <span class="c-str">'Hi!'</span>;
+<span class="c-cmt">// Page updates instantly — HTML file is NOT changed</span></pre>
+
+    <h3>DOM vs HTML — what's the difference?</h3>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th></th><th>HTML</th><th>DOM</th></tr>
+        <tr><td>What is it?</td><td>A text file you write</td><td>A live object in memory</td></tr>
+        <tr><td>Where does it live?</td><td>On your computer/server</td><td>Inside the browser</td></tr>
+        <tr><td>Can JavaScript change it?</td><td><span class="cross">✗ No</span></td><td><span class="check">✓ Yes</span></td></tr>
+        <tr><td>Updates live?</td><td><span class="cross">✗ No</span></td><td><span class="check">✓ Yes</span></td></tr>
+      </table>
+    </div>
+
+    <pre><span class="c-cmt">// Run this in the browser:</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'p'</span>).<span class="c-fn">remove</span>();
+
+<span class="c-cmt">// Result:</span>
+<span class="c-cmt">// DOM      → the &lt;p&gt; is gone from the page ✓</span>
+<span class="c-cmt">// HTML file → still has &lt;p&gt; in it, unchanged ✓</span>
+<span class="c-cmt">// They are two different things!</span></pre>
+
+    <h3>What is a Node?</h3>
+    <p>Everything in the DOM is a <strong style="color:#fff">node</strong>. A node is simply one unit in the tree. There are 3 types you need to know:</p>
+
+    <div class="grid grid-3">
+      <div class="mini-card">
+        <div class="label label-purple">Type 1</div>
+        <div class="method">Element Node</div>
+        <div class="desc">Any HTML tag.<br><code>&lt;div&gt; &lt;p&gt; &lt;h1&gt; &lt;span&gt;</code><br>The most common node type.</div>
+      </div>
+      <div class="mini-card">
+        <div class="label label-teal">Type 2</div>
+        <div class="method">Text Node</div>
+        <div class="desc">The actual text inside a tag.<br><code>&lt;p&gt;</code><strong style="color:var(--teal)">Hello</strong><code>&lt;/p&gt;</code><br>"Hello" is a separate text node.</div>
+      </div>
+      <div class="mini-card">
+        <div class="label label-amber">Type 3</div>
+        <div class="method">Comment Node</div>
+        <div class="desc">HTML comments are real nodes.<br><code>&lt;!-- comment --&gt;</code><br>Invisible to users, exists in DOM.</div>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <div class="note-icon">⚠️</div>
+      <div>When you write <span class="inline-code">&lt;p&gt;Hello&lt;/p&gt;</span> that is <strong>two nodes</strong> — an Element node (<span class="inline-code">&lt;p&gt;</span>) and a Text node (<span class="inline-code">"Hello"</span>) inside it. This is why some navigation properties surprise beginners.</div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-title">Quick Summary</div>
+      <pre>HTML file  →  browser reads it  →  builds the DOM (a tree of nodes)
+                                            ↓
+                             JavaScript can now read, change,
+                             add, or delete anything in that tree</pre>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- SECTION 2 — HOW BROWSER BUILDS DOM          -->
+  <!-- ─────────────────────────────────────────── -->
+  <div id="s2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">How the Browser Builds the DOM</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <p>When you open a webpage, the browser goes through these exact steps to turn your HTML text into a usable DOM tree:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Bytes</strong> → Browser receives raw bytes from the server. <span>e.g. <code>3C 68 74 6D 6C 3E</code></span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Characters</strong> → Bytes are decoded using UTF-8 into readable characters. <span>e.g. <code>&lt;html&gt;</code></span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Tokens</strong> → Characters are broken into meaningful pieces. <span>e.g. <code>&lt;</code> | <code>html</code> | <code>&gt;</code></span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Nodes</strong> → Each token becomes a node object with properties.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>DOM Tree</strong> → Nodes are linked together into the parent-child tree structure.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-text"><strong>Ready</strong> → JavaScript can now fully interact with the tree.</div>
+      </div>
+    </div>
+
+    <div class="note info">
+      <div class="note-icon">ℹ️</div>
+      <div>The browser builds the DOM <strong>incrementally</strong> — it doesn't wait for the full HTML. It starts immediately, token by token. This is why large pages can display partially before fully loading.</div>
+    </div>
+
+    <h3>Why does &lt;script&gt; go at the bottom?</h3>
+    <p>When the browser hits a <span class="inline-code">&lt;script&gt;</span> tag while building the DOM — it <strong style="color:#fff">stops everything</strong> and runs the script first, because JavaScript might try to modify the DOM while it's being built.</p>
+
+    <pre><span class="c-bad">❌ Bad — script runs before DOM is built, can't find elements</span>
+&lt;head&gt;
+  &lt;script src=<span class="c-str">"app.js"</span>&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 id=<span class="c-str">"title"</span>&gt;Hello&lt;/h1&gt;
+&lt;/body&gt;
+
+<span class="c-good">✓ Good — DOM is fully built before the script runs</span>
+&lt;body&gt;
+  &lt;h1 id=<span class="c-str">"title"</span>&gt;Hello&lt;/h1&gt;
+
+  &lt;script src=<span class="c-str">"app.js"</span>&gt;&lt;/script&gt;  <span class="c-cmt">← always at the bottom</span>
+&lt;/body&gt;</pre>
+  </div>
+
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- SECTION 3 — TREE NAVIGATION                -->
+  <!-- ─────────────────────────────────────────── -->
+  <div id="s3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">Tree Structure &amp; Navigation</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="analogy">
+      <span class="analogy-icon">💡</span>
+      Think of the DOM like a <strong>family tree</strong>. Every element has parents, children, and siblings — and JavaScript gives you properties to move between all of them.
+    </div>
+
+    <h3>The HTML we'll use for all examples</h3>
+    <pre>&lt;body&gt;
+  &lt;div id=<span class="c-str">"parent"</span>&gt;
+    <span class="c-cmt">&lt;!-- a comment --&gt;</span>
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Paragraph&lt;/p&gt;
+    &lt;span&gt;Span&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;</pre>
+
+    <p>This is how the DOM tree actually looks for that HTML:</p>
+
+    <div class="tree">
+<span class="doc">document</span>
+└── <span class="el">body</span>
+    └── <span class="el">div#parent</span>
+        ├── <span class="com">#comment "a comment"</span>
+        ├── <span class="el">h1</span>
+        │   └── <span class="txt">#text "Title"</span>
+        ├── <span class="el">p</span>
+        │   └── <span class="txt">#text "Paragraph"</span>
+        └── <span class="el">span</span>
+            └── <span class="txt">#text "Span"</span>
+    </div>
+
+    <h3>The Golden Rule</h3>
+    <div class="rule-box">
+      <strong>Always use the Element version</strong> of every property. The plain versions (<span class="inline-code">childNodes</span>, <span class="inline-code">firstChild</span>, etc.) catch invisible whitespace text nodes and comments between tags — almost never what you want. The Element versions skip all of that.
+    </div>
+
+    <h3>Going UP — to the parent</h3>
+    <pre><span class="c-key">const</span> h1 = document.<span class="c-fn">querySelector</span>(<span class="c-str">'h1'</span>);
+
+h1.parentNode;     <span class="c-cmt">// → &lt;div id="parent"&gt;  (returns ANY node type)</span>
+h1.parentElement;  <span class="c-cmt">// → &lt;div id="parent"&gt;  (returns only Elements)</span>
+
+<span class="c-cmt">// The difference only shows at the very top:</span>
+document.documentElement.parentNode;     <span class="c-cmt">// → #document</span>
+document.documentElement.parentElement;  <span class="c-cmt">// → null ← parent is not an Element</span></pre>
+
+    <h3>Going DOWN — to the children</h3>
+    <pre><span class="c-key">const</span> parent = document.<span class="c-fn">getElementById</span>(<span class="c-str">'parent'</span>);
+
+parent.childNodes;
+<span class="c-cmt">// → [#comment, #text, h1, #text, p, #text, span, #text]</span>
+<span class="c-cmt">// ↑ sees EVERYTHING including whitespace text nodes</span>
+
+parent.children;
+<span class="c-cmt">// → HTMLCollection [h1, p, span]</span>
+<span class="c-cmt">// ↑ sees ONLY elements — use this ✓</span>
+
+parent.firstChild;         <span class="c-cmt">// → #comment  (the comment node!)</span>
+parent.firstElementChild;  <span class="c-cmt">// → &lt;h1&gt;  ← use this ✓</span>
+
+parent.lastChild;          <span class="c-cmt">// → #text (whitespace after &lt;/span&gt;)</span>
+parent.lastElementChild;   <span class="c-cmt">// → &lt;span&gt;  ← use this ✓</span></pre>
+
+    <h3>Going SIDEWAYS — to siblings</h3>
+    <pre><span class="c-key">const</span> h1 = document.<span class="c-fn">querySelector</span>(<span class="c-str">'h1'</span>);
+
+h1.nextSibling;              <span class="c-cmt">// → #text (whitespace between &lt;/h1&gt; and &lt;p&gt;)</span>
+h1.nextElementSibling;       <span class="c-cmt">// → &lt;p&gt;  ← use this ✓</span>
+
+<span class="c-key">const</span> p = document.<span class="c-fn">querySelector</span>(<span class="c-str">'p'</span>);
+p.previousSibling;           <span class="c-cmt">// → #text (whitespace)</span>
+p.previousElementSibling;    <span class="c-cmt">// → &lt;h1&gt;  ← use this ✓</span></pre>
+
+    <h3>Full navigation example</h3>
+    <pre><span class="c-key">const</span> parent = document.<span class="c-fn">getElementById</span>(<span class="c-str">'parent'</span>);
+
+<span class="c-key">const</span> h1   = parent.firstElementChild;             <span class="c-cmt">// &lt;h1&gt;</span>
+<span class="c-key">const</span> p    = h1.nextElementSibling;                <span class="c-cmt">// &lt;p&gt;</span>
+<span class="c-key">const</span> span = p.nextElementSibling;                 <span class="c-cmt">// &lt;span&gt;</span>
+<span class="c-key">const</span> back = span.previousElementSibling;          <span class="c-cmt">// &lt;p&gt;</span>
+<span class="c-key">const</span> up   = span.parentElement;                   <span class="c-cmt">// &lt;div#parent&gt;</span>
+
+<span class="c-cmt">// Entire tree navigated — no querySelector needed!</span></pre>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Direction</th><th>❌ Avoid (catches whitespace)</th><th>✅ Use this</th></tr>
+        <tr><td>Go to parent</td><td><code>parentNode</code></td><td><code>parentElement</code></td></tr>
+        <tr><td>All children</td><td><code>childNodes</code></td><td><code>children</code></td></tr>
+        <tr><td>First child</td><td><code>firstChild</code></td><td><code>firstElementChild</code></td></tr>
+        <tr><td>Last child</td><td><code>lastChild</code></td><td><code>lastElementChild</code></td></tr>
+        <tr><td>Next sibling</td><td><code>nextSibling</code></td><td><code>nextElementSibling</code></td></tr>
+        <tr><td>Previous sibling</td><td><code>previousSibling</code></td><td><code>previousElementSibling</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- SECTION 4 — SELECTORS                      -->
+  <!-- ─────────────────────────────────────────── -->
+  <div id="s4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title">Selecting Elements</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="analogy">
+      <span class="analogy-icon">💡</span>
+      Like searching for a book in a library — you can search by its <strong>unique ID number</strong> (fastest), by <strong>category</strong>, by <strong>type</strong>, or by a <strong>full description</strong> (most flexible).
+    </div>
+
+    <h3>The HTML we'll use for all examples</h3>
+    <pre>&lt;h1 id=<span class="c-str">"main-title"</span>&gt;Hello&lt;/h1&gt;
+&lt;p class=<span class="c-str">"text"</span>&gt;First&lt;/p&gt;
+&lt;p class=<span class="c-str">"text special"</span>&gt;Second&lt;/p&gt;
+&lt;p&gt;Third — no class&lt;/p&gt;
+&lt;div class=<span class="c-str">"box"</span>&gt;
+  &lt;span class=<span class="c-str">"text"</span>&gt;A span&lt;/span&gt;
+&lt;/div&gt;</pre>
+
+    <h3>1. getElementById</h3>
+    <pre><span class="c-key">const</span> title = document.<span class="c-fn">getElementById</span>(<span class="c-str">'main-title'</span>);
+<span class="c-cmt">// → &lt;h1 id="main-title"&gt;Hello&lt;/h1&gt;</span>
+
+document.<span class="c-fn">getElementById</span>(<span class="c-str">'nothing'</span>);
+<span class="c-cmt">// → null</span></pre>
+    <div class="note tip"><div class="note-icon">✓</div><div>Fastest selector — direct lookup. Returns one element or <span class="inline-code">null</span>. Only available on <span class="inline-code">document</span>, not on sub-elements.</div></div>
+
+    <h3>2. getElementsByClassName</h3>
+    <pre><span class="c-key">const</span> items = document.<span class="c-fn">getElementsByClassName</span>(<span class="c-str">'text'</span>);
+<span class="c-cmt">// → HTMLCollection [&lt;p&gt;, &lt;p&gt;, &lt;span&gt;] — all 3 elements with class "text"</span>
+
+<span class="c-cmt">// Can be used on a specific element too:</span>
+<span class="c-key">const</span> box = document.<span class="c-fn">querySelector</span>(<span class="c-str">'.box'</span>);
+box.<span class="c-fn">getElementsByClassName</span>(<span class="c-str">'text'</span>);
+<span class="c-cmt">// → HTMLCollection [&lt;span&gt;] — only finds .text INSIDE .box</span></pre>
+    <div class="note info"><div class="note-icon">ℹ️</div><div>Returns a <strong>live HTMLCollection</strong> — automatically updates when the DOM changes.</div></div>
+
+    <h3>3. getElementsByTagName</h3>
+    <pre><span class="c-key">const</span> paragraphs = document.<span class="c-fn">getElementsByTagName</span>(<span class="c-str">'p'</span>);
+<span class="c-cmt">// → HTMLCollection [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;] — all paragraphs</span>
+
+document.<span class="c-fn">getElementsByTagName</span>(<span class="c-str">'*'</span>);
+<span class="c-cmt">// → ALL elements on the page</span></pre>
+
+    <h3>4. querySelector</h3>
+    <pre>document.<span class="c-fn">querySelector</span>(<span class="c-str">'p'</span>);              <span class="c-cmt">// first &lt;p&gt;</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'.text'</span>);          <span class="c-cmt">// first element with class "text"</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'.text.special'</span>);  <span class="c-cmt">// must have BOTH classes</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'#main-title'</span>);    <span class="c-cmt">// by ID</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'.box span'</span>);      <span class="c-cmt">// span INSIDE .box</span>
+document.<span class="c-fn">querySelector</span>(<span class="c-str">'.nothing'</span>);      <span class="c-cmt">// → null if not found</span></pre>
+    <div class="note tip"><div class="note-icon">✓</div><div>Accepts <strong>any valid CSS selector</strong>. Most flexible. Returns the first match or <span class="inline-code">null</span>.</div></div>
+
+    <h3>5. querySelectorAll</h3>
+    <pre>document.<span class="c-fn">querySelectorAll</span>(<span class="c-str">'p'</span>);
+<span class="c-cmt">// → NodeList [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]</span>
+
+document.<span class="c-fn">querySelectorAll</span>(<span class="c-str">'.text'</span>);
+<span class="c-cmt">// → NodeList [&lt;p&gt;, &lt;p&gt;, &lt;span&gt;]</span>
+
+document.<span class="c-fn">querySelectorAll</span>(<span class="c-str">'p.text'</span>);
+<span class="c-cmt">// → NodeList [&lt;p&gt;, &lt;p&gt;] — only &lt;p&gt; elements that also have class "text"</span>
+
+document.<span class="c-fn">querySelectorAll</span>(<span class="c-str">'.nothing'</span>);
+<span class="c-cmt">// → empty NodeList [] — NOT null</span></pre>
+
+    <h3>Live vs Static — the most important difference</h3>
+    <pre><span class="c-key">const</span> live   = document.<span class="c-fn">getElementsByClassName</span>(<span class="c-str">'text'</span>); <span class="c-cmt">// HTMLCollection — LIVE</span>
+<span class="c-key">const</span> frozen = document.<span class="c-fn">querySelectorAll</span>(<span class="c-str">'.text'</span>);          <span class="c-cmt">// NodeList — STATIC</span>
+
+console.log(live.length);    <span class="c-cmt">// 3</span>
+console.log(frozen.length);  <span class="c-cmt">// 3</span>
+
+<span class="c-cmt">// Add a new element with class "text"</span>
+<span class="c-key">const</span> newP = document.<span class="c-fn">createElement</span>(<span class="c-str">'p'</span>);
+newP.className = <span class="c-str">'text'</span>;
+document.body.<span class="c-fn">appendChild</span>(newP);
+
+console.log(live.length);    <span class="c-cmt">// 4 ← updated automatically!</span>
+console.log(frozen.length);  <span class="c-cmt">// 3 ← still frozen at the old count</span></pre>
+
+    <div class="grid grid-2">
+      <div class="mini-card">
+        <div class="label label-teal">Live (window)</div>
+        <div class="method">HTMLCollection</div>
+        <div class="desc">Like a window looking at the DOM — always shows current state. Returned by <code>getElementsByClassName</code> and <code>getElementsByTagName</code>.</div>
+      </div>
+      <div class="mini-card">
+        <div class="label label-amber">Static (photo)</div>
+        <div class="method">NodeList</div>
+        <div class="desc">Like a photograph of the DOM — frozen at the moment of the query. Returned by <code>querySelectorAll</code>.</div>
+      </div>
+    </div>
+
+    <h3>Are they arrays? No — but you can convert them</h3>
+    <pre><span class="c-key">const</span> items = document.<span class="c-fn">querySelectorAll</span>(<span class="c-str">'.text'</span>);
+
+<span class="c-bad">❌ items.map(...)    → error, not a real array</span>
+<span class="c-bad">❌ items.filter(...) → error</span>
+
+<span class="c-good">✓ items.forEach(item => console.log(item.textContent));</span>
+<span class="c-good">✓ Array.from(items).map(item => item.textContent);</span>
+
+<span class="c-cmt">// HTMLCollection does NOT support forEach — must convert first:</span>
+<span class="c-key">const</span> coll = document.<span class="c-fn">getElementsByClassName</span>(<span class="c-str">'text'</span>);
+<span class="c-good">✓ Array.from(coll).forEach(item => console.log(item.textContent));</span></pre>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Method</th><th>Returns</th><th>Live?</th><th>When to use</th></tr>
+        <tr><td><code>getElementById</code></td><td>One element or null</td><td>—</td><td>You know the ID, need it fast</td></tr>
+        <tr><td><code>getElementsByClassName</code></td><td>HTMLCollection</td><td><span class="check">✓ Live</span></td><td>Need live list by class name</td></tr>
+        <tr><td><code>getElementsByTagName</code></td><td>HTMLCollection</td><td><span class="check">✓ Live</span></td><td>Need live list by tag name</td></tr>
+        <tr><td><code>querySelector</code></td><td>One element or null</td><td>—</td><td>First match with any CSS selector</td></tr>
+        <tr><td><code>querySelectorAll</code></td><td>NodeList</td><td><span class="cross">✗ Static</span></td><td>All matches with any CSS selector</td></tr>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- SECTION 5 — MANIPULATION                   -->
+  <!-- ─────────────────────────────────────────── -->
+  <div id="s5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title">Manipulating Elements</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="analogy">
+      <span class="analogy-icon">💡</span>
+      Think of a DOM element like a <strong>physical box</strong>. It has a <strong>label</strong> (the text), <strong>stickers</strong> (the classes), <strong>written properties</strong> (attributes like src, href), and a <strong>color</strong> (the style). Manipulation means changing any of these after the page loads.
+    </div>
+
+    <h3>The HTML we'll use for all examples</h3>
+    <pre>&lt;h1 id=<span class="c-str">"title"</span>&gt;Hello &lt;strong&gt;World&lt;/strong&gt;&lt;/h1&gt;
+&lt;p id=<span class="c-str">"para"</span> class=<span class="c-str">"text old-style"</span>&gt;A paragraph&lt;/p&gt;
+&lt;img id=<span class="c-str">"photo"</span> src=<span class="c-str">"cat.jpg"</span> alt=<span class="c-str">"A cat"</span>&gt;</pre>
+
+    <!-- TEXT CONTENT -->
+    <h3>Part 1 — Text Content</h3>
+
+    <div class="grid grid-3">
+      <div class="mini-card">
+        <div class="label label-teal">Safe · Fast</div>
+        <div class="method">textContent</div>
+        <div class="desc">Plain text only. Ignores all HTML tags. XSS-safe. Use this most often.</div>
+      </div>
+      <div class="mini-card">
+        <div class="label label-blue">CSS-aware</div>
+        <div class="method">innerText</div>
+        <div class="desc">Like textContent but respects CSS. Hidden elements are excluded from the result.</div>
+      </div>
+      <div class="mini-card">
+        <div class="label label-red">Renders HTML</div>
+        <div class="method">innerHTML</div>
+        <div class="desc">Gets/sets actual HTML markup. Powerful but dangerous with user input.</div>
+      </div>
+    </div>
+
+    <pre><span class="c-cmt">// HTML: &lt;h1&gt;Hello &lt;strong&gt;World&lt;/strong&gt;&lt;/h1&gt;</span>
+<span class="c-key">const</span> h1 = document.<span class="c-fn">getElementById</span>(<span class="c-str">'title'</span>);
+
+<span class="c-cmt">// GETTING:</span>
+h1.textContent;  <span class="c-cmt">// "Hello World"                      — plain text, ignores tags</span>
+h1.innerText;    <span class="c-cmt">// "Hello World"                      — same here</span>
+h1.innerHTML;    <span class="c-cmt">// "Hello &lt;strong&gt;World&lt;/strong&gt;"     — returns tags too</span>
+
+<span class="c-cmt">// SETTING:</span>
+h1.textContent = <span class="c-str">'&lt;em&gt;test&lt;/em&gt;'</span>;  <span class="c-cmt">// shows literally: &lt;em&gt;test&lt;/em&gt;</span>
+h1.innerHTML = <span class="c-str">'&lt;em&gt;test&lt;/em&gt;'</span>;   <span class="c-cmt">// renders italic: test</span></pre>
+
+    <h3>The hidden difference — CSS visibility</h3>
+    <pre><span class="c-cmt">// HTML: &lt;div&gt;Visible &lt;span style="display:none"&gt;Hidden&lt;/span&gt;&lt;/div&gt;</span>
+<span class="c-key">const</span> box = document.<span class="c-fn">querySelector</span>(<span class="c-str">'div'</span>);
+
+box.textContent;  <span class="c-cmt">// "Visible Hidden"  → returns ALL text, even hidden</span>
+box.innerText;    <span class="c-cmt">// "Visible"         → respects CSS, hidden text excluded</span></pre>
+
+    <div class="note danger"><div class="note-icon">⚠️</div><div><strong>Never use innerHTML with user input</strong> — it can execute malicious scripts. Always use <span class="inline-code">textContent</span> when setting text from user input.</div></div>
+
+    <pre><span class="c-cmt">// ❌ Dangerous — XSS attack vector</span>
+element.innerHTML = userInput;
+
+<span class="c-cmt">// ✓ Safe — always use for user-provided text</span>
+element.textContent = userInput;</pre>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th></th><th>textContent</th><th>innerText</th><th>innerHTML</th></tr>
+        <tr><td>Returns tags?</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Respects CSS?</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td>—</td></tr>
+        <tr><td>Renders HTML?</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>XSS safe?</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+      </table>
+    </div>
+
+    <!-- ATTRIBUTES -->
+    <h3>Part 2 — Attributes</h3>
+    <pre><span class="c-key">const</span> img = document.<span class="c-fn">getElementById</span>(<span class="c-str">'photo'</span>);
+
+<span class="c-cmt">// Read</span>
+img.<span class="c-fn">getAttribute</span>(<span class="c-str">'src'</span>);   <span class="c-cmt">// "cat.jpg"</span>
+img.<span class="c-fn">getAttribute</span>(<span class="c-str">'alt'</span>);   <span class="c-cmt">// "A cat"</span>
+img.<span class="c-fn">getAttribute</span>(<span class="c-str">'width'</span>); <span class="c-cmt">// null — doesn't exist</span>
+
+<span class="c-cmt">// Write / Create</span>
+img.<span class="c-fn">setAttribute</span>(<span class="c-str">'src'</span>, <span class="c-str">'dog.jpg'</span>);   <span class="c-cmt">// changes the image</span>
+img.<span class="c-fn">setAttribute</span>(<span class="c-str">'width'</span>, <span class="c-str">'300'</span>);     <span class="c-cmt">// creates new attribute</span>
+
+<span class="c-cmt">// Delete</span>
+img.<span class="c-fn">removeAttribute</span>(<span class="c-str">'alt'</span>);            <span class="c-cmt">// removes it entirely</span>
+
+<span class="c-cmt">// Shortcut properties for common attributes:</span>
+img.src;   <span class="c-cmt">// same as getAttribute('src')</span>
+img.alt;   <span class="c-cmt">// same as getAttribute('alt')</span>
+img.id;    <span class="c-cmt">// same as getAttribute('id')</span></pre>
+
+    <!-- CLASSES -->
+    <h3>Part 3 — Classes</h3>
+    <pre><span class="c-key">const</span> para = document.<span class="c-fn">getElementById</span>(<span class="c-str">'para'</span>);
+<span class="c-cmt">// currently: class="text old-style"</span>
+
+para.classList.<span class="c-fn">add</span>(<span class="c-str">'active'</span>);
+<span class="c-cmt">// → class="text old-style active"</span>
+
+para.classList.<span class="c-fn">remove</span>(<span class="c-str">'old-style'</span>);
+<span class="c-cmt">// → class="text active"</span>
+
+para.classList.<span class="c-fn">toggle</span>(<span class="c-str">'active'</span>);
+<span class="c-cmt">// → "active" existed → now removed: class="text"</span>
+
+para.classList.<span class="c-fn">toggle</span>(<span class="c-str">'active'</span>);
+<span class="c-cmt">// → "active" was absent → now added: class="text active"</span>
+
+para.classList.<span class="c-fn">contains</span>(<span class="c-str">'text'</span>);    <span class="c-cmt">// → true</span>
+para.classList.<span class="c-fn">contains</span>(<span class="c-str">'nothing'</span>); <span class="c-cmt">// → false</span></pre>
+
+    <div class="note tip"><div class="note-icon">✓</div><div><strong>toggle</strong> is perfect for buttons that switch between two states — dark mode, open/close menus, active/inactive tabs.</div></div>
+
+    <!-- STYLING -->
+    <h3>Part 4 — Styling</h3>
+    <pre><span class="c-bad">❌ Avoid — inline styles, hard to maintain</span>
+para.style.color = <span class="c-str">'red'</span>;
+para.style.fontSize = <span class="c-str">'24px'</span>;         <span class="c-cmt">// camelCase in JS!</span>
+para.style.backgroundColor = <span class="c-str">'yellow'</span>; <span class="c-cmt">// not background-color</span>
+
+<span class="c-good">✓ Better — toggle a CSS class</span>
+para.classList.<span class="c-fn">add</span>(<span class="c-str">'highlighted'</span>);
+<span class="c-cmt">// then in style.css: .highlighted { color: red; font-size: 24px; }</span></pre>
+
+    <div class="note info"><div class="note-icon">ℹ️</div><div>CSS property names become camelCase in JavaScript: <span class="inline-code">background-color</span> → <span class="inline-code">backgroundColor</span>, <span class="inline-code">font-size</span> → <span class="inline-code">fontSize</span>, <span class="inline-code">margin-top</span> → <span class="inline-code">marginTop</span>.</div></div>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th></th><th>Inline styles</th><th>CSS classes</th></tr>
+        <tr><td>Reusable?</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Media queries?</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Animations?</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Easy to override?</td><td><span class="cross">✗ very high specificity</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Separation of concerns?</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      </table>
+    </div>
+
+    <div class="rule-box">
+      <strong>Exception:</strong> Use inline styles when the value is <strong>dynamic</strong> (comes from a variable or calculation):
+      <pre style="background:transparent;border:none;padding:8px 0 0;margin:0">element.style.width = progress + <span class="c-str">'%'</span>;   <span class="c-cmt">// value changes at runtime ✓</span>
+element.style.top   = mouseY + <span class="c-str">'px'</span>;   <span class="c-cmt">// depends on mouse position ✓</span></pre>
+    </div>
+
+    <div class="summary">
+      <div class="summary-title">Full Summary — All Manipulation</div>
+      <pre>TEXT:
+  textContent  → plain text, safe, fast ← use this most
+  innerText    → plain text, respects CSS visibility
+  innerHTML    → renders HTML ← never use with user input
+
+ATTRIBUTES:
+  getAttribute('x')       → read attribute value
+  setAttribute('x', 'v')  → write or create attribute
+  removeAttribute('x')    → delete attribute entirely
+
+CLASSES:
+  classList.add('x')       → add class
+  classList.remove('x')    → remove class
+  classList.toggle('x')    → flip — adds if absent, removes if present
+  classList.contains('x')  → check — returns true or false
+
+STYLING:
+  ✓ classList.add('my-class')  ← always prefer this
+  ✓ style.property = value     ← only when value is dynamic</pre>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  DOM Study Guide · Sections 1–5 · Built for Abd 🚀
+</div>
+
+</body>
+</html>
